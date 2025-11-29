@@ -779,6 +779,31 @@
         color: var(--text-secondary);
         text-transform: uppercase;
     }
+
+    /* Plugin List */
+    .plugin-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .plugin-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .plugin-name {
+        font-weight: 500;
+    }
+
+    .plugin-version {
+        color: var(--text-secondary);
+    }
 </style>
 </head>
 <body>
@@ -819,6 +844,7 @@
         <div class="tabs">
             <div class="tab active" data-tab="overview">Overview</div>
             <div class="tab" data-tab="performance">Performance</div>
+            <div class="tab" data-tab="plugins">Plugins</div>
             <div class="tab" data-tab="history">History</div>
         </div>
 
@@ -894,7 +920,7 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">Server Type</div>
-                        <div class="info-value">PocketMine-MP</div>
+                        <div class="info-value" id="server-software">-</div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">Last Checked</div>
@@ -937,17 +963,45 @@
                         <div class="info-value" id="server-load">-</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">World Size</div>
-                        <div class="info-value" id="world-size">-</div>
+                        <div class="info-label">World</div>
+                        <div class="info-value" id="world-name">-</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Plugins</div>
-                        <div class="info-value" id="plugins-count">-</div>
+                        <div class="info-label">Game Mode</div>
+                        <div class="info-value" id="gamemode">-</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">Entities</div>
-                        <div class="info-value" id="entities-count">-</div>
+                        <div class="info-label">Server ID</div>
+                        <div class="info-value" id="server-id">-</div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="plugins-tab">
+            <div class="server-info">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-plug"></i>
+                        Server Plugins
+                    </div>
+                    <div class="player-count" id="plugins-count">0 plugins</div>
+                </div>
+                <div class="plugin-list" id="plugin-list">
+                    <div class="no-players">No plugin information available</div>
+                </div>
+            </div>
+
+            <div class="server-info">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-cubes"></i>
+                        Server Mods
+                    </div>
+                    <div class="player-count" id="mods-count">0 mods</div>
+                </div>
+                <div class="plugin-list" id="mod-list">
+                    <div class="no-players">No mod information available</div>
                 </div>
             </div>
         </div>
@@ -1025,6 +1079,7 @@
     const refreshBtn = document.getElementById('refresh-btn');
     const serverFavicon = document.getElementById('server-favicon');
     const serverAddress = document.getElementById('server-address');
+    const serverSoftware = document.getElementById('server-software');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notification-text');
     const tabs = document.querySelectorAll('.tab');
@@ -1036,9 +1091,15 @@
     const memoryUsage = document.getElementById('memory-usage');
     const cpuUsage = document.getElementById('cpu-usage');
     const serverLoad = document.getElementById('server-load');
-    const worldSize = document.getElementById('world-size');
+    const worldName = document.getElementById('world-name');
+    const gamemode = document.getElementById('gamemode');
+    const serverId = document.getElementById('server-id');
+    
+    // Plugin elements
+    const pluginList = document.getElementById('plugin-list');
+    const modList = document.getElementById('mod-list');
     const pluginsCount = document.getElementById('plugins-count');
-    const entitiesCount = document.getElementById('entities-count');
+    const modsCount = document.getElementById('mods-count');
     
     // History metrics
     const dailyUptime = document.getElementById('daily-uptime');
@@ -1048,7 +1109,7 @@
 
     // Configuration
     const CONFIG = {
-        API_URL: 'https://mcsrvstat.us/bedrock/basic-6.alstore.space:25710',
+        API_URL: 'https://api.mcsrvstat.us/2/basic-6.alstore.space',
         REFRESH_INTERVAL: 30000, // 30 seconds
         TIMEOUT: 10000, // 10 seconds timeout for API calls
         HISTORY_LIMIT: 48 // Store last 48 status checks (24 hours with 30-minute intervals)
@@ -1080,27 +1141,44 @@
     }
 
     function formatPlayerList(players) {
-        if (!players || players.length === 0) {
+        if (!players || !players.list || players.list.length === 0) {
             return '<div class="no-players">No players online</div>';
         }
         
         let playerHTML = '';
-        players.forEach(player => {
+        players.list.forEach(player => {
             playerHTML += `
                 <div class="player-item">
                     <div class="player-avatar">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="player-name">${player}</div>
+                    <div class="player-name">${player.name}</div>
                 </div>
             `;
         });
         return playerHTML;
     }
 
-    function handleFavicon(faviconData) {
-        if (faviconData) {
-            serverFavicon.src = faviconData;
+    function formatPluginList(plugins) {
+        if (!plugins || plugins.length === 0) {
+            return '<div class="no-players">No plugins available</div>';
+        }
+        
+        let pluginHTML = '';
+        plugins.forEach(plugin => {
+            pluginHTML += `
+                <div class="plugin-item">
+                    <span class="plugin-name">${plugin.name}</span>
+                    <span class="plugin-version">${plugin.version || ''}</span>
+                </div>
+            `;
+        });
+        return pluginHTML;
+    }
+
+    function handleFavicon(iconData) {
+        if (iconData) {
+            serverFavicon.src = iconData;
             serverFavicon.style.display = 'block';
         } else {
             serverFavicon.style.display = 'none';
@@ -1256,9 +1334,9 @@
             memoryUsage.textContent = '64%';
             cpuUsage.textContent = '23%';
             serverLoad.textContent = 'Medium';
-            worldSize.textContent = '1.2 GB';
-            pluginsCount.textContent = '12';
-            entitiesCount.textContent = '247';
+            worldName.textContent = data.map ? data.map.clean : 'Unknown';
+            gamemode.textContent = data.gamemode || 'Unknown';
+            serverId.textContent = data.serverid ? data.serverid.substring(0, 8) + '...' : 'Unknown';
             
             // Update uptime stats
             dailyUptime.textContent = '99.8%';
@@ -1271,9 +1349,9 @@
             memoryUsage.textContent = '0%';
             cpuUsage.textContent = '0%';
             serverLoad.textContent = 'Offline';
-            worldSize.textContent = '-';
-            pluginsCount.textContent = '-';
-            entitiesCount.textContent = '-';
+            worldName.textContent = '-';
+            gamemode.textContent = '-';
+            serverId.textContent = '-';
             
             // Update uptime stats
             dailyUptime.textContent = '92.3%';
@@ -1288,8 +1366,7 @@
             timestamp: Date.now(),
             online: data.online,
             players: data.players ? data.players.online : 0,
-            maxPlayers: data.players ? data.players.max : 0,
-            ping: data.ping || 0
+            maxPlayers: data.players ? data.players.max : 0
         };
         
         serverHistory.push(statusEntry);
@@ -1343,9 +1420,16 @@
                 version.textContent = '-';
                 protocol.textContent = '-';
                 motd.textContent = 'Server is offline';
-                serverAddress.textContent = data.address || '-';
+                serverAddress.textContent = data.hostname || `${data.ip}:${data.port}`;
+                serverSoftware.textContent = '-';
                 playerList.innerHTML = '<div class="no-players">Server is offline</div>';
                 serverFavicon.style.display = 'none';
+                
+                // Update plugin information
+                pluginList.innerHTML = '<div class="no-players">No plugin information available</div>';
+                modList.innerHTML = '<div class="no-players">No mod information available</div>';
+                pluginsCount.textContent = '0 plugins';
+                modsCount.textContent = '0 mods';
                 
                 // Update performance metrics for offline state
                 updatePerformanceMetrics(data);
@@ -1361,20 +1445,35 @@
                 playerCountText.textContent = `${data.players.online} player${data.players.online !== 1 ? 's' : ''} online`;
                 
                 // Update other stats
-                pingValue.textContent = `${Math.round(data.ping)} ms`;
+                pingValue.textContent = data.debug && data.debug.ping ? 'Online' : '- ms';
                 version.textContent = data.version || '-';
-                protocol.textContent = data.protocol || data.version || '-';
-                motd.textContent = data.motd || '-';
-                serverAddress.textContent = data.address || '-';
+                protocol.textContent = data.protocol ? (data.protocol.name || data.protocol.version) : '-';
+                motd.textContent = data.motd ? (data.motd.clean ? data.motd.clean.join(' ') : '-') : '-';
+                serverAddress.textContent = data.hostname || `${data.ip}:${data.port}`;
+                serverSoftware.textContent = data.software || 'Unknown';
                 
                 // Handle favicon
-                handleFavicon(data.favicon);
+                handleFavicon(data.icon);
                 
                 // Update player list
-                if (data.players.list && data.players.list.length > 0) {
-                    playerList.innerHTML = formatPlayerList(data.players.list);
+                playerList.innerHTML = formatPlayerList(data.players);
+                
+                // Update plugin information
+                if (data.plugins && data.plugins.length > 0) {
+                    pluginList.innerHTML = formatPluginList(data.plugins);
+                    pluginsCount.textContent = `${data.plugins.length} plugins`;
                 } else {
-                    playerList.innerHTML = '<div class="no-players">No players online</div>';
+                    pluginList.innerHTML = '<div class="no-players">No plugins available</div>';
+                    pluginsCount.textContent = '0 plugins';
+                }
+                
+                // Update mod information
+                if (data.mods && data.mods.length > 0) {
+                    modList.innerHTML = formatPluginList(data.mods);
+                    modsCount.textContent = `${data.mods.length} mods`;
+                } else {
+                    modList.innerHTML = '<div class="no-players">No mods available</div>';
+                    modsCount.textContent = '0 mods';
                 }
 
                 // Update performance metrics
