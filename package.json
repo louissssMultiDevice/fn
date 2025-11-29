@@ -1,0 +1,14 @@
+{
+  "name": "minecraft-status-web",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "minecraft-server-util": "^5.4.6",
+    "cors": "^2.8.5"
+  }
+}
