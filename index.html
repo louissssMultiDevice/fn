@@ -786,8 +786,7 @@
 
         // Fungsi untuk mengambil data server dari API
         async function fetchServerStatus() {
-            const serverAddress = 'basic-6.alstore.space:25710';
-            const apiUrl = `https://api.mcsrvstat.us/server/${serverAddress}`;
+            const apiUrl = `https://mcsrvstat.us/server/basic-6.alstore.space:25710`;
             
             try {
                 const response = await fetch(apiUrl);
