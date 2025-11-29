@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft Server Status</title>
+
+<style>
+    body {
+        background: #181818;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+    }
+
+    .container {
+        width: 400px;
+    }
+
+    .banner {
+        background: #242424;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #0005;
+    }
+
+    .banner h2 {
+        margin: 0 0 5px;
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    #status-dot {
+        width: 12px;
+        height: 12px;
+        background: gray;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .card {
+        background: #2e2e2e;
+        padding: 12px;
+        border-radius: 7px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .icon {
+        width: 64px;
+        height: 64px;
+        margin-top: 15px;
+        border-radius: 5px;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="banner">
+        <h2>Minecraft Server Status</h2>
+        <p id="address"></p>
+
+        <div class="status">
+            <span id="status-dot"></span>
+            <span id="status-text">Checking...</span>
+        </div>
+
+        <div class="card">
+            <div>Online Players</div>
+            <div id="players">0/0</div>
+        </div>
+
+        <div class="card">
+            <div>MOTD</div>
+            <div id="motd">-</div>
+        </div>
+
+        <div class="card">
+            <div>Ping</div>
+            <div id="ping">- ms</div>
+        </div>
+
+        <div class="card">
+            <div>Version</div>
+            <div id="version">-</div>
+        </div>
+
+        <img id="favicon" class="icon" src="" alt="Server Icon" hidden>
+
+    </div>
+
+</div>
+
+<script>
+async function loadStatus() {
+    const r = await fetch("https://api.mcstatus.io/v2/status/java/basic-6.alstore.space:25710");
+    const data = await r.json();
+
+    document.getElementById("address").textContent = "basic-6.alstore.space:25710";
+
+    if (!data.online) {
+        document.getElementById("status-dot").style.background = "red";
+        document.getElementById("status-text").textContent = "Offline";
+        return;
+    }
+
+    document.getElementById("status-dot").style.background = "lime";
+    document.getElementById("status-text").textContent = "Online";
+
+    document.getElementById("players").textContent = `${data.players.online}/${data.players.max}`;
+    document.getElementById("motd").textContent = data.motd?.clean ?? "-";
+    document.getElementById("ping").textContent = data.latency + " ms";
+    document.getElementById("version").textContent = data.version?.name_clean ?? "-";
+
+    if (data.icon) {
+        document.getElementById("favicon").src = data.icon;
+        document.getElementById("favicon").hidden = false;
+    }
+}
+
+loadStatus();
+setInterval(loadStatus, 5000);
+</script>
+
+</body>
+</html>
