@@ -1,929 +1,176 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forexter Network - Server Minecraft Premium</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4CAF50;
-            --primary-dark: #388E3C;
-            --secondary: #2196F3;
-            --dark: #0d1b2a;
-            --darker: #08111a;
-            --light: #ffffff;
-            --gray: #bbbbbb;
-            --discord: #5865F2;
-            --offline: #f44336;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--darker), var(--dark));
-            color: var(--light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            position: relative;
-            text-align: center;
-            padding: 60px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
-            opacity: 0.2;
-            z-index: -1;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-            text-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
-            }
-            to {
-                text-shadow: 0 0 20px rgba(76, 175, 80, 1), 0 0 30px rgba(76, 175, 80, 0.7);
-            }
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            color: var(--gray);
-            margin-bottom: 20px;
-        }
-
-        .server-status {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 25px;
-            border-radius: 50px;
-            margin: 15px 0;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        .server-status.offline {
-            border-color: var(--offline);
-            box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
-            animation: pulse-offline 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-            }
-        }
-
-        @keyframes pulse-offline {
-            0% {
-                box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(244, 67, 54, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
-            }
-        }
-
-        .server-address {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: inline-block;
-            border-left: 4px solid var(--primary);
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .card h2 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card h2 i {
-            font-size: 1.5rem;
-        }
-
-        .card p {
-            margin-bottom: 15px;
-            color: var(--gray);
-        }
-
-        .server-card {
-            text-align: center;
-            background: rgba(76, 175, 80, 0.1);
-            border: 2px solid var(--primary);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .discord-widget {
-            background: rgba(88, 101, 242, 0.1);
-            border: 2px solid var(--discord);
-        }
-
-        .discord-widget h2 {
-            color: var(--discord);
-        }
-
-        .discord-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .discord-info {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .discord-widget-frame {
-            flex: 2;
-            min-width: 300px;
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .discord-widget-frame iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .discord-join-btn {
-            display: inline-block;
-            background: var(--discord);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: background 0.3s, transform 0.3s;
-        }
-
-        .discord-join-btn:hover {
-            background: #4752c4;
-            transform: translateY(-3px);
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .status-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .status-item:hover {
-            transform: scale(1.05);
-        }
-
-        .status-label {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 5px;
-        }
-
-        .status-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .shop-card {
-            background: rgba(255, 193, 7, 0.1);
-            border: 2px solid #FFC107;
-            text-align: center;
-        }
-
-        .shop-card h2 {
-            color: #FFC107;
-        }
-
-        .shop-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #FFC107, #FF9800);
-            color: #333;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
-        }
-
-        .shop-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.5);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .feature-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .feature-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        /* Modal untuk detail card */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: var(--darker);
-            border-radius: 15px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 30px;
-            position: relative;
-            transform: translateY(50px);
-            opacity: 0;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal.active .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
-            color: var(--gray);
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: var(--light);
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-
-        .modal-footer {
-            text-align: right;
-        }
-
-        .modal-btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.3s, transform 0.3s;
-        }
-
-        .modal-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-        }
-
-        /* Loading spinner */
-        .loader {
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 5px solid var(--primary);
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--gray);
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .social-link:hover {
-            transform: translateY(-5px);
-            background: var(--primary);
-        }
-
-        .discord-link:hover {
-            background: var(--discord);
-        }
-
-        .youtube-link:hover {
-            background: #FF0000;
-        }
-
-        .twitter-link:hover {
-            background: #1DA1F2;
-        }
-
-        /* Animasi untuk elemen yang muncul saat scroll */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease-out;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsif */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .discord-container {
-                flex-direction: column;
-            }
-            
-            .discord-widget-frame {
-                height: 350px;
-            }
-            
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Forexter Network</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0f0f12;
+        font-family: Arial, sans-serif;
+        color: #eaeaea;
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    .panel {
+        width: 430px;
+        background: #15151a;
+        border-radius: 14px;
+        box-shadow: 0 0 25px #0008;
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #3a3a4d, #1d1d26);
+        padding: 25px;
+        text-align: center;
+        border-bottom: 1px solid #333;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    .server-box {
+        padding: 20px;
+    }
+
+    .stat {
+        background: #1d1d24;
+        padding: 14px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        transition: 0.25s;
+        border: 1px solid #2d2d37;
+    }
+
+    .stat:hover {
+        background: #24242e;
+    }
+
+    .status-box {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 8px;
+    }
+
+    #dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: gray;
+    }
+
+    .icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 6px;
+        margin: 15px auto 0 auto;
+        display: block;
+    }
+
+    .footer {
+        padding: 15px;
+        text-align: center;
+        font-size: 13px;
+        color: #aaa;
+        border-top: 1px solid #2d2d37;
+    }
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <div class="header-bg"></div>
-            <h1>Forexter Network</h1>
-            <p class="subtitle">Server Minecraft Premium dengan Pengalaman Bermain Terbaik</p>
-            <div class="server-status" id="server-status">
-                <i class="fas fa-circle" style="color: #4CAF50;"></i> <span id="status-text">Loading Status...</span>
-            </div>
-            <div class="server-address">play.forexternetwork.my.id:19260</div>
-            <p>Bergabunglah sekarang dan rasakan pengalaman bermain yang berbeda!</p>
-        </header>
 
-        <div class="card server-card fade-in" id="server-status-card">
-            <h2><i class="fas fa-server"></i> Status Server Real-time</h2>
-            <p>Status server diperbarui secara real-time dari panel server Minecraft.</p>
-            
-            <div id="server-loading" class="loader"></div>
-            
-            <div id="server-data" style="display: none;">
-                <div class="status-grid">
-                    <div class="status-item">
-                        <div class="status-label">Pemain Online</div>
-                        <div class="status-value" id="online-players">0/0</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-label">Versi</div>
-                        <div class="status-value" id="server-version">Loading...</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-label">Status</div>
-                        <div class="status-value" id="server-status-value">Loading...</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-label">Ping</div>
-                        <div class="status-value" id="server-ping">Loading...</div>
-                    </div>
-                </div>
-                
-                <div id="player-list" style="margin-top: 20px; display: none;">
-                    <h3 style="margin-bottom: 10px;">Pemain Online:</h3>
-                    <div id="players-container" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
-                </div>
-            </div>
+<div class="panel">
+    <div class="header">
+        <h1>Basic-6 Server Status</h1>
+        <p>Java • basic-6.alstore.space:25710</p>
+    </div>
+
+    <img id="favicon" class="icon" hidden>
+
+    <div class="server-box">
+        <div class="status-box">
+            <div id="dot"></div>
+            <div id="statustext">Checking...</div>
         </div>
 
-        <div class="grid">
-            <div class="card fade-in" id="web-info-card">
-                <h2><i class="fas fa-globe"></i> Info Web</h2>
-                <p>Website ini adalah portal resmi untuk informasi server Forexter Network.</p>
-                <p>Di sini Anda dapat menemukan informasi terbaru tentang server, update, event, dan panduan bermain.</p>
-                <p>Kami akan terus mengembangkan website ini untuk memberikan pengalaman terbaik bagi komunitas kami.</p>
-            </div>
-
-            <div class="card fade-in" id="admin-info-card">
-                <h2><i class="fas fa-user-shield"></i> Info Admin</h2>
-                <p>Admin Forexter Network bertugas menjaga kenyamanan dan keamanan server.</p>
-                <p>Jika Anda membutuhkan bantuan atau melaporkan masalah, hubungi admin melalui Discord server kami.</p>
-                <p>Admin akan dengan senang hati membantu Anda dengan masalah teknis atau pertanyaan tentang server.</p>
-            </div>
-
-            <div class="card fade-in" id="owner-info-card">
-                <h2><i class="fas fa-crown"></i> Info Owner</h2>
-                <p>Owner Forexter Network adalah penggagas dan pemilik server ini.</p>
-                <p>Dengan visi untuk menciptakan komunitas Minecraft yang inklusif dan menyenangkan, owner terus berupaya mengembangkan server dengan fitur-fitur terbaru.</p>
-                <p>Keputusan strategis tentang arah pengembangan server berada di tangan owner.</p>
-            </div>
-
-            <div class="card fade-in" id="dev-info-card">
-                <h2><i class="fas fa-code"></i> Info Developer</h2>
-                <p>Developer Forexter Network bertanggung jawab atas pengembangan plugin kustom, fitur unik, dan pemeliharaan teknis server.</p>
-                <p>Tim developer bekerja keras untuk memastikan server berjalan lancar dan menambahkan konten baru secara berkala.</p>
-                <p>Jika Anda menemukan bug atau memiliki saran untuk pengembangan, silakan laporkan kepada tim developer.</p>
-            </div>
+        <div class="stat">
+            <span>Online Players</span>
+            <span id="players">-</span>
         </div>
 
-        <div class="card discord-widget fade-in">
-            <h2><i class="fab fa-discord"></i> Discord Forexter Network</h2>
-            <p>Bergabunglah dengan komunitas Discord kami untuk mendapatkan informasi terbaru, berinteraksi dengan pemain lain, dan berpartisipasi dalam event seru!</p>
-            
-            <div class="discord-container">
-                <div class="discord-info">
-                    <h3>Kenapa Bergabung dengan Discord Kami?</h3>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>Informasi update server terbaru</li>
-                        <li>Komunitas yang ramah dan aktif</li>
-                        <li>Event dan giveaway eksklusif</li>
-                        <li>Dukungan teknis 24/7</li>
-                        <li>Saluran khusus untuk berbagai minat</li>
-                    </ul>
-                    <a href="https://discord.gg/Xm5YhCnkw" class="discord-join-btn"><i class="fab fa-discord"></i> Join Discord</a>
-                </div>
-                <div class="discord-widget-frame">
-                    <!-- Widget Discord akan ditampilkan di sini -->
-                    <iframe src="https://discord.com/widget?id=1436294007541071874&theme=dark" allowtransparency="true" frameborder="0"></iframe>
-                </div>
-            </div>
+        <div class="stat">
+            <span>MOTD</span>
+            <span id="motd">-</span>
         </div>
 
-        <div class="card shop-card fade-in">
-            <h2><i class="fas fa-shopping-cart"></i> Toko Server</h2>
-            <p>Dukung server kami dan dapatkan keuntungan eksklusif dengan membeli rank, item, dan paket spesial di toko kami!</p>
-            <p>Semua pembelian akan digunakan untuk pengembangan dan pemeliharaan server.</p>
-            
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-gem"></i>
-                    </div>
-                    <h3>Rank Eksklusif</h3>
-                    <p>Dapatkan akses ke fitur khusus dan perintah tambahan</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Kostumisasi</h3>
-                    <p>Personalisasi karakter dan pengalaman bermain Anda</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <h3>Paket Item</h3>
-                    <p>Paket item spesial untuk mempercepat perkembangan</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3>Dukungan Server</h3>
-                    <p>Bantu server tetap online dan berkembang</p>
-                </div>
-            </div>
-            
-            <a href="/shop" class="shop-btn"><i class="fas fa-store"></i> Kunjungi Toko</a>
+        <div class="stat">
+            <span>Ping</span>
+            <span id="ping">- ms</span>
         </div>
 
-        <div class="card fade-in">
-            <h2><i class="fas fa-star"></i> Fitur Unggulan</h2>
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Anti-Cheat Canggih</h3>
-                    <p>Sistem keamanan terbaik untuk pengalaman bermain yang adil</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </div>
-                    <h3>Plugin Kustom</h3>
-                    <p>Fitur unik yang tidak akan Anda temukan di server lain</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <h3>Performance Optimal</h3>
-                    <p>Server dengan hardware terbaik untuk gameplay yang mulus</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Komunitas Aktif</h3>
-                    <p>Bergabung dengan ratusan pemain aktif setiap hari</p>
-                </div>
-            </div>
+        <div class="stat">
+            <span>Version</span>
+            <span id="ver">-</span>
         </div>
     </div>
 
-    <!-- Modal untuk detail card -->
-    <div class="modal" id="detail-modal">
-        <div class="modal-content">
-            <span class="close-modal" id="close-modal">&times;</span>
-            <div class="modal-header">
-                <h2 id="modal-title">Detail Informasi</h2>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <p>Isi detail informasi akan ditampilkan di sini.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn" id="modal-close-btn">Tutup</button>
-            </div>
-        </div>
+    <div class="footer">
+        Update otomatis setiap 5 detik
     </div>
+</div>
 
-    <footer>
-        <div class="social-links">
-            <a href="#" class="social-link discord-link"><i class="fab fa-discord"></i></a>
-            <a href="#" class="social-link youtube-link"><i class="fab fa-youtube"></i></a>
-            <a href="#" class="social-link twitter-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
-        </div>
-        <p>&copy; 2023 Forexter Network. All rights reserved.</p>
-        <p>play.forexternetwork.my.id:19260</p>
-    </footer>
 
-    <script>
-        // Data untuk modal detail
-        const cardDetails = {
-            'web-info-card': {
-                title: 'Info Website Forexter Network',
-                content: `
-                    <p>Website Forexter Network adalah portal resmi yang dikembangkan untuk memberikan informasi terbaru tentang server Minecraft kami.</p>
-                    <h3>Fitur Website:</h3>
-                    <ul>
-                        <li>Status server real-time</li>
-                        <li>Informasi update terbaru</li>
-                        <li>Panduan bermain untuk pemula</li>
-                        <li>Event dan giveaway</li>
-                        <li>Integrasi dengan Discord</li>
-                    </ul>
-                    <p>Website ini terus dikembangkan untuk meningkatkan pengalaman pengguna dan menyediakan informasi yang akurat tentang server kami.</p>
-                `
-            },
-            'admin-info-card': {
-                title: 'Info Admin Forexter Network',
-                content: `
-                    <p>Tim admin Forexter Network terdiri dari anggota komunitas yang berpengalaman dan terpercaya.</p>
-                    <h3>Tugas dan Tanggung Jawab Admin:</h3>
-                    <ul>
-                        <li>Menjaga ketertiban dan keamanan server</li>
-                        <li>Membantu pemain dengan masalah teknis</li>
-                        <li>Mengorganisir event dan aktivitas komunitas</li>
-                        <li>Memoderasi chat dan interaksi pemain</li>
-                        <li>Melaporkan bug dan masalah kepada developer</li>
-                    </ul>
-                    <p>Jika Anda membutuhkan bantuan admin, silakan hubungi melalui Discord server atau gunakan perintah /help di dalam game.</p>
-                `
-            },
-            'owner-info-card': {
-                title: 'Info Owner Forexter Network',
-                content: `
-                    <p>Pemilik Forexter Network memiliki visi untuk menciptakan komunitas Minecraft yang inklusif, menyenangkan, dan berkelanjutan.</p>
-                    <h3>Visi dan Misi:</h3>
-                    <ul>
-                        <li>Menyediakan server Minecraft berkualitas tinggi</li>
-                        <li>Membangun komunitas yang positif dan mendukung</li>
-                        <li>Terus berinovasi dengan fitur dan konten baru</li>
-                        <li>Memastikan pengalaman bermain yang adil untuk semua pemain</li>
-                    </ul>
-                    <p>Keputusan strategis tentang arah pengembangan server dan kebijakan komunitas dibuat oleh owner dengan mempertimbangkan masukan dari seluruh tim dan komunitas.</p>
-                `
-            },
-            'dev-info-card': {
-                title: 'Info Developer Forexter Network',
-                content: `
-                    <p>Tim developer Forexter Network bertanggung jawab atas aspek teknis server, termasuk pengembangan plugin kustom dan pemeliharaan sistem.</p>
-                    <h3>Tanggung Jawab Developer:</h3>
-                    <ul>
-                        <li>Mengembangkan dan memelihara plugin kustom</li>
-                        <li>Mengoptimalkan performa server</li>
-                        <li>Memperbaiki bug dan masalah teknis</li>
-                        <li>Menerapkan fitur baru berdasarkan masukan komunitas</li>
-                        <li>Memastikan kompatibilitas dengan update Minecraft</li>
-                    </ul>
-                    <p>Tim developer bekerja secara proaktif untuk meningkatkan kualitas server dan merespons kebutuhan komunitas dengan cepat.</p>
-                `
-            }
-        };
+<script>
+async function loadStatus() {
+    try {
+        const req = await fetch("https://api.mcstatus.io/v2/status/java/basic-6.alstore.space:25710");
+        const data = await req.json();
 
-        // Fungsi untuk mengambil data server dari API
-        async function fetchServerStatus() {
-            const apiUrl = `https://mcsrvstat.us/server/basic-6.alstore.space:25710`;
-            
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                updateServerStatus(data);
-            } catch (error) {
-                console.error('Error fetching server status:', error);
-                document.getElementById('status-text').textContent = 'Error Loading Status';
-                document.getElementById('server-status').classList.add('offline');
-                document.getElementById('server-status-value').textContent = 'Error';
-                document.getElementById('online-players').textContent = '0/0';
-                document.getElementById('server-version').textContent = 'Unknown';
-                document.getElementById('server-ping').textContent = 'N/A';
-                
-                // Sembunyikan loading, tampilkan data
-                document.getElementById('server-loading').style.display = 'none';
-                document.getElementById('server-data').style.display = 'block';
-            }
+        const dot = document.getElementById("dot");
+        const st = document.getElementById("statustext");
+
+        if (!data.online) {
+            dot.style.background = "red";
+            st.textContent = "Offline";
+            return;
         }
 
-        // Fungsi untuk memperbarui tampilan status server
-        function updateServerStatus(data) {
-            const statusElement = document.getElementById('server-status');
-            const statusText = document.getElementById('status-text');
-            const onlinePlayers = document.getElementById('online-players');
-            const serverVersion = document.getElementById('server-version');
-            const serverStatusValue = document.getElementById('server-status-value');
-            const serverPing = document.getElementById('server-ping');
-            const playerList = document.getElementById('player-list');
-            const playersContainer = document.getElementById('players-container');
-            
-            if (data.online) {
-                statusText.textContent = 'Server Online';
-                statusElement.classList.remove('offline');
-                
-                onlinePlayers.textContent = `${data.players.online}/${data.players.max}`;
-                serverVersion.textContent = data.version || 'Unknown';
-                serverStatusValue.textContent = 'Online';
-                serverPing.textContent = 'N/A'; // API tidak menyediakan data ping
-                
-                // Tampilkan daftar pemain jika tersedia
-                if (data.players.list && data.players.list.length > 0) {
-                    playerList.style.display = 'block';
-                    playersContainer.innerHTML = '';
-                    
-                    data.players.list.forEach(player => {
-                        const playerElement = document.createElement('div');
-                        playerElement.style.background = 'rgba(255, 255, 255, 0.1)';
-                        playerElement.style.padding = '8px 12px';
-                        playerElement.style.borderRadius = '5px';
-                        playerElement.textContent = player;
-                        playersContainer.appendChild(playerElement);
-                    });
-                } else {
-                    playerList.style.display = 'none';
-                }
-            } else {
-                statusText.textContent = 'Server Offline';
-                statusElement.classList.add('offline');
-                
-                onlinePlayers.textContent = '0/0';
-                serverVersion.textContent = 'Unknown';
-                serverStatusValue.textContent = 'Offline';
-                serverPing.textContent = 'N/A';
-                playerList.style.display = 'none';
-            }
-            
-            // Sembunyikan loading, tampilkan data
-            document.getElementById('server-loading').style.display = 'none';
-            document.getElementById('server-data').style.display = 'block';
+        dot.style.background = "lime";
+        st.textContent = "Online";
+
+        document.getElementById("players").textContent =
+            `${data.players.online}/${data.players.max}`;
+
+        document.getElementById("motd").textContent = data.motd?.clean ?? "-";
+        document.getElementById("ping").textContent = data.latency + " ms";
+        document.getElementById("ver").textContent = data.version?.name_clean ?? "-";
+
+        if (data.icon) {
+            const icon = document.getElementById("favicon");
+            icon.src = data.icon;
+            icon.hidden = false;
         }
 
-        // Fungsi untuk menampilkan modal detail
-        function showDetailModal(cardId) {
-            const modal = document.getElementById('detail-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalBody = document.getElementById('modal-body');
-            
-            if (cardDetails[cardId]) {
-                modalTitle.textContent = cardDetails[cardId].title;
-                modalBody.innerHTML = cardDetails[cardId].content;
-                modal.classList.add('active');
-            }
-        }
+    } catch (e) {
+        document.getElementById("statustext").textContent = "Error fetching data";
+        document.getElementById("dot").style.background = "gray";
+    }
+}
 
-        // Fungsi untuk menutup modal
-        function closeModal() {
-            document.getElementById('detail-modal').classList.remove('active');
-        }
+loadStatus();
+setInterval(loadStatus, 5000);
+</script>
 
-        // Event listener saat DOM siap
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ambil status server
-            fetchServerStatus();
-            
-            // Refresh status server setiap 30 detik
-            setInterval(fetchServerStatus, 30000);
-            
-            // Tambahkan event listener untuk card yang bisa diklik
-            const clickableCards = ['web-info-card', 'admin-info-card', 'owner-info-card', 'dev-info-card'];
-            clickableCards.forEach(cardId => {
-                document.getElementById(cardId).addEventListener('click', () => {
-                    showDetailModal(cardId);
-                });
-            });
-            
-            // Event listener untuk menutup modal
-            document.getElementById('close-modal').addEventListener('click', closeModal);
-            document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-            
-            // Tutup modal saat klik di luar konten modal
-            document.getElementById('detail-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'detail-modal') {
-                    closeModal();
-                }
-            });
-            
-            // Animasi saat scroll
-            const fadeElements = document.querySelectorAll('.fade-in');
-            
-            const fadeInOnScroll = function() {
-                fadeElements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('visible');
-                    }
-                });
-            };
-            
-            // Panggil sekali saat halaman dimuat
-            fadeInOnScroll();
-            
-            // Tambahkan event listener untuk scroll
-            window.addEventListener('scroll', fadeInOnScroll);
-        });
-    </script>
 </body>
 </html>
