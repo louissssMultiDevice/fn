@@ -787,6 +787,89 @@
         .plugin-version {
             color: var(--text-secondary);
         }
+
+        /* Player List Enhancements */
+        .player-search {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .player-search input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .player-search input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+
+        .player-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .player-action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .player-action-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .player-action-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .player-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .player-stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .player-stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
     </style>
 </head>
 <body>
@@ -875,6 +958,43 @@
                         </div>
                         <div class="player-count" id="player-count-text">0 players online</div>
                     </div>
+
+                    <!-- Player Stats -->
+                    <div class="player-stats">
+                        <div class="player-stat-item">
+                            <div class="player-stat-value" id="unique-players">0</div>
+                            <div>Unique Today</div>
+                        </div>
+                        <div class="player-stat-item">
+                            <div class="player-stat-value" id="peak-players">0</div>
+                            <div>Peak Today</div>
+                        </div>
+                        <div class="player-stat-item">
+                            <div class="player-stat-value" id="avg-playtime">0m</div>
+                            <div>Avg Playtime</div>
+                        </div>
+                    </div>
+
+                    <!-- Player Actions -->
+                    <div class="player-actions">
+                        <button class="player-action-btn active" data-sort="name">
+                            <i class="fas fa-sort-alpha-down"></i> Name
+                        </button>
+                        <button class="player-action-btn" data-sort="join">
+                            <i class="fas fa-clock"></i> Join Time
+                        </button>
+                        <button class="player-action-btn" data-sort="playtime">
+                            <i class="fas fa-hourglass"></i> Playtime
+                        </button>
+                    </div>
+
+                    <!-- Player Search -->
+                    <div class="player-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="player-search-input" placeholder="Search players...">
+                    </div>
+
+                    <!-- Player List -->
                     <div class="player-list" id="player-list">
                         <div class="no-players">No players online</div>
                     </div>
@@ -1040,17 +1160,21 @@
         const serverHistory = {
             playerData: [],
             uptimeData: [],
+            playerHistory: {}, // Menyimpan data pemain individual
             maxDataPoints: 288 // 24 jam data dengan interval 5 menit
         };
 
         // Chart instance
         let historyChart = null;
+        let currentPlayerSort = 'name';
+        let playerSearchTerm = '';
 
         // Inisialisasi aplikasi
         document.addEventListener('DOMContentLoaded', function() {
             initParticles();
             initTabs();
             initChart();
+            initPlayerFeatures();
             loadServerStatus();
             startAutoRefresh();
             
@@ -1088,6 +1212,25 @@
                 
                 container.appendChild(particle);
             }
+        }
+
+        // Inisialisasi fitur pemain
+        function initPlayerFeatures() {
+            // Search functionality
+            document.getElementById('player-search-input').addEventListener('input', function(e) {
+                playerSearchTerm = e.target.value.toLowerCase();
+                updatePlayerListDisplay();
+            });
+
+            // Sort buttons
+            document.querySelectorAll('.player-action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.player-action-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentPlayerSort = this.getAttribute('data-sort');
+                    updatePlayerListDisplay();
+                });
+            });
         }
 
         // Inisialisasi tab system
@@ -1223,6 +1366,7 @@
                 if (data.online && data.players) {
                     updateChart(data.players.online);
                     updateUptimeStats(data.online);
+                    updatePlayerStats(data.players.list || []);
                 }
                 
                 // Show success notification untuk manual refresh
@@ -1301,26 +1445,140 @@
             }
         }
 
-        // Update player list
+        // Update player list dengan data aktual
         function updatePlayerList(players) {
-            const playerList = document.getElementById('player-list');
+            const now = Date.now();
             
-            if (players && players.length > 0) {
+            // Update data history pemain
+            players.forEach(player => {
+                if (!serverHistory.playerHistory[player]) {
+                    serverHistory.playerHistory[player] = {
+                        name: player,
+                        firstSeen: now,
+                        lastSeen: now,
+                        sessions: 1,
+                        totalPlaytime: 0,
+                        currentSessionStart: now
+                    };
+                } else {
+                    serverHistory.playerHistory[player].lastSeen = now;
+                    serverHistory.playerHistory[player].sessions += 1;
+                }
+            });
+            
+            // Update tampilan daftar pemain
+            updatePlayerListDisplay();
+            
+            // Simpan ke localStorage
+            saveToLocalStorage();
+        }
+
+        // Update tampilan daftar pemain dengan filter dan sorting
+        function updatePlayerListDisplay() {
+            const playerList = document.getElementById('player-list');
+            const players = Object.values(serverHistory.playerHistory);
+            
+            // Filter berdasarkan pencarian
+            let filteredPlayers = players.filter(player => 
+                player.name.toLowerCase().includes(playerSearchTerm)
+            );
+            
+            // Sort berdasarkan kriteria yang dipilih
+            filteredPlayers.sort((a, b) => {
+                switch(currentPlayerSort) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'join':
+                        return b.lastSeen - a.lastSeen;
+                    case 'playtime':
+                        return b.totalPlaytime - a.totalPlaytime;
+                    default:
+                        return 0;
+                }
+            });
+            
+            if (filteredPlayers.length > 0) {
                 playerList.innerHTML = '';
-                players.forEach(player => {
+                filteredPlayers.forEach(player => {
                     const playerItem = document.createElement('div');
                     playerItem.className = 'player-item';
+                    
+                    // Hitung playtime
+                    const playtimeHours = Math.floor(player.totalPlaytime / 3600000);
+                    const playtimeMinutes = Math.floor((player.totalPlaytime % 3600000) / 60000);
+                    const playtimeText = playtimeHours > 0 ? 
+                        `${playtimeHours}h ${playtimeMinutes}m` : `${playtimeMinutes}m`;
+                    
+                    // Format last seen
+                    const lastSeen = new Date(player.lastSeen);
+                    const lastSeenText = isToday(lastSeen) ? 
+                        `Today ${lastSeen.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}` :
+                        lastSeen.toLocaleDateString();
+                    
                     playerItem.innerHTML = `
                         <div class="player-avatar">
                             <i class="fas fa-user"></i>
                         </div>
-                        <div class="player-name">${player}</div>
+                        <div style="flex: 1;">
+                            <div class="player-name">${player.name}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+                                <i class="fas fa-clock"></i> Last seen: ${lastSeenText} 
+                                <span style="margin-left: 10px;">
+                                    <i class="fas fa-hourglass"></i> Playtime: ${playtimeText}
+                                </span>
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">
+                            <i class="fas fa-sign-in-alt"></i> ${player.sessions} sessions
+                        </div>
                     `;
                     playerList.appendChild(playerItem);
                 });
             } else {
-                playerList.innerHTML = '<div class="no-players">No players online</div>';
+                playerList.innerHTML = '<div class="no-players">No players found</div>';
             }
+        }
+
+        // Update player statistics
+        function updatePlayerStats(onlinePlayers) {
+            const now = Date.now();
+            const todayStart = new Date();
+            todayStart.setHours(0, 0, 0, 0);
+            
+            // Hitung pemain unik hari ini
+            const uniqueToday = Object.values(serverHistory.playerHistory).filter(player => 
+                player.lastSeen >= todayStart.getTime()
+            ).length;
+            
+            // Hitung peak players hari ini
+            let peakToday = 0;
+            const todayPlayerData = serverHistory.playerData.filter(data => {
+                const dataTime = new Date(data.time);
+                return dataTime >= todayStart;
+            });
+            if (todayPlayerData.length > 0) {
+                peakToday = Math.max(...todayPlayerData.map(data => data.players));
+            }
+            
+            // Hitung average playtime
+            const totalPlaytime = Object.values(serverHistory.playerHistory).reduce((sum, player) => 
+                sum + player.totalPlaytime, 0
+            );
+            const playerCount = Object.keys(serverHistory.playerHistory).length;
+            const avgPlaytime = playerCount > 0 ? Math.round(totalPlaytime / playerCount / 60000) : 0;
+            
+            // Update display
+            document.getElementById('unique-players').textContent = uniqueToday;
+            document.getElementById('peak-players').textContent = peakToday;
+            document.getElementById('avg-playtime').textContent = `${avgPlaytime}m`;
+        }
+
+        // Helper function untuk mengecek apakah tanggal adalah hari ini
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
         }
 
         // Update plugins dan mods
@@ -1447,6 +1705,11 @@
             document.getElementById('plugin-list').innerHTML = '<div class="no-players">No plugin information available</div>';
             document.getElementById('mods-count').textContent = '0 mods';
             document.getElementById('mod-list').innerHTML = '<div class="no-players">No mod information available</div>';
+            
+            // Reset player stats
+            document.getElementById('unique-players').textContent = '0';
+            document.getElementById('peak-players').textContent = '0';
+            document.getElementById('avg-playtime').textContent = '0m';
         }
 
         // Show notification
@@ -1479,6 +1742,7 @@
                 const parsed = JSON.parse(saved);
                 serverHistory.playerData = parsed.playerData || [];
                 serverHistory.uptimeData = parsed.uptimeData || [];
+                serverHistory.playerHistory = parsed.playerHistory || {};
                 
                 // Update chart dengan data yang disimpan
                 if (serverHistory.playerData.length > 0) {
@@ -1486,6 +1750,10 @@
                     historyChart.data.datasets[0].data = serverHistory.playerData.map(item => item.players);
                     historyChart.update();
                 }
+                
+                // Update player stats
+                updatePlayerStats([]);
+                updatePlayerListDisplay();
             }
         }
     </script>
