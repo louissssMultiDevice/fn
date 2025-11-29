@@ -102,7 +102,7 @@
 
 <script>
 async function loadStatus() {
-    const r = await fetch("https://api.mcstatus.io/v2/status/java/basic-6.alstore.space:25710");
+    const r = await fetch("https://api.mcstatus.io/v2/status/bedrock/basic-6.alstore.space:25710");
     const data = await r.json();
 
     document.getElementById("address").textContent = "basic-6.alstore.space:25710";
