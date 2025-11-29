@@ -1199,7 +1199,7 @@
             saveToLocalStorage();
         }
 
-        // Load server status dari mcsrvstat.us
+        // Load server status dari mcstatus.io
         async function loadServerStatus(manualRefresh = false) {
             const refreshBtn = document.getElementById('refresh-btn');
             
@@ -1212,7 +1212,7 @@
                 // Update status menjadi checking
                 updateStatus('checking', 'Checking Server Status...');
                 
-                // Fetch data dari mcsrvstat.us API
+                // Fetch data dari mcstatus.io API
                 const response = await fetch('https://api.mcstatus.io/v2/status/bedrock/basic-6.alstore.space:25710');
                 const data = await response.json();
                 
@@ -1258,7 +1258,7 @@
                 `Last updated: ${now.toLocaleTimeString()}`;
         }
 
-        // Update server display dengan data dari mcsrvstat.us
+        // Update server display dengan data dari mcstatus.io
         function updateServerDisplay(data) {
             if (data.online) {
                 updateStatus('online', 'Server Online');
@@ -1268,16 +1268,15 @@
                     `${data.players.online}/${data.players.max}`;
                 document.getElementById('player-count-text').textContent = 
                     `${data.players.online} players online`;
-                document.getElementById('ping-value').textContent = 
-                    data.debug?.ping ? `${data.debug.ping} ms` : '- ms';
-                document.getElementById('version').textContent = data.version || '-';
+                document.getElementById('ping-value').textContent = '- ms'; // mcstatus.io tidak menyediakan ping
+                document.getElementById('version').textContent = data.version?.name || '-';
                 document.getElementById('protocol').textContent = 
-                    data.protocol || '-';
+                    data.version?.protocol || '-';
                 document.getElementById('motd').textContent = 
-                    data.motd?.clean || data.motd || '-';
+                    data.motd?.clean || '-';
                 document.getElementById('server-address').textContent = 
-                    `${data.hostname || data.ip}:${data.port}`;
-                document.getElementById('server-software').textContent = data.software || '-';
+                    `${data.host}:${data.port}`;
+                document.getElementById('server-software').textContent = data.software || 'PocketMine-MP';
                 
                 // Update last checked
                 document.getElementById('last-checked').textContent = 
@@ -1286,15 +1285,11 @@
                 // Update player list
                 updatePlayerList(data.players.list || []);
                 
-                // Update favicon
-                if (data.icon) {
-                    const favicon = document.getElementById('server-favicon');
-                    favicon.src = data.icon;
-                    favicon.style.display = 'block';
-                }
+                // mcstatus.io tidak menyediakan favicon, jadi kita sembunyikan
+                document.getElementById('server-favicon').style.display = 'none';
                 
                 // Update plugins dan mods
-                updatePluginsAndMods(data.plugins || [], data.mods || []);
+                updatePluginsAndMods(data.plugins || [], []);
                 
                 // Update performance data
                 updatePerformanceData(data);
@@ -1341,8 +1336,8 @@
                     const pluginItem = document.createElement('div');
                     pluginItem.className = 'plugin-item';
                     pluginItem.innerHTML = `
-                        <span class="plugin-name">${plugin.name || plugin}</span>
-                        <span class="plugin-version">${plugin.version || ''}</span>
+                        <span class="plugin-name">${plugin}</span>
+                        <span class="plugin-version"></span>
                     `;
                     pluginList.appendChild(pluginItem);
                 });
@@ -1362,8 +1357,8 @@
                     const modItem = document.createElement('div');
                     modItem.className = 'plugin-item';
                     modItem.innerHTML = `
-                        <span class="plugin-name">${mod.name || mod}</span>
-                        <span class="plugin-version">${mod.version || ''}</span>
+                        <span class="plugin-name">${mod}</span>
+                        <span class="plugin-version"></span>
                     `;
                     modList.appendChild(modItem);
                 });
@@ -1375,16 +1370,16 @@
 
         // Update performance data
         function updatePerformanceData(data) {
-            // Data ini mungkin tidak tersedia di mcsrvstat.us
+            // Data ini mungkin tidak tersedia di mcstatus.io
             // Tapi kita bisa mengisi dengan data yang tersedia
             document.getElementById('uptime-value').textContent = '-';
             document.getElementById('tps-value').textContent = '-';
             document.getElementById('memory-usage').textContent = '-';
             document.getElementById('cpu-usage').textContent = '-';
             document.getElementById('server-load').textContent = '-';
-            document.getElementById('world-name').textContent = data.map || '-';
+            document.getElementById('world-name').textContent = '-';
             document.getElementById('gamemode').textContent = data.gamemode || '-';
-            document.getElementById('server-id').textContent = data.serverid || '-';
+            document.getElementById('server-id').textContent = data.server_id || '-';
         }
 
         // Update uptime statistics
