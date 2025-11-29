@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forexter Network</title>
+<link rel="icon" type="image/png" href="https://files.catbox.moe/pvnz0v.jpg">
+<title>Forexter Network - Server Status</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     :root {
@@ -376,6 +377,45 @@
         background: var(--primary-dark);
     }
 
+    .refresh-btn:disabled {
+        background: var(--text-secondary);
+        cursor: not-allowed;
+    }
+
+    .refresh-btn.loading {
+        position: relative;
+        color: transparent;
+    }
+
+    .refresh-btn.loading::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Favicon */
+    .favicon-container {
+        text-align: center;
+        margin: 15px 0;
+    }
+
+    .server-favicon {
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .status-header {
@@ -404,20 +444,54 @@
             font-size: 22px;
         }
     }
+
+    /* Notification */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        transform: translateX(150%);
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .notification.show {
+        transform: translateX(0);
+    }
+
+    .notification.success {
+        background: var(--success);
+    }
+
+    .notification.error {
+        background: var(--danger);
+    }
+
+    .notification.warning {
+        background: var(--warning);
+        color: var(--dark);
+    }
 </style>
 </head>
 <body>
 
+<!-- Notification System -->
+<div id="notification" class="notification"></div>
+
 <div class="panel-container">
     <!-- Banner Section -->
-    
     <div class="banner">
         <div class="banner-content">
             <div class="server-logo">
                 <i class="fas fa-server"></i>
             </div>
-            <h1>Server Status</h1>
-            <p>PMP Edition • play.forexternetwork.my.id:25710</p>
+            <h1>Forexter Network</h1>
+            <p>PocketMine-MP Edition • Server Status</p>
         </div>
     </div>
 
@@ -430,6 +504,11 @@
                 <div class="status-text" id="status-text">Checking Server Status...</div>
             </div>
             <div class="last-updated" id="last-updated">Last updated: -</div>
+        </div>
+
+        <!-- Favicon -->
+        <div class="favicon-container">
+            <img id="server-favicon" class="server-favicon" src="" alt="Server Favicon" style="display: none;">
         </div>
 
         <!-- Stats Grid -->
@@ -445,7 +524,7 @@
                 <div class="stat-icon">
                     <i class="fas fa-signal"></i>
                 </div>
-                <div class="stat-value" id="ping-value">ms</div>
+                <div class="stat-value" id="ping-value">- ms</div>
                 <div class="stat-label">Server Ping</div>
             </div>
             <div class="stat-card">
@@ -493,11 +572,11 @@
                 </div>
                 <div class="info-item">
                     <div class="info-label">Server Address</div>
-                    <div class="info-value">play.forexternetwork.my.id:25710</div>
+                    <div class="info-value" id="server-address">-</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Server Type</div>
-                    <div class="info-value">Pocketmine-MP</div>
+                    <div class="info-value">PocketMine-MP</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Last Checked</div>
@@ -516,7 +595,7 @@
             <span>Auto-refresh every 30 seconds</span>
         </div>
         <div class="copyright">
-            &copy; 2025 Server Status Panel | Powered by ndiidepzX API
+            &copy; 2025 Forexter Network | Powered by Custom API
         </div>
     </div>
 </div>
@@ -535,14 +614,36 @@
     const motd = document.getElementById('motd');
     const lastChecked = document.getElementById('last-checked');
     const refreshBtn = document.getElementById('refresh-btn');
+    const serverFavicon = document.getElementById('server-favicon');
+    const serverAddress = document.getElementById('server-address');
+    const notification = document.getElementById('notification');
 
-    // Function to update time
+    // Configuration
+    const CONFIG = {
+        API_URL: '/api/status',
+        REFRESH_INTERVAL: 30000, // 30 seconds
+        TIMEOUT: 10000 // 10 seconds timeout for API calls
+    };
+
+    // State management
+    let refreshInterval;
+    let isRefreshing = false;
+
+    // Utility functions
+    function showNotification(message, type = 'success') {
+        notification.textContent = message;
+        notification.className = `notification ${type} show`;
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
     function updateTime() {
         const now = new Date();
         return now.toLocaleTimeString();
     }
 
-    // Function to format player list
     function formatPlayerList(players) {
         if (!players || players.length === 0) {
             return '<div class="no-players">No players online</div>';
@@ -555,22 +656,57 @@
                     <div class="player-avatar">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="player-name">${player.name}</div>
+                    <div class="player-name">${player}</div>
                 </div>
             `;
         });
         return playerHTML;
     }
 
-    // Function to load server status
-    async function loadStatus() {
-        try {
-            // Update status to checking
+    function handleFavicon(faviconData) {
+        if (faviconData) {
+            serverFavicon.src = faviconData;
+            serverFavicon.style.display = 'block';
+        } else {
+            serverFavicon.style.display = 'none';
+        }
+    }
+
+    function setLoadingState(loading) {
+        isRefreshing = loading;
+        
+        if (loading) {
+            refreshBtn.disabled = true;
+            refreshBtn.classList.add('loading');
             statusDot.className = 'status-dot checking';
             statusText.textContent = 'Checking Server Status...';
+        } else {
+            refreshBtn.disabled = false;
+            refreshBtn.classList.remove('loading');
+        }
+    }
+
+    // Function to load server status
+    async function loadStatus() {
+        if (isRefreshing) return;
+        
+        setLoadingState(true);
+        
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+
+            const response = await fetch(CONFIG.API_URL, {
+                signal: controller.signal
+            });
             
-            const req = await fetch("https://api.mcstatus.io/v2/status/java/basic-6.alstore.space:25710");
-            const data = await req.json();
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
 
             // Update last checked time
             const currentTime = updateTime();
@@ -578,6 +714,7 @@
             lastChecked.textContent = currentTime;
 
             if (!data.online) {
+                // Server is offline
                 statusDot.className = 'status-dot offline';
                 statusText.textContent = 'Server Offline';
                 playerCount.textContent = '0/0';
@@ -586,52 +723,97 @@
                 version.textContent = '-';
                 protocol.textContent = '-';
                 motd.textContent = 'Server is offline';
+                serverAddress.textContent = data.address || '-';
                 playerList.innerHTML = '<div class="no-players">Server is offline</div>';
-                return;
-            }
-
-            // Server is online
-            statusDot.className = 'status-dot online';
-            statusText.textContent = 'Server Online';
-
-            // Update player information
-            playerCount.textContent = `${data.players.online}/${data.players.max}`;
-            playerCountText.textContent = `${data.players.online} player${data.players.online !== 1 ? 's' : ''} online`;
-            
-            // Update other stats
-            pingValue.textContent = `${Math.round(data.latency)} ms`;
-            version.textContent = data.version?.name_clean || '-';
-            protocol.textContent = data.version?.protocol || '-';
-            motd.textContent = data.motd?.clean || '-';
-            
-            // Update player list
-            if (data.players.list && data.players.list.length > 0) {
-                playerList.innerHTML = formatPlayerList(data.players.list);
+                serverFavicon.style.display = 'none';
+                
+                showNotification('Server is currently offline', 'warning');
             } else {
-                playerList.innerHTML = '<div class="no-players">No players online</div>';
+                // Server is online
+                statusDot.className = 'status-dot online';
+                statusText.textContent = 'Server Online';
+
+                // Update player information
+                playerCount.textContent = `${data.players.online}/${data.players.max}`;
+                playerCountText.textContent = `${data.players.online} player${data.players.online !== 1 ? 's' : ''} online`;
+                
+                // Update other stats
+                pingValue.textContent = `${Math.round(data.ping)} ms`;
+                version.textContent = data.version || '-';
+                protocol.textContent = data.version || '-'; // Using version as protocol fallback
+                motd.textContent = data.motd || '-';
+                serverAddress.textContent = data.address || '-';
+                
+                // Handle favicon
+                handleFavicon(data.favicon);
+                
+                // Update player list
+                if (data.players.list && data.players.list.length > 0) {
+                    playerList.innerHTML = formatPlayerList(data.players.list);
+                } else {
+                    playerList.innerHTML = '<div class="no-players">No players online</div>';
+                }
+
+                showNotification('Server status updated successfully', 'success');
             }
 
-        } catch (e) {
-            console.error('Error fetching server status:', e);
+        } catch (error) {
+            console.error('Error fetching server status:', error);
+            
             statusDot.className = 'status-dot offline';
-            statusText.textContent = 'Error Fetching Data';
+            statusText.textContent = 'Connection Error';
             lastUpdated.textContent = `Last updated: ${updateTime()}`;
+            
+            if (error.name === 'AbortError') {
+                showNotification('Request timeout - server may be offline', 'error');
+            } else {
+                showNotification('Failed to fetch server status', 'error');
+            }
+        } finally {
+            setLoadingState(false);
         }
     }
 
-    // Initial load
-    loadStatus();
+    // Initialize the application
+    function init() {
+        // Initial load
+        loadStatus();
 
-    // Set up auto-refresh
-    const refreshInterval = setInterval(loadStatus, 30000);
+        // Set up auto-refresh
+        refreshInterval = setInterval(loadStatus, CONFIG.REFRESH_INTERVAL);
 
-    // Manual refresh button
-    refreshBtn.addEventListener('click', loadStatus);
+        // Manual refresh button
+        refreshBtn.addEventListener('click', loadStatus);
+
+        // Add keyboard shortcut (F5 or Ctrl+R)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                e.preventDefault();
+                loadStatus();
+            }
+        });
+
+        // Service Worker registration for PWA (optional)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+        }
+    }
 
     // Clean up on page unload
     window.addEventListener('beforeunload', () => {
-        clearInterval(refreshInterval);
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+        }
     });
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
