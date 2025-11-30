@@ -1427,7 +1427,7 @@
                     new Date().toLocaleString();
                 
                 // Update player list
-                updatePlayerList(data.players.list || []);
+                updatePlayerList(data.players.list);
                 
                 // mcstatus.io tidak menyediakan favicon, jadi kita sembunyikan
                 document.getElementById('server-favicon').style.display = 'none';
