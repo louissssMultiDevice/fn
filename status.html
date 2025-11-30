@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forexter Network - Advanced Server Monitor</title>
+    <title>Forexter Network - Server Monitor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -29,7 +29,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -51,9 +51,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 20%),
-                        radial-gradient(circle at 90% 80%, rgba(0, 206, 201, 0.1) 0%, transparent 20%),
-                        radial-gradient(circle at 50% 50%, rgba(253, 203, 110, 0.05) 0%, transparent 50%);
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 206, 201, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(253, 203, 110, 0.05) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -91,12 +92,6 @@
             position: relative;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .panel-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), var(--glow);
         }
 
         /* Banner Section */
@@ -118,7 +113,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25VzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI3BhdHRlcm4pIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+');
         }
 
         .banner-content {
@@ -686,41 +681,6 @@
             to { opacity: 1; }
         }
 
-        /* Performance Metrics */
-        .performance-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .metric-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            background: linear-gradient(to right, var(--text), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .metric-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
         /* History Chart */
         .history-chart {
             background: rgba(255, 255, 255, 0.08);
@@ -762,114 +722,6 @@
             color: var(--text-secondary);
             text-transform: uppercase;
         }
-
-        /* Plugin List */
-        .plugin-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .plugin-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .plugin-name {
-            font-weight: 500;
-        }
-
-        .plugin-version {
-            color: var(--text-secondary);
-        }
-
-        /* Player List Enhancements */
-        .player-search {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .player-search input {
-            width: 100%;
-            padding: 10px 15px 10px 40px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .player-search input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
-        }
-
-        .player-search i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        .player-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .player-action-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .player-action-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-2px);
-        }
-
-        .player-action-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .player-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .player-stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .player-stat-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text);
-        }
     </style>
 </head>
 <body>
@@ -888,7 +740,7 @@
                     <i class="fas fa-server"></i>
                 </div>
                 <h1>Forexter Network</h1>
-                <p>PocketMine-MP Edition • Advanced Server Monitoring</p>
+                <p>PocketMine-MP Edition • Server Monitoring</p>
             </div>
         </div>
 
@@ -906,12 +758,10 @@
             <!-- Tabs -->
             <div class="tabs">
                 <div class="tab active" data-tab="overview">Overview</div>
-                <div class="tab" data-tab="performance">Performance</div>
-                <div class="tab" data-tab="plugins">Plugins</div>
                 <div class="tab" data-tab="history">History</div>
             </div>
 
-            <!-- Tab Contents -->
+            <!-- Overview Tab -->
             <div class="tab-content active" id="overview-tab">
                 <!-- Favicon -->
                 <div class="favicon-container">
@@ -958,43 +808,6 @@
                         </div>
                         <div class="player-count" id="player-count-text">0 players online</div>
                     </div>
-
-                    <!-- Player Stats -->
-                    <div class="player-stats">
-                        <div class="player-stat-item">
-                            <div class="player-stat-value" id="unique-players">0</div>
-                            <div>Unique Today</div>
-                        </div>
-                        <div class="player-stat-item">
-                            <div class="player-stat-value" id="peak-players">0</div>
-                            <div>Peak Today</div>
-                        </div>
-                        <div class="player-stat-item">
-                            <div class="player-stat-value" id="avg-playtime">0m</div>
-                            <div>Avg Playtime</div>
-                        </div>
-                    </div>
-
-                    <!-- Player Actions -->
-                    <div class="player-actions">
-                        <button class="player-action-btn active" data-sort="name">
-                            <i class="fas fa-sort-alpha-down"></i> Name
-                        </button>
-                        <button class="player-action-btn" data-sort="join">
-                            <i class="fas fa-clock"></i> Join Time
-                        </button>
-                        <button class="player-action-btn" data-sort="playtime">
-                            <i class="fas fa-hourglass"></i> Playtime
-                        </button>
-                    </div>
-
-                    <!-- Player Search -->
-                    <div class="player-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="player-search-input" placeholder="Search players...">
-                    </div>
-
-                    <!-- Player List -->
                     <div class="player-list" id="player-list">
                         <div class="no-players">No players online</div>
                     </div>
@@ -1024,79 +837,6 @@
                             <div class="info-label">Last Checked</div>
                             <div class="info-value" id="last-checked">-</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Performance Tab -->
-            <div class="tab-content" id="performance-tab">
-                <div class="performance-metrics">
-                    <div class="metric-card">
-                        <div class="metric-value" id="uptime-value">-</div>
-                        <div class="metric-label">Uptime</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" id="tps-value">-</div>
-                        <div class="metric-label">TPS</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" id="memory-usage">-</div>
-                        <div class="metric-label">Memory Usage</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value" id="cpu-usage">-</div>
-                        <div class="metric-label">CPU Usage</div>
-                    </div>
-                </div>
-                <div class="server-info">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fas fa-chart-line"></i> Performance Metrics
-                        </div>
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Server Load</div>
-                            <div class="info-value" id="server-load">-</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">World</div>
-                            <div class="info-value" id="world-name">-</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Game Mode</div>
-                            <div class="info-value" id="gamemode">-</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Server ID</div>
-                            <div class="info-value" id="server-id">-</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plugins Tab -->
-            <div class="tab-content" id="plugins-tab">
-                <div class="server-info">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fas fa-plug"></i> Server Plugins
-                        </div>
-                        <div class="player-count" id="plugins-count">0 plugins</div>
-                    </div>
-                    <div class="plugin-list" id="plugin-list">
-                        <div class="no-players">No plugin information available</div>
-                    </div>
-                </div>
-                <div class="server-info">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fas fa-cubes"></i> Server Mods
-                        </div>
-                        <div class="player-count" id="mods-count">0 mods</div>
-                    </div>
-                    <div class="plugin-list" id="mod-list">
-                        <div class="no-players">No mod information available</div>
                     </div>
                 </div>
             </div>
@@ -1150,7 +890,7 @@
                 <span>Auto-refresh every 30 seconds</span>
             </div>
             <div class="copyright">
-                &copy; 2025 Forexter Network | Advanced Monitoring System
+                &copy; 2025 Forexter Network | Server Monitoring
             </div>
         </div>
     </div>
@@ -1160,21 +900,17 @@
         const serverHistory = {
             playerData: [],
             uptimeData: [],
-            playerHistory: {}, // Menyimpan data pemain individual
             maxDataPoints: 288 // 24 jam data dengan interval 5 menit
         };
 
         // Chart instance
         let historyChart = null;
-        let currentPlayerSort = 'name';
-        let playerSearchTerm = '';
 
         // Inisialisasi aplikasi
         document.addEventListener('DOMContentLoaded', function() {
             initParticles();
             initTabs();
             initChart();
-            initPlayerFeatures();
             loadServerStatus();
             startAutoRefresh();
             
@@ -1212,25 +948,6 @@
                 
                 container.appendChild(particle);
             }
-        }
-
-        // Inisialisasi fitur pemain
-        function initPlayerFeatures() {
-            // Search functionality
-            document.getElementById('player-search-input').addEventListener('input', function(e) {
-                playerSearchTerm = e.target.value.toLowerCase();
-                updatePlayerListDisplay();
-            });
-
-            // Sort buttons
-            document.querySelectorAll('.player-action-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.player-action-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentPlayerSort = this.getAttribute('data-sort');
-                    updatePlayerListDisplay();
-                });
-            });
         }
 
         // Inisialisasi tab system
@@ -1356,7 +1073,7 @@
                 updateStatus('checking', 'Checking Server Status...');
                 
                 // Fetch data dari mcstatus.io API
-                const response = await fetch('https://api.mcstatus.io/v2/status/bedrock/basic-6.alstore.space:25710');
+                const response = await fetch('https://api.mcstatus.io/v2/status/bedrock/basic-6.alstore.space');
                 const data = await response.json();
                 
                 // Update UI dengan data server
@@ -1366,7 +1083,6 @@
                 if (data.online && data.players) {
                     updateChart(data.players.online);
                     updateUptimeStats(data.online);
-                    updatePlayerStats(data.players.list || []);
                 }
                 
                 // Show success notification untuk manual refresh
@@ -1412,7 +1128,7 @@
                     `${data.players.online}/${data.players.max}`;
                 document.getElementById('player-count-text').textContent = 
                     `${data.players.online} players online`;
-                document.getElementById('ping-value').textContent = '20 ms'; // mcstatus.io tidak menyediakan ping
+                document.getElementById('ping-value').textContent = data.round_trip_latency_ms ? `${data.round_trip_latency_ms} ms` : '- ms';
                 document.getElementById('version').textContent = data.version?.name || '-';
                 document.getElementById('protocol').textContent = 
                     data.version?.protocol || '-';
@@ -1420,7 +1136,7 @@
                     data.motd?.clean || '-';
                 document.getElementById('server-address').textContent = 
                     `${data.host}:${data.port}`;
-                document.getElementById('server-software').textContent = data.software || 'PocketMine-MP';
+                document.getElementById('server-software').textContent = 'PocketMine-MP';
                 
                 // Update last checked
                 document.getElementById('last-checked').textContent = 
@@ -1429,14 +1145,13 @@
                 // Update player list
                 updatePlayerList(data.players.list);
                 
-                // mcstatus.io tidak menyediakan favicon, jadi kita sembunyikan
-                document.getElementById('server-favicon').style.display = 'none';
-                
-                // Update plugins dan mods
-                updatePluginsAndMods(data.plugins || [], []);
-                
-                // Update performance data
-                updatePerformanceData(data);
+                // Update favicon jika ada
+                if (data.icon) {
+                    document.getElementById('server-favicon').src = data.icon;
+                    document.getElementById('server-favicon').style.display = 'block';
+                } else {
+                    document.getElementById('server-favicon').style.display = 'none';
+                }
                 
             } else {
                 updateStatus('offline', 'Server Offline');
@@ -1447,203 +1162,27 @@
 
         // Update player list dengan data aktual
         function updatePlayerList(players) {
-            const now = Date.now();
+            const playerList = document.getElementById('player-list');
             
-            // Update data history pemain
-            players.forEach(player => {
-                if (!serverHistory.playerHistory[player]) {
-                    serverHistory.playerHistory[player] = {
-                        name: player,
-                        firstSeen: now,
-                        lastSeen: now,
-                        sessions: 1,
-                        totalPlaytime: 0,
-                        currentSessionStart: now
-                    };
-                } else {
-                    serverHistory.playerHistory[player].lastSeen = now;
-                    serverHistory.playerHistory[player].sessions += 1;
-                }
-            });
-            
-            // Update tampilan daftar pemain
-            updatePlayerListDisplay();
-            
-            // Simpan ke localStorage
-            saveToLocalStorage();
-        }
-
-        // Update tampilan daftar pemain dengan filter dan sorting
-        // PLAYER LIST
-        const updatePlayerList = data.players?.list;
-
-        if (list && list.length > 0) {
-            playerListEl.innerHTML = "";
-            list.forEach(name => {
-                const div = document.createElement("div");
-                div.className = "player-item";
-                div.textContent = name;
-                playerListEl.appendChild(div);
-            });
-        } else {
-            playerListEl.textContent = "No players online";
-        }
-            
-            // Sort berdasarkan kriteria yang dipilih
-            filteredPlayers.sort((a, b) => {
-                switch(currentPlayerSort) {
-                    case 'name':
-                        return a.name.localeCompare(b.name);
-                    case 'join':
-                        return b.lastSeen - a.lastSeen;
-                    case 'playtime':
-                        return b.totalPlaytime - a.totalPlaytime;
-                    default:
-                        return 0;
-                }
-            });
-            
-            if (filteredPlayers.length > 0) {
+            if (players && players.length > 0) {
                 playerList.innerHTML = '';
-                filteredPlayers.forEach(player => {
+                
+                players.forEach(player => {
                     const playerItem = document.createElement('div');
                     playerItem.className = 'player-item';
-                    
-                    // Hitung playtime
-                    const playtimeHours = Math.floor(player.totalPlaytime / 3600000);
-                    const playtimeMinutes = Math.floor((player.totalPlaytime % 3600000) / 60000);
-                    const playtimeText = playtimeHours > 0 ? 
-                        `${playtimeHours}h ${playtimeMinutes}m` : `${playtimeMinutes}m`;
-                    
-                    // Format last seen
-                    const lastSeen = new Date(player.lastSeen);
-                    const lastSeenText = isToday(lastSeen) ? 
-                        `Today ${lastSeen.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}` :
-                        lastSeen.toLocaleDateString();
                     
                     playerItem.innerHTML = `
                         <div class="player-avatar">
                             <i class="fas fa-user"></i>
                         </div>
-                        <div style="flex: 1;">
-                            <div class="player-name">${player.name}</div>
-                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
-                                <i class="fas fa-clock"></i> Last seen: ${lastSeenText} 
-                                <span style="margin-left: 10px;">
-                                    <i class="fas fa-hourglass"></i> Playtime: ${playtimeText}
-                                </span>
-                            </div>
-                        </div>
-                        <div style="font-size: 12px; color: var(--text-secondary);">
-                            <i class="fas fa-sign-in-alt"></i> ${player.sessions} sessions
-                        </div>
+                        <div class="player-name">${player.name_clean || player.name || player}</div>
                     `;
+                    
                     playerList.appendChild(playerItem);
                 });
             } else {
-                playerList.innerHTML = '<div class="no-players">No players found</div>';
+                playerList.innerHTML = '<div class="no-players">No players online</div>';
             }
-        }
-
-        // Update player statistics
-        function updatePlayerStats(onlinePlayers) {
-            const now = Date.now();
-            const todayStart = new Date();
-            todayStart.setHours(0, 0, 0, 0);
-            
-            // Hitung pemain unik hari ini
-            const uniqueToday = Object.values(serverHistory.playerHistory).filter(player => 
-                player.lastSeen >= todayStart.getTime()
-            ).length;
-            
-            // Hitung peak players hari ini
-            let peakToday = 0;
-            const todayPlayerData = serverHistory.playerData.filter(data => {
-                const dataTime = new Date(data.time);
-                return dataTime >= todayStart;
-            });
-            if (todayPlayerData.length > 0) {
-                peakToday = Math.max(...todayPlayerData.map(data => data.players));
-            }
-            
-            // Hitung average playtime
-            const totalPlaytime = Object.values(serverHistory.playerHistory).reduce((sum, player) => 
-                sum + player.totalPlaytime, 0
-            );
-            const playerCount = Object.keys(serverHistory.playerHistory).length;
-            const avgPlaytime = playerCount > 0 ? Math.round(totalPlaytime / playerCount / 60000) : 0;
-            
-            // Update display
-            document.getElementById('unique-players').textContent = uniqueToday;
-            document.getElementById('peak-players').textContent = peakToday;
-            document.getElementById('avg-playtime').textContent = `${avgPlaytime}m`;
-        }
-
-        // Helper function untuk mengecek apakah tanggal adalah hari ini
-        function isToday(date) {
-            const today = new Date();
-            return date.getDate() === today.getDate() &&
-                   date.getMonth() === today.getMonth() &&
-                   date.getFullYear() === today.getFullYear();
-        }
-
-        // Update plugins dan mods
-        function updatePluginsAndMods(plugins, mods) {
-            // Update plugins
-            const pluginList = document.getElementById('plugin-list');
-            const pluginsCount = document.getElementById('plugins-count');
-            
-            if (plugins && plugins.length > 0) {
-                pluginsCount.textContent = `${plugins.length} plugins`;
-                pluginList.innerHTML = '';
-                plugins.forEach(plugin => {
-                    const pluginItem = document.createElement('div');
-                    pluginItem.className = 'plugin-item';
-                    pluginItem.innerHTML = `
-                        <span class="plugin-name">${plugin}</span>
-                        <span class="plugin-version"></span>
-                    `;
-                    pluginList.appendChild(pluginItem);
-                });
-            } else {
-                pluginsCount.textContent = '0 plugins';
-                pluginList.innerHTML = '<div class="no-players">No plugin information available</div>';
-            }
-            
-            // Update mods
-            const modList = document.getElementById('mod-list');
-            const modsCount = document.getElementById('mods-count');
-            
-            if (mods && mods.length > 0) {
-                modsCount.textContent = `${mods.length} mods`;
-                modList.innerHTML = '';
-                mods.forEach(mod => {
-                    const modItem = document.createElement('div');
-                    modItem.className = 'plugin-item';
-                    modItem.innerHTML = `
-                        <span class="plugin-name">${mod}</span>
-                        <span class="plugin-version"></span>
-                    `;
-                    modList.appendChild(modItem);
-                });
-            } else {
-                modsCount.textContent = '0 mods';
-                modList.innerHTML = '<div class="no-players">No mod information available</div>';
-            }
-        }
-
-        // Update performance data
-        function updatePerformanceData(data) {
-            // Data ini mungkin tidak tersedia di mcstatus.io
-            // Tapi kita bisa mengisi dengan data yang tersedia
-            document.getElementById('uptime-value').textContent = '-';
-            document.getElementById('tps-value').textContent = '-';
-            document.getElementById('memory-usage').textContent = '-';
-            document.getElementById('cpu-usage').textContent = '-';
-            document.getElementById('server-load').textContent = '-';
-            document.getElementById('world-name').textContent = '-';
-            document.getElementById('gamemode').textContent = data.gamemode || '-';
-            document.getElementById('server-id').textContent = data.server_id || '-';
         }
 
         // Update uptime statistics
@@ -1705,17 +1244,6 @@
             
             // Reset player list
             document.getElementById('player-list').innerHTML = '<div class="no-players">No players online</div>';
-            
-            // Reset plugins dan mods
-            document.getElementById('plugins-count').textContent = '0 plugins';
-            document.getElementById('plugin-list').innerHTML = '<div class="no-players">No plugin information available</div>';
-            document.getElementById('mods-count').textContent = '0 mods';
-            document.getElementById('mod-list').innerHTML = '<div class="no-players">No mod information available</div>';
-            
-            // Reset player stats
-            document.getElementById('unique-players').textContent = '0';
-            document.getElementById('peak-players').textContent = '0';
-            document.getElementById('avg-playtime').textContent = '0m';
         }
 
         // Show notification
@@ -1748,7 +1276,6 @@
                 const parsed = JSON.parse(saved);
                 serverHistory.playerData = parsed.playerData || [];
                 serverHistory.uptimeData = parsed.uptimeData || [];
-                serverHistory.playerHistory = parsed.playerHistory || {};
                 
                 // Update chart dengan data yang disimpan
                 if (serverHistory.playerData.length > 0) {
@@ -1756,10 +1283,6 @@
                     historyChart.data.datasets[0].data = serverHistory.playerData.map(item => item.players);
                     historyChart.update();
                 }
-                
-                // Update player stats
-                updatePlayerStats([]);
-                updatePlayerListDisplay();
             }
         }
     </script>
