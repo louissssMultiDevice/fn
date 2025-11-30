@@ -1474,14 +1474,20 @@
         }
 
         // Update tampilan daftar pemain dengan filter dan sorting
-        function updatePlayerListDisplay() {
-            const playerList = document.getElementById('player-list');
-            const players = Object.values(serverHistory.playerHistory);
-            
-            // Filter berdasarkan pencarian
-            let filteredPlayers = players.filter(player => 
-                player.name.toLowerCase().includes(playerSearchTerm)
-            );
+        // PLAYER LIST
+        const updatePlayerList = data.players?.list;
+
+        if (list && list.length > 0) {
+            playerListEl.innerHTML = "";
+            list.forEach(name => {
+                const div = document.createElement("div");
+                div.className = "player-item";
+                div.textContent = name;
+                playerListEl.appendChild(div);
+            });
+        } else {
+            playerListEl.textContent = "No players online";
+        }
             
             // Sort berdasarkan kriteria yang dipilih
             filteredPlayers.sort((a, b) => {
