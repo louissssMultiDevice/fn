@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Forexter Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #00f7ff;
+            --primary-dark: #00b8cc;
+            --secondary: #9d4edd;
+            --secondary-dark: #7b2cbf;
+            --accent: #ff00aa;
+            --accent-dark: #cc0088;
+            --bg-dark: #0a0a12;
+            --bg-card: #12121f;
+            --bg-card-hover: #1a1a2e;
+            --text: #f0f0ff;
+            --text-dim: #a0a0cc;
+            --success: #00ff9d;
+            --warning: #ffcc00;
+            --danger: #ff4757;
+            --glass: rgba(255, 255, 255, 0.05);
+            --muted: rgba(255, 255, 255, 0.5);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(157, 78, 221, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 170, 0.05) 0%, transparent 30%);
+            padding-top: 70px;
+        }
+
+        /* Background Animation */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Header */
+        header#mainHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+            z-index: 1100;
+            transition: var(--transition);
+        }
+
+        header#mainHeader.scrolled {
+            background: rgba(10, 10, 18, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            height: 60px;
+        }
+
+        .logoku {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-custom {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(93, 139, 244, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: float 5s ease-in-out infinite, glow 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateY(10deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 10px 20px rgba(93, 139, 244, 0.3), 0 0 20px rgba(93, 139, 244, 0.2); }
+            50% { box-shadow: 0 15px 30px rgba(93, 139, 244, 0.4), 0 0 30px rgba(93, 139, 244, 0.3); }
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 18px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-back {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 247, 255, 0.1);
+            transform: translateX(-3px);
+            border-color: var(--primary);
+        }
+
+        .btn-icon {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background: rgba(0, 247, 255, 0.1);
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        /* Sidebar dengan Logo Server */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -340px;
+            width: 340px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(15,15,18,0.98), rgba(10,10,12,0.99));
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(0, 247, 255, 0.1);
+            padding: 84px 18px 20px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1300;
+            overflow-y: auto;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1299;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Profile Sidebar dengan Logo Server */
+        .sidebar .profile {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 247, 255, 0.1);
+        }
+
+        .sidebar .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(0, 247, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
+        }
+
+        .sidebar .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar .profile-info {
+            flex: 1;
+        }
+
+        .sidebar h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .sidebar p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .sidebar hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.3), transparent);
+            margin: 20px 0;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        .sidebar nav a:hover {
+            background: rgba(0, 247, 255, 0.08);
+            transform: translateX(5px);
+            border-color: rgba(0, 247, 255, 0.2);
+        }
+
+        .sidebar nav a i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .sidebar nav a span {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .sidebar nav a .badge {
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .admin-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            color: var(--bg-dark);
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 247, 255, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .page-title h1 {
+            font-size: 3.2rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .page-title .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Contact Cards Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 35px;
+            margin-bottom: 4rem;
+            perspective: 1200px;
+        }
+
+        /* Creative Contact Card */
+        .contact-card {
+            background: var(--bg-card);
+            border-radius: 25px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 247, 255, 0.15);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-25px) rotateX(10deg) rotateY(8deg) translateZ(25px);
+            border-color: var(--primary);
+            box-shadow: 
+                0 35px 70px rgba(0, 247, 255, 0.3),
+                0 0 60px rgba(0, 247, 255, 0.15) inset,
+                0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 0 2px rgba(0, 247, 255, 0.2);
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: translateZ(15px);
+            z-index: 2;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            transition: all 1s ease;
+            z-index: 1;
+        }
+
+        .contact-card:hover::after {
+            top: 0;
+            left: 0;
+        }
+
+        /* Profile Container yang Diperbaiki */
+        .profile-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 25px;
+            transform: translateZ(40px);
+            z-index: 3;
+        }
+
+        .profile-frame {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            padding: 5px;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 247, 255, 0.2);
+            animation: rotateFrame 8s linear infinite;
+        }
+
+        @keyframes rotateFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-image-wrapper {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-card:hover .profile-frame {
+            padding: 7px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 50px rgba(0, 247, 255, 0.3);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .profile-image.owner {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .profile-image.owner i {
+            font-size: 4rem;
+        }
+
+        .profile-badge {
+            position: absolute;
+            bottom: 15px;
+            right: -10px;
+            background: linear-gradient(45deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 4;
+            transform: translateZ(25px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            border: 3px solid var(--bg-dark);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            transform: translateZ(25px);
+            text-shadow: 0 0 15px rgba(0, 247, 255, 0.4);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .contact-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            transform: translateZ(20px);
+            line-height: 1.5;
+            position: relative;
+            z-index: 3;
+        }
+
+        .contact-details {
+            width: 100%;
+            margin-bottom: 35px;
+            transform: translateZ(20px);
+            position: relative;
+            z-index: 3;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 20px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 247, 255, 0.08);
+            transform: translateX(5px);
+            border-color: rgba(0, 247, 255, 0.2);
+        }
+
+        .contact-item i {
+            color: var(--primary);
+            font-size: 1.3rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        .contact-item-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .contact-name {
+            font-weight: 700;
+            color: var(--text);
+            font-size: 1.05rem;
+            margin-bottom: 3px;
+        }
+
+        .contact-info {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            word-break: break-all;
+        }
+
+        .contact-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 15px;
+            color: var(--bg-dark);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            transform: translateZ(25px);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            z-index: 3;
+            box-shadow: 0 10px 25px rgba(0, 247, 255, 0.2);
+        }
+
+        .contact-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .contact-button:hover::before {
+            left: 100%;
+        }
+
+        .contact-button:hover {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            transform: translateZ(30px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 247, 255, 0.4);
+        }
+
+        /* Card Variations */
+        .contact-card.owner {
+            background: linear-gradient(145deg, rgba(18, 140, 126, 0.1), var(--bg-card));
+        }
+
+        .contact-card.owner::before {
+            background: linear-gradient(90deg, #25D366, #128C7E, #075E54);
+        }
+
+        .contact-card.owner .contact-title {
+            color: #25D366;
+            text-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .contact-card.owner .profile-frame {
+            background: conic-gradient(from 0deg, #25D366, #128C7E, #075E54, #25D366);
+        }
+
+        .contact-card.channel {
+            background: linear-gradient(145deg, rgba(157, 78, 221, 0.1), var(--bg-card));
+        }
+
+        .contact-card.channel::before {
+            background: linear-gradient(90deg, var(--accent), var(--secondary), var(--primary));
+        }
+
+        .contact-card.channel .contact-title {
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(255, 0, 170, 0.4);
+        }
+
+        .contact-card.channel .profile-frame {
+            background: conic-gradient(from 0deg, var(--accent), var(--secondary), var(--primary), var(--accent));
+        }
+
+        .contact-card.group {
+            background: linear-gradient(145deg, rgba(255, 152, 0, 0.1), var(--bg-card));
+        }
+
+        .contact-card.group::before {
+            background: linear-gradient(90deg, #FF9800, #FF5722, #FF4081);
+        }
+
+        .contact-card.group .contact-title {
+            color: #FF9800;
+            text-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .contact-card.group .profile-frame {
+            background: conic-gradient(from 0deg, #FF9800, #FF5722, #FF4081, #FF9800);
+        }
+
+        /* QR Code Section */
+        .qr-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            text-align: center;
+        }
+
+        .qr-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .qr-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 247, 255, 0.2);
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .qr-text {
+            margin-top: 15px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* 3D Visualization Area */
+        .visualization-area {
+            margin-top: 60px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visualization-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+        }
+
+        .visualization-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+            perspective: 1500px;
+        }
+
+        .floating-logo {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                inset 0 5px 15px rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            animation: logoFloat3D 6s ease-in-out infinite;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .floating-logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            transform: translateZ(20px);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            transition: all 0.5s ease;
+        }
+
+        @keyframes logoFloat3D {
+            0%, 100% {
+                transform: translateY(0) rotateY(0deg) rotateX(0deg) translateZ(0);
+            }
+            25% {
+                transform: translateY(-20px) rotateY(15deg) rotateX(5deg) translateZ(10px);
+            }
+            50% {
+                transform: translateY(-10px) rotateY(0deg) rotateX(10deg) translateZ(5px);
+            }
+            75% {
+                transform: translateY(-20px) rotateY(-15deg) rotateX(5deg) translateZ(10px);
+            }
+        }
+
+        .visualization-desc {
+            margin-top: 30px;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            background: rgba(10, 10, 18, 0.9);
+            border-top: 1px solid rgba(0, 247, 255, 0.2);
+            margin-top: 4rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .footer-text {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-text span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .contact-grid {
+                grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+                gap: 30px;
+            }
+            
+            .visualization-container {
+                gap: 30px;
+            }
+            
+            .floating-logo {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .floating-logo img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .qr-container {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header#mainHeader {
+                padding: 0 15px;
+            }
+            
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .visualization-container {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .floating-logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .sidebar {
+                width: 300px;
+            }
+
+            .qr-container {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-card {
+                padding: 25px 20px;
+            }
+            
+            .contact-title {
+                font-size: 1.6rem;
+            }
+            
+            .visualization-title {
+                font-size: 1.6rem;
+            }
+
+            .profile-container {
+                width: 140px;
+                height: 140px;
+            }
+
+            .qr-placeholder {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Header -->
+    <header id="mainHeader">
+        <div class="logoku">
+            <a href="../" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            <img src="https://files.catbox.moe/pvnz0v.jpg" alt="Forexter Network" class="logo-custom floating">
+            <div class="brand-text">Forexter Contact</div>
+        </div>
+        
+        <div class="header-actions">
+            <div class="sidebar-toggle">
+                <button id="openSidebar" class="btn-icon" title="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <!-- Profile dengan Logo Server -->
+        <div class="profile">
+            <div class="avatar">
+                <img src="https://files.catbox.moe/pvnz0v.jpg" alt="Server Logo">
+            </div>
+            <div class="profile-info">
+                <h4>Forexter Network</h4>
+                <p>Premium Minecraft Server</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Navigation dengan Icon yang Sesuai -->
+        <nav>
+            <a href="../">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+                <span class="badge">Home</span>
+            </a>
+            <a href="../shop">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Premium Shop</span>
+                <span class="badge">VIP</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-address-book"></i>
+                <span>Kontak</span>
+                <span class="badge">Active</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-server"></i>
+                <span>Server Status</span>
+                <span class="badge">Online</span>
+            </a>
+            <a href="https://discord.gg" target="_blank">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+                <span class="badge">Join</span>
+            </a>
+            <a href="https://wa.me/6285842887740" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+                <span class="badge">Chat</span>
+            </a>
+        </nav>
+
+        <hr>
+
+        <!-- Server Info -->
+        <div style="margin-top: 8px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+            <h4 style="margin-bottom: 10px; color: var(--primary);">Server Information</h4>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <i class="fas fa-globe" style="color: var(--primary);"></i>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-dim);">IP Address</div>
+                    <div style="font-weight: 600;">play.forexternetwork.my.id:25710</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-code" style="color: var(--primary);"></i>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-dim);">Developer</div>
+                    <div style="font-weight: 600;">ndiidepzX</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 40px"></div>
+        
+        <!-- Close Button -->
+        <div style="position: sticky; bottom: 12px;">
+            <button id="closeSidebar" class="admin-btn">
+                <i class="fas fa-times"></i> Tutup Menu
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>CONTACT INFORMATION</h1>
+            <p class="subtitle">Get in touch with the Forexter Network team through our official contact channels. We're here to assist you 24/7.</p>
+        </div>
+
+        <!-- Contact Cards Grid -->
+        <div class="contact-grid">
+            <!-- WhatsApp Owner Card -->
+            <div class="contact-card owner">
+                <div class="profile-container">
+                    <div class="profile-frame">
+                        <div class="profile-image-wrapper">
+                            <div class="profile-image owner">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-badge">Owner</div>
+                </div>
+                
+                <h3 class="contact-title">WhatsApp Owner</h3>
+                <p class="contact-subtitle">Direct contact with owner Lanyz for urgent matters</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-user-crown"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Owner Lanyz</div>
+                            <div class="contact-info">6285842887740</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Availability</div>
+                            <div class="contact-info">24/7 Priority Support</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-bolt"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Response Time</div>
+                            <div class="contact-info">Instant Reply</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="https://wa.me/6285842887740?text=Hello%20Lanyz,%20I%20need%20assistance%20with%20Forexter%20Network" target="_blank" class="contact-button">
+                    <i class="fab fa-whatsapp"></i> Direct Chat 💬
+                </a>
+            </div>
+
+            <!-- WhatsApp Channel Card -->
+            <div class="contact-card channel">
+                <div class="profile-container">
+                    <div class="profile-frame">
+                        <div class="profile-image-wrapper">
+                            <img src="https://files.catbox.moe/mh0hg4.jpg" alt="WhatsApp Channel" class="profile-image">
+                        </div>
+                    </div>
+                    <div class="profile-badge" style="background: linear-gradient(45deg, var(--accent), var(--accent-dark));">Channel</div>
+                </div>
+                
+                <h3 class="contact-title">WhatsApp Channel</h3>
+                <p class="contact-subtitle">Official announcements and updates channel</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Channel Name</div>
+                            <div class="contact-info">Forexter Network Official</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-link"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Channel Link</div>
+                            <div class="contact-info">whatsapp.com/channel/0029Vak7WcP5vKADSpWQyv2Y</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-bullhorn"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Content Type</div>
+                            <div class="contact-info">Announcements & Updates</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="https://whatsapp.com/channel/0029Vak7WcP5vKADSpWQyv2Y" target="_blank" class="contact-button">
+                    <i class="fas fa-external-link-alt"></i> Open Channel
+                </a>
+            </div>
+
+            <!-- WhatsApp Group Card -->
+            <div class="contact-card group">
+                <div class="profile-container">
+                    <div class="profile-frame">
+                        <div class="profile-image-wrapper">
+                            <img src="https://files.catbox.moe/pvnz0v.jpg" alt="WhatsApp Group" class="profile-image">
+                        </div>
+                    </div>
+                    <div class="profile-badge" style="background: linear-gradient(45deg, #FF9800, #FF5722);">Community</div>
+                </div>
+                
+                <h3 class="contact-title">WhatsApp Group</h3>
+                <p class="contact-subtitle">Community group for discussions and support</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-users"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Group Name</div>
+                            <div class="contact-info">Forexter Network Community</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-link"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Group Link</div>
+                            <div class="contact-info">chat.whatsapp.com/CqWwObEaDpc7Zua7nbTEgy?mode=hqrt2</div>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-comments"></i>
+                        <div class="contact-item-text">
+                            <div class="contact-name">Community</div>
+                            <div class="contact-info">Discussions & Support</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="https://chat.whatsapp.com/CqWwObEaDpc7Zua7nbTEgy?mode=hqrt2" target="_blank" class="contact-button">
+                    <i class="fas fa-external-link-alt"></i> Join Group
+                </a>
+            </div>
+        </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text"><span>© 2025 ForexterMC</span> • All rights reserved</p>
+        <p class="footer-text">Official Contact Channels for Forexter Network</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles background
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: 100, density: { enable: true, value_area: 1000 } },
+                    color: { value: "#00f7ff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.6, random: true },
+                    size: { value: 4, random: true, anim: { enable: true, speed: 2, size_min: 1 } },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#9d4edd",
+                        opacity: 0.3,
+                        width: 1.5
+                    },
+                    move: {
+                        enable: true,
+                        speed: 3,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: { enable: true, rotateX: 600, rotateY: 1200 }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+
+            // Sidebar functionality
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('openSidebar');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mainHeader = document.getElementById('mainHeader');
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            openSidebarBtn.addEventListener('click', openSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar when clicking on a link
+            document.querySelectorAll('.sidebar nav a').forEach(link => {
+                link.addEventListener('click', closeSidebar);
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    mainHeader.classList.add('scrolled');
+                } else {
+                    mainHeader.classList.remove('scrolled');
+                }
+            });
+
+            // Enhanced 3D hover effect for contact cards
+            const contactCards = document.querySelectorAll('.contact-card');
+            contactCards.forEach(card => {
+                // Determine glow color based on card type
+                let glowColor;
+                if (card.classList.contains('owner')) {
+                    glowColor = 'rgba(37, 211, 102, 0.35)';
+                } else if (card.classList.contains('channel')) {
+                    glowColor = 'rgba(255, 0, 170, 0.35)';
+                } else if (card.classList.contains('group')) {
+                    glowColor = 'rgba(255, 152, 0, 0.35)';
+                }
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateY = ((x - centerX) / centerX) * 12;
+                    const rotateX = ((centerY - y) / centerY) * 10;
+                    const glowX = (x / rect.width) * 100;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-20px) translateZ(25px)`;
+                    card.style.boxShadow = `
+                        0 35px 70px ${glowColor},
+                        0 0 60px rgba(0, 247, 255, 0.2) inset,
+                        0 1px 0 rgba(255, 255, 255, 0.3),
+                        0 0 0 2px rgba(0, 247, 255, 0.25),
+                        ${glowX - 50}px 0 80px ${glowColor}
+                    `;
+                    
+                    // Add interactive effect to profile frame
+                    const profileFrame = card.querySelector('.profile-frame');
+                    if (profileFrame) {
+                        const profileRotateY = ((x - centerX) / centerX) * 20;
+                        const profileRotateX = ((centerY - y) / centerY) * 15;
+                        profileFrame.style.transform = `rotateX(${profileRotateX}deg) rotateY(${profileRotateY}deg) scale(1.05)`;
+                    }
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) translateZ(0)';
+                    card.style.boxShadow = `
+                        0 15px 35px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        0 0 0 1px rgba(255, 255, 255, 0.03)
+                    `;
+                    
+                    // Reset profile frame
+                    const profileFrame = card.querySelector('.profile-frame');
+                    if (profileFrame) {
+                        profileFrame.style.transform = 'none';
+                    }
+                });
+            });
+
+            // Add interactive 3D effect to visualization logos
+            const floatingLogos = document.querySelectorAll('.floating-logo');
+            floatingLogos.forEach((logo, index) => {
+                logo.style.animationDelay = `${index * 1}s`;
+                
+                logo.addEventListener('mousemove', (e) => {
+                    const rect = logo.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateY = ((x - centerX) / centerX) * 30;
+                    const rotateX = ((centerY - y) / centerY) * 20;
+                    
+                    logo.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(30px) scale(1.1)`;
+                });
+                
+                logo.addEventListener('mouseleave', () => {
+                    logo.style.transform = '';
+                });
+            });
+
+            // Add click effect to contact buttons
+            document.querySelectorAll('.contact-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Add visual feedback
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> OPENING...';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                    }, 1500);
+                });
+            });
+
+            // Add ripple effect to contact items
+            document.querySelectorAll('.contact-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // For WhatsApp owner item, copy number to clipboard
+                    if (this.querySelector('.contact-info').textContent.includes('62858')) {
+                        const phoneNumber = '6285842887740';
+                        navigator.clipboard.writeText(phoneNumber).then(() => {
+                            const originalText = this.querySelector('.contact-info').textContent;
+                            this.querySelector('.contact-info').textContent = 'Copied to clipboard!';
+                            this.querySelector('.contact-info').style.color = 'var(--success)';
+                            
+                            setTimeout(() => {
+                                this.querySelector('.contact-info').textContent = originalText;
+                                this.querySelector('.contact-info').style.color = '';
+                            }, 2000);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
