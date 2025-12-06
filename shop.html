@@ -189,7 +189,7 @@
             color: var(--text);
         }
 
-        /* Sidebar */
+        /* Sidebar dengan Logo Server */
         .sidebar {
             position: fixed;
             top: 0;
@@ -229,83 +229,128 @@
             visibility: visible;
         }
 
+        /* Profile Sidebar dengan Logo Server */
         .sidebar .profile {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 25px;
             animation: fadeInUp 0.6s ease-out;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 247, 255, 0.1);
         }
 
         .sidebar .avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(0, 247, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
+        }
+
+        .sidebar .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar .profile-info {
+            flex: 1;
         }
 
         .sidebar h4 {
-            font-size: 16px;
-            margin-bottom: 2px;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
         }
 
         .sidebar p {
-            font-size: 13px;
-            color: var(--muted);
+            font-size: 0.9rem;
+            color: var(--text-dim);
         }
 
         .sidebar hr {
             border: none;
             height: 1px;
-            background: rgba(255, 255, 255, 0.05);
-            margin: 14px 0;
-            border-radius: 4px;
+            background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.3), transparent);
+            margin: 20px 0;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .sidebar nav a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 8px;
+            gap: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
             color: var(--text);
             text-decoration: none;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            border: 1px solid transparent;
         }
 
         .sidebar nav a:hover {
             background: rgba(0, 247, 255, 0.08);
-            transform: translateX(-4px);
-            border-left: 3px solid var(--primary);
+            transform: translateX(5px);
+            border-color: rgba(0, 247, 255, 0.2);
         }
 
         .sidebar nav a i {
-            width: 20px;
+            width: 24px;
             text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary);
         }
 
-        .admin-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
+        .sidebar nav a span {
+            flex: 1;
             font-weight: 500;
         }
 
+        .sidebar nav a .badge {
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .admin-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            color: var(--bg-dark);
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
         .admin-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 247, 255, 0.3);
         }
 
         @keyframes fadeInUp {
@@ -848,36 +893,86 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
+        <!-- Profile dengan Logo Server -->
         <div class="profile">
-            <div class="avatar"><i class="fas fa-user-cog" style="font-size:20px;color:#fff"></i></div>
-            <div>
+            <div class="avatar">
+                <img src="https://files.catbox.moe/pvnz0v.jpg" alt="Server Logo">
+            </div>
+            <div class="profile-info">
                 <h4>Forexter Shop</h4>
-                <p>Premium Network Services</p>
+                <p>Premium Services</p>
             </div>
         </div>
 
         <hr>
 
+        <!-- Navigation dengan Icon yang Sesuai -->
         <nav>
-            <a href="../"><i class="fas fa-house"></i> Beranda</a>
-            <a href="#"><i class="fas fa-star"></i> Fitur Premium</a>
-            <a href="#"><i class="fas fa-info-circle"></i> Informasi Shop</a>
-            <a href="#"><i class="fas fa-store"></i> Shop</a>
-            <a href="/discord"><i class="fab fa-discord"></i> Discord</a>
-            <a href="/contact"<i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="../">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+                <span class="badge">Home</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-crown"></i>
+                <span>VIP Ranks</span>
+                <span class="badge">Premium</span>
+            </a>
+            <a href="#">
+                <i class="fas fa-coins"></i>
+                <span>In-Game Money</span>
+                <span class="badge">Best Deals</span>
+            </a>
+            <a href="/contact">
+                <i class="fas fa-address-book"></i>
+                <span>Kontak</span>
+                <span class="badge">Support</span>
+            </a>
+            <a href="https://discord.gg/Xm5YhCnkw" target="_blank">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+                <span class="badge">Join</span>
+            </a>
+            <a href="https://wa.me/6285842887740" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+                <span class="badge">Chat</span>
+            </a>
         </nav>
 
         <hr>
 
-        <div style="margin-top: 8px">
-            <h4 style="margin-bottom: 8px">Kontak & Info</h4>
-            <p style="font-size:13px;color:var(--muted);margin-bottom: 5px">play.forexter.my.id:25710</p>
-            <p style="font-size:13px;color:var(--muted)">Developed by ndiidepzX</p>
+        <!-- Server Info -->
+        <div style="margin-top: 8px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+            <h4 style="margin-bottom: 10px; color: var(--primary);">Shop Information</h4>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <i class="fas fa-shopping-cart" style="color: var(--primary);"></i>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-dim);">Payment Method</div>
+                    <div style="font-weight: 600;">WhatsApp Transfer</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <i class="fas fa-bolt" style="color: var(--primary);"></i>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-dim);">Delivery</div>
+                    <div style="font-weight: 600;">Instant Delivery</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-code" style="color: var(--primary);"></i>
+                <div>
+                    <div style="font-size: 13px; color: var(--text-dim);">Developer</div>
+                    <div style="font-weight: 600;">ndiidepzX</div>
+                </div>
+            </div>
         </div>
 
-        <div style="height:40px"></div>
-        <div style="position:sticky;bottom:12px">
-            <button id="closeSidebar" class="admin-btn" style="width:100%;">
+        <div style="height: 40px"></div>
+        
+        <!-- Close Button -->
+        <div style="position: sticky; bottom: 12px;">
+            <button id="closeSidebar" class="admin-btn">
                 <i class="fas fa-times"></i> Tutup Menu
             </button>
         </div>
@@ -894,7 +989,7 @@
         <!-- Ranks Section -->
         <div class="section-title">
             <i class="fas fa-crown section-icon"></i>
-            <h2>VIP RANKS COLLECTION</h2>
+            <h2>RANKS COLLECTION</h2>
         </div>
 
         <div class="cards-grid" id="ranks-container">
