@@ -2022,7 +2022,7 @@
                     notifications: {
                         emailEnabled: true,
                         whatsappEnabled: false,
-                        adminEmail: 'admin@forexter.network',
+                        adminEmail: 'cnntwrk@gmail.com',
                         secondaryEmail: '',
                         whatsappNumber: '',
                         smsNumber: '',
@@ -2085,8 +2085,8 @@
                     users: [
                         {
                             id: 1,
-                            username: 'admin',
-                            email: 'admin@forexter.network',
+                            username: 'fn',
+                            email: 'cnntwrk@gmail.com',
                             role: 'admin',
                             status: 'active',
                             lastActive: new Date().toISOString()
@@ -2887,7 +2887,7 @@
                     localStorage.removeItem('adminLoggedIn');
                     
                     // Redirect to main status page
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                 }
             }
 
@@ -2935,7 +2935,7 @@
                     localStorage.setItem('adminLoggedIn', 'true');
                 } else {
                     alert('Invalid password');
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                 }
             }
         });
