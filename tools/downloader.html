@@ -530,24 +530,32 @@
             overflow: hidden;
             position: relative;
             border: 2px solid rgba(255, 255, 255, 0.1);
+            min-height: 300px;
         }
 
         .video-thumbnail {
             width: 100%;
-            height: 300px;
+            height: 100%;
             object-fit: cover;
             display: block;
         }
 
         .video-placeholder {
             width: 100%;
-            height: 300px;
+            height: 100%;
+            min-height: 300px;
             background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 60px;
             color: white;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-placeholder i {
+            font-size: 80px;
         }
 
         .video-info {
@@ -672,6 +680,7 @@
             font-weight: 700;
             box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
             border: 3px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
         }
 
         .creator-avatar img {
@@ -1166,6 +1175,25 @@
                 box-shadow: 0 0 0 10px rgba(0, 184, 148, 0); 
             }
         }
+
+        /* Proxy Info */
+        .proxy-info {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--warning);
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proxy-info i {
+            color: var(--warning);
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -1192,11 +1220,11 @@
         <div class="api-status">
             <div class="api-status-info">
                 <div class="api-status-dot"></div>
-                <div class="api-status-text">API Status: <strong>Online</strong> • Tim Forexter</div>
+                <div class="api-status-text">API Status: <strong>Online</strong> • Using CORS Proxy</div>
             </div>
             <div class="api-status-credits">
                 <i class="fas fa-code"></i>
-                <span>Powered by Tim Forexter</span>
+                <span>Powered by Nekolabs API + CORS Proxy</span>
             </div>
         </div>
 
@@ -1225,11 +1253,15 @@
                     <span id="platformLabelText">TikTok</span> Video URL
                 </label>
                 <input type="text" class="form-input" id="videoUrl" 
-                       placeholder="Paste TikTok video URL here (e.g., https://www.tiktok.com/@username/video/123456789)" 
-                       value="">
+                       placeholder="Paste TikTok video URL here (e.g., https://vt.tiktok.com/ZSPL2AgRW/)" 
+                       value="https://vt.tiktok.com/ZSPL2AgRW/">
                 <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; display: flex; align-items: center; gap: 5px;">
                     <i class="fas fa-info-circle"></i>
                     <span>Paste the full URL of the TikTok or Instagram video you want to download</span>
+                </div>
+                <div class="proxy-info">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Using CORS proxy to bypass restrictions. Your download is secure.</span>
                 </div>
             </div>
 
@@ -1269,6 +1301,7 @@
                     <div class="video-preview">
                         <div class="video-placeholder" id="videoThumbnailPlaceholder">
                             <i class="fas fa-play-circle"></i>
+                            <span>Video preview will appear here</span>
                         </div>
                         <img class="video-thumbnail" id="videoThumbnail" style="display: none;" alt="Video Thumbnail">
                     </div>
@@ -1405,10 +1438,13 @@
                 this.platform = 'tiktok';
                 this.downloadHistory = [];
                 this.currentVideoData = null;
-                this.apiEndpoints = {
-                    tiktok: 'https://api.nekolabs.web.id/downloader/tiktok?url=',
-                    instagram: 'https://api.nekolabs.web.id/downloader/instagram?url='
-                };
+                this.proxyList = [
+                    'https://corsproxy.io/?',
+                    'https://api.codetabs.com/v1/proxy?quest=',
+                    'https://api.allorigins.win/raw?url=',
+                    'https://cors-anywhere.herokuapp.com/'
+                ];
+                this.currentProxyIndex = 0;
                 
                 this.init();
             }
@@ -1417,6 +1453,11 @@
                 this.loadHistory();
                 this.setupEventListeners();
                 this.updateHistoryDisplay();
+                
+                // Preload dengan contoh URL
+                setTimeout(() => {
+                    this.fetchVideoInfo();
+                }, 500);
             }
 
             setupEventListeners() {
@@ -1469,9 +1510,11 @@
                 // Update placeholder
                 const input = document.getElementById('videoUrl');
                 if (this.platform === 'tiktok') {
-                    input.placeholder = 'Paste TikTok video URL here (e.g., https://www.tiktok.com/@username/video/123456789)';
+                    input.placeholder = 'Paste TikTok video URL here (e.g., https://vt.tiktok.com/ZSPL2AgRW/)';
+                    if (!input.value) input.value = 'https://vt.tiktok.com/ZSPL2AgRW/';
                 } else {
                     input.placeholder = 'Paste Instagram video URL here (e.g., https://www.instagram.com/p/AbCdEfGHiJk/)';
+                    if (!input.value) input.value = '';
                 }
                 
                 // Clear previous results
@@ -1483,12 +1526,6 @@
                 const videoUrl = document.getElementById('videoUrl').value.trim();
                 if (!videoUrl) {
                     this.showError('Missing URL', 'Please enter a video URL to download');
-                    return;
-                }
-
-                // Validate URL
-                if (!this.isValidUrl(videoUrl)) {
-                    this.showError('Invalid URL', 'Please enter a valid video URL');
                     return;
                 }
 
@@ -1535,133 +1572,267 @@
                 }
             }
 
-            isValidUrl(url) {
-                try {
-                    new URL(url);
-                    return true;
-                } catch (e) {
-                    return false;
+            async fetchWithProxy(url) {
+                // Coba dengan proxy yang berbeda jika gagal
+                for (let i = 0; i < this.proxyList.length; i++) {
+                    try {
+                        const proxyIndex = (this.currentProxyIndex + i) % this.proxyList.length;
+                        const proxyUrl = this.proxyList[proxyIndex] + encodeURIComponent(url);
+                        
+                        console.log(`Trying proxy ${proxyIndex}: ${this.proxyList[proxyIndex]}`);
+                        
+                        const response = await fetch(proxyUrl, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                            }
+                        });
+
+                        if (response.ok) {
+                            this.currentProxyIndex = proxyIndex;
+                            const data = await response.json();
+                            return data;
+                        }
+                    } catch (error) {
+                        console.log(`Proxy ${i} failed:`, error.message);
+                        continue;
+                    }
                 }
+                
+                throw new Error('All proxies failed. Please try again later.');
             }
 
             async fetchTikTokData(url) {
-                // API untuk TikTok dari Nekolabs
-                const apiUrl = `${this.apiEndpoints.tiktok}` + `${encodeURIComponent(url)}`;
+                // API untuk TikTok dari Nekolabs dengan proxy
+                const apiUrl = `https://api.nekolabs.web.id/downloader/tiktok?url=${encodeURIComponent(url)}`;
                 
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                try {
+                    const data = await this.fetchWithProxy(apiUrl);
+                    
+                    if (!data.success) {
+                        throw new Error(data.error || 'Failed to fetch TikTok data');
                     }
-                });
 
-                if (!response.ok) {
-                    throw new Error(`API responded with status: ${response.status}`);
+                    // Format data untuk konsistensi
+                    const result = data.result;
+                    return {
+                        platform: 'tiktok',
+                        url: url,
+                        title: result.title || 'TikTok Video',
+                        description: result.title || '',
+                        thumbnail: result.cover || '',
+                        videoUrl: result.videoUrl || '',
+                        views: result.stats?.play || '0',
+                        likes: result.stats?.like || '0',
+                        comments: result.stats?.comment || '0',
+                        shares: result.stats?.share || '0',
+                        creator: {
+                            name: result.author?.name || 'Unknown',
+                            username: result.author?.username || '@unknown',
+                            avatar: result.author?.avatar || '',
+                            createAt: result.create_at || 'Unknown'
+                        },
+                        musicInfo: result.music_info || {},
+                        downloadLinks: [{
+                            type: 'video',
+                            quality: 'HD',
+                            url: result.videoUrl,
+                            description: 'Download video without watermark'
+                        }]
+                    };
+                } catch (error) {
+                    // Fallback ke API alternatif jika nekolabs gagal
+                    return await this.fetchTikTokFallback(url);
                 }
+            }
 
-                const data = await response.json();
+            async fetchTikTokFallback(url) {
+                // Fallback API untuk TikTok
+                const fallbackApis = [
+                    `https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(url)}`,
+                    `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`,
+                    `https://tikcdn.io/ssstik/${encodeURIComponent(url)}`
+                ];
+
+                for (const apiUrl of fallbackApis) {
+                    try {
+                        const data = await this.fetchWithProxy(apiUrl);
+                        
+                        // Parse response berdasarkan struktur API yang berbeda
+                        let videoData = null;
+                        
+                        if (data.videoUrl || data.data?.play) {
+                            // Format tiktokapi
+                            videoData = data;
+                        } else if (data.data?.wmplay) {
+                            // Format tikwm
+                            videoData = {
+                                title: data.data?.title || 'TikTok Video',
+                                cover: data.data?.cover || '',
+                                videoUrl: data.data?.play || data.data?.wmplay || '',
+                                author: {
+                                    name: data.data?.author?.nickname || 'Unknown',
+                                    username: data.data?.author?.unique_id || '@unknown',
+                                    avatar: data.data?.author?.avatar || ''
+                                },
+                                stats: {
+                                    play: data.data?.play_count || '0',
+                                    like: data.data?.digg_count || '0',
+                                    comment: data.data?.comment_count || '0',
+                                    share: data.data?.share_count || '0'
+                                }
+                            };
+                        }
+                        
+                        if (videoData) {
+                            return {
+                                platform: 'tiktok',
+                                url: url,
+                                title: videoData.title || 'TikTok Video',
+                                description: videoData.title || '',
+                                thumbnail: videoData.cover || '',
+                                videoUrl: videoData.videoUrl || videoData.data?.play || '',
+                                views: videoData.stats?.play || videoData.data?.play_count || '0',
+                                likes: videoData.stats?.like || videoData.data?.digg_count || '0',
+                                comments: videoData.stats?.comment || videoData.data?.comment_count || '0',
+                                shares: videoData.stats?.share || videoData.data?.share_count || '0',
+                                creator: {
+                                    name: videoData.author?.name || videoData.data?.author?.nickname || 'Unknown',
+                                    username: videoData.author?.username || videoData.data?.author?.unique_id || '@unknown',
+                                    avatar: videoData.author?.avatar || videoData.data?.author?.avatar || '',
+                                    createAt: 'Unknown'
+                                },
+                                downloadLinks: [{
+                                    type: 'video',
+                                    quality: 'HD',
+                                    url: videoData.videoUrl || videoData.data?.play || '',
+                                    description: 'Download video without watermark'
+                                }]
+                            };
+                        }
+                    } catch (error) {
+                        console.log(`Fallback API failed:`, error.message);
+                        continue;
+                    }
+                }
                 
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to fetch TikTok data');
-                }
-
-                // Format data untuk konsistensi
-                const result = data.result;
-                return {
-                    platform: 'tiktok',
-                    url: url,
-                    title: result.title || 'TikTok Video',
-                    description: result.title || '',
-                    thumbnail: result.cover || '',
-                    videoUrl: result.videoUrl || '',
-                    views: result.stats?.play || '0',
-                    likes: result.stats?.like || '0',
-                    comments: result.stats?.comment || '0',
-                    shares: result.stats?.share || '0',
-                    creator: {
-                        name: result.author?.name || 'Unknown',
-                        username: result.author?.username || '@unknown',
-                        avatar: result.author?.avatar || '',
-                        createAt: result.create_at || 'Unknown'
-                    },
-                    musicInfo: result.music_info || {},
-                    downloadLinks: [{
-                        type: 'video',
-                        quality: 'HD',
-                        url: result.videoUrl,
-                        description: 'Download video without watermark'
-                    }]
-                };
+                throw new Error('All TikTok APIs failed. Please try another video.');
             }
 
             async fetchInstagramData(url) {
-                // API untuk Instagram dari Nekolabs
-                const apiUrl = `${this.apiEndpoints.instagram}` + `${encodeURIComponent(url)}`;
+                // API untuk Instagram dari Nekolabs dengan proxy
+                const apiUrl = `https://api.nekolabs.web.id/downloader/instagram?url=${encodeURIComponent(url)}`;
                 
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                try {
+                    const data = await this.fetchWithProxy(apiUrl);
+                    
+                    if (!data.success) {
+                        throw new Error(data.error || 'Failed to fetch Instagram data');
                     }
-                });
 
-                if (!response.ok) {
-                    throw new Error(`API responded with status: ${response.status}`);
+                    // Format data untuk konsistensi
+                    const result = data.result;
+                    const metadata = result.metadata || {};
+                    const downloadUrl = result.downloadUrl?.[0] || '';
+                    
+                    return {
+                        platform: 'instagram',
+                        url: url,
+                        title: metadata.caption ? this.truncateText(metadata.caption, 100) : 'Instagram Video',
+                        description: metadata.caption || '',
+                        thumbnail: '', // Instagram API tidak memberikan thumbnail
+                        videoUrl: downloadUrl,
+                        views: 'N/A',
+                        likes: metadata.like || '0',
+                        comments: metadata.comment || '0',
+                        shares: 'N/A',
+                        creator: {
+                            name: metadata.username || 'Instagram User',
+                            username: `@${metadata.username || 'instagram'}`,
+                            avatar: '',
+                            isVideo: metadata.isVideo || false
+                        },
+                        downloadLinks: [{
+                            type: 'video',
+                            quality: metadata.isVideo ? 'Video' : 'Image',
+                            url: downloadUrl,
+                            description: metadata.isVideo ? 'Download Instagram video' : 'Download Instagram image'
+                        }]
+                    };
+                } catch (error) {
+                    // Fallback ke API alternatif jika nekolabs gagal
+                    return await this.fetchInstagramFallback(url);
                 }
+            }
 
-                const data = await response.json();
-                
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to fetch Instagram data');
+            async fetchInstagramFallback(url) {
+                // Fallback API untuk Instagram
+                const fallbackApis = [
+                    `https://api.instagram.com/oembed?url=${encodeURIComponent(url)}`,
+                    `https://www.instagram.com/graphql/query/?query_hash=2b0673e0dc4580674a88d426fe00ea90&variables={"shortcode":"${this.extractInstagramShortcode(url)}"}`
+                ];
+
+                for (const apiUrl of fallbackApis) {
+                    try {
+                        const data = await this.fetchWithProxy(apiUrl);
+                        
+                        if (data) {
+                            return {
+                                platform: 'instagram',
+                                url: url,
+                                title: data.title || 'Instagram Post',
+                                description: '',
+                                thumbnail: data.thumbnail_url || '',
+                                videoUrl: '', // Instagram oEmbed tidak memberikan video URL
+                                views: 'N/A',
+                                likes: 'N/A',
+                                comments: 'N/A',
+                                shares: 'N/A',
+                                creator: {
+                                    name: data.author_name || 'Instagram User',
+                                    username: data.author_url ? `@${data.author_url.split('/').pop()}` : '@instagram',
+                                    avatar: '',
+                                    isVideo: false
+                                },
+                                downloadLinks: []
+                            };
+                        }
+                    } catch (error) {
+                        console.log(`Instagram fallback API failed:`, error.message);
+                        continue;
+                    }
                 }
-
-                // Format data untuk konsistensi
-                const result = data.result;
-                const metadata = result.metadata || {};
-                const downloadUrl = result.downloadUrl?.[0] || '';
                 
-                return {
-                    platform: 'instagram',
-                    url: url,
-                    title: metadata.caption ? metadata.caption.substring(0, 100) + (metadata.caption.length > 100 ? '...' : '') : 'Instagram Video',
-                    description: metadata.caption || '',
-                    thumbnail: '', // Instagram API tidak memberikan thumbnail
-                    videoUrl: downloadUrl,
-                    views: 'N/A',
-                    likes: metadata.like || '0',
-                    comments: metadata.comment || '0',
-                    shares: 'N/A',
-                    creator: {
-                        name: metadata.username || 'Instagram User',
-                        username: `@${metadata.username || 'instagram'}`,
-                        avatar: '',
-                        isVideo: metadata.isVideo || false
-                    },
-                    downloadLinks: [{
-                        type: 'video',
-                        quality: metadata.isVideo ? 'Video' : 'Image',
-                        url: downloadUrl,
-                        description: metadata.isVideo ? 'Download Instagram video' : 'Download Instagram image'
-                    }]
-                };
+                throw new Error('All Instagram APIs failed. Please try another video.');
+            }
+
+            extractInstagramShortcode(url) {
+                // Extract shortcode dari URL Instagram
+                const match = url.match(/instagram\.com\/p\/([^/?]+)/) || 
+                             url.match(/instagram\.com\/reel\/([^/?]+)/) ||
+                             url.match(/instagram\.com\/tv\/([^/?]+)/);
+                return match ? match[1] : '';
+            }
+
+            truncateText(text, maxLength) {
+                if (text.length <= maxLength) return text;
+                return text.substring(0, maxLength) + '...';
             }
 
             displayVideoInfo(data) {
                 // Update video info
-                document.getElementById('videoTitle').textContent = data.title;
+                document.getElementById('videoTitle').textContent = data.title || 'No Title';
                 document.getElementById('videoDescription').textContent = data.description || 'No description available';
                 
                 // Update stats
-                document.getElementById('viewCount').textContent = data.views;
-                document.getElementById('likeCount').textContent = data.likes;
-                document.getElementById('commentCount').textContent = data.comments;
-                document.getElementById('shareCount').textContent = data.shares;
+                document.getElementById('viewCount').textContent = data.views || '0';
+                document.getElementById('likeCount').textContent = data.likes || '0';
+                document.getElementById('commentCount').textContent = data.comments || '0';
+                document.getElementById('shareCount').textContent = data.shares || '0';
                 
                 // Update creator info
-                document.getElementById('creatorName').textContent = data.creator.name;
-                document.getElementById('creatorUsername').textContent = data.creator.username;
+                document.getElementById('creatorName').textContent = data.creator.name || 'Unknown Creator';
+                document.getElementById('creatorUsername').textContent = data.creator.username || '@unknown';
                 
                 // Update creator stats based on platform
                 if (data.platform === 'tiktok') {
@@ -1677,7 +1848,7 @@
                     document.getElementById('creatorStats1').textContent = 'Instagram';
                     document.getElementById('creatorStats1Label').textContent = 'Platform';
                     
-                    document.getElementById('creatorStats2').textContent = data.creator.isVideo ? 'Video' : 'Image';
+                    document.getElementById('creatorStats2').textContent = data.creator.isVideo ? 'Video' : 'Image/Post';
                     document.getElementById('creatorStats2Label').textContent = 'Content Type';
                     
                     document.getElementById('creatorStats3').textContent = '-';
@@ -1730,7 +1901,7 @@
                 optionsGrid.innerHTML = '';
                 
                 // Add download options based on available links
-                if (data.downloadLinks && data.downloadLinks.length > 0) {
+                if (data.downloadLinks && data.downloadLinks.length > 0 && data.downloadLinks[0].url) {
                     data.downloadLinks.forEach((link, index) => {
                         const optionDiv = document.createElement('div');
                         optionDiv.className = 'download-option option-video';
@@ -1890,7 +2061,7 @@
                 const historyItem = {
                     url: url,
                     platform: this.platform,
-                    title: data.title.substring(0, 50) + (data.title.length > 50 ? '...' : ''),
+                    title: this.truncateText(data.title, 50),
                     creator: data.creator.username,
                     timestamp: new Date().toISOString(),
                     time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
