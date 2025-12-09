@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forexter Network Tools - TikTok & Instagram Downloader</title>
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/pvnz0v.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --primary-light: #8b7cea;
+            --secondary: #00cec9;
+            --secondary-dark: #00a8a8;
+            --dark: #121212;
+            --dark-light: #1e1e2d;
+            --darker: #0a0a0a;
+            --text: #eaeaea;
+            --text-secondary: #b0b0b0;
+            --success: #00b894;
+            --danger: #e84393;
+            --warning: #fdcb6e;
+            --info: #74b9ff;
+            --tiktok-pink: #FF0050;
+            --tiktok-blue: #00F2EA;
+            --instagram-purple: #C13584;
+            --instagram-orange: #F77737;
+            --forexter-purple: #8A2BE2;
+            --forexter-blue: #4169E1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, var(--dark-light) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Forexter Logo Container */
+        .forexter-header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .forexter-logo-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            perspective: 1000px;
+        }
+
+        .forexter-logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 15px 35px rgba(138, 43, 226, 0.4),
+                0 0 50px rgba(65, 105, 225, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            animation: logoFloat 6s ease-in-out infinite, logoGlow 3s ease-in-out infinite alternate;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+
+        .forexter-logo:hover {
+            transform: rotateY(20deg) rotateX(10deg) scale(1.05);
+            animation-play-state: paused;
+        }
+
+        .forexter-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: logoShine 4s linear infinite;
+        }
+
+        .forexter-logo img {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+            border-radius: 20px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .forexter-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0) rotateX(5deg); 
+            }
+            50% { 
+                transform: translateY(-15px) rotateX(5deg); 
+            }
+        }
+
+        @keyframes logoGlow {
+            0% { 
+                box-shadow: 
+                    0 15px 35px rgba(138, 43, 226, 0.4),
+                    0 0 50px rgba(65, 105, 225, 0.3),
+                    inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            100% { 
+                box-shadow: 
+                    0 15px 45px rgba(138, 43, 226, 0.6),
+                    0 0 70px rgba(65, 105, 225, 0.5),
+                    inset 0 0 30px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        @keyframes logoShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .forexter-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff, var(--forexter-purple), var(--forexter-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .forexter-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--forexter-purple), 
+                var(--forexter-blue),
+                transparent
+            );
+            border-radius: 3px;
+        }
+
+        .forexter-subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 15px auto 0;
+            line-height: 1.6;
+        }
+
+        .forexter-tagline {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(65, 105, 225, 0.2));
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--secondary);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* API Status Indicator */
+        .api-status {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--info);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .api-status-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .api-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulseSuccess 2s infinite;
+        }
+
+        .api-status-text {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .api-status-credits {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Platform Selector */
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .platform-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px 40px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .platform-btn i {
+            font-size: 28px;
+        }
+
+        .platform-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .platform-btn.active {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .platform-btn.tiktok.active {
+            background: linear-gradient(135deg, var(--tiktok-pink), var(--tiktok-blue));
+            border-color: var(--tiktok-pink);
+        }
+
+        .platform-btn.instagram.active {
+            background: linear-gradient(135deg, var(--instagram-purple), var(--instagram-orange));
+            border-color: var(--instagram-purple);
+        }
+
+        /* Download Form */
+        .download-form {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--forexter-purple), 
+                var(--forexter-blue),
+                var(--tiktok-pink)
+            );
+            border-radius: 20px 20px 0 0;
+        }
+
+        .form-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text);
+            position: relative;
+        }
+
+        .form-title i {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label i {
+            color: var(--forexter-purple);
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 18px 20px;
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--forexter-purple);
+            box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.5);
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .download-btn:disabled::before {
+            display: none;
+        }
+
+        .download-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .download-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 4px solid transparent;
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Result Display */
+        .result-display {
+            display: none;
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+        }
+
+        .result-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--forexter-purple), 
+                var(--forexter-blue),
+                var(--success)
+            );
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            padding: 30px;
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.1), 
+                rgba(65, 105, 225, 0.1));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text);
+        }
+
+        .result-title i {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-content {
+            padding: 35px;
+        }
+
+        /* Video Display */
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .video-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .video-preview {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+        }
+
+        .video-info {
+            padding: 25px;
+        }
+
+        .video-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .video-description::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .video-description::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .video-description::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--forexter-purple), var(--forexter-blue));
+            border-radius: 3px;
+        }
+
+        .video-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px;
+            border-radius: 12px;
+            transition: transform 0.3s;
+            border-left: 4px solid var(--forexter-purple);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .views .stat-icon { background: linear-gradient(135deg, var(--info), #1E90FF); }
+        .likes .stat-icon { background: linear-gradient(135deg, var(--danger), #FF416C); }
+        .comments .stat-icon { background: linear-gradient(135deg, var(--success), #00C9B7); }
+        .saves .stat-icon { background: linear-gradient(135deg, var(--warning), #FFD166); }
+
+        .stat-details {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Creator Info */
+        .creator-info {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(65, 105, 225, 0.05));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(138, 43, 226, 0.15);
+        }
+
+        .creator-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .creator-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .creator-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .creator-details h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .creator-details p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .creator-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .creator-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .creator-stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .creator-stat:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .creator-stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, var(--forexter-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .creator-stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Download Options */
+        .download-options {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-options::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, 
+                var(--forexter-purple), 
+                var(--forexter-blue));
+        }
+
+        .options-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .options-title i {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 24px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .download-option {
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.1), 
+                rgba(65, 105, 225, 0.05));
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid rgba(138, 43, 226, 0.1);
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .download-option:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(138, 43, 226, 0.2);
+            border-color: rgba(138, 43, 226, 0.3);
+        }
+
+        .option-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .download-option:hover .option-icon {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .option-video .option-icon {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+        }
+
+        .option-hd .option-icon {
+            background: linear-gradient(135deg, var(--success), #00C9B7);
+        }
+
+        .option-audio .option-icon {
+            background: linear-gradient(135deg, var(--danger), #FF416C);
+        }
+
+        .option-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .option-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.3);
+        }
+
+        .option-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            background: rgba(30, 30, 45, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .footer p:first-child {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .footer p:last-child {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* Error Display */
+        .error-display {
+            background: linear-gradient(135deg, rgba(232, 67, 147, 0.1), rgba(192, 57, 43, 0.1));
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 4px solid var(--danger);
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .error-title {
+            color: var(--danger);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Loading Placeholder */
+        .loading-placeholder {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1) 25%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: loadingShimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loadingShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .forexter-title {
+                font-size: 36px;
+            }
+            
+            .forexter-logo-container {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .video-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .forexter-title {
+                font-size: 32px;
+            }
+            
+            .forexter-subtitle {
+                font-size: 16px;
+            }
+            
+            .forexter-logo-container {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .platform-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .download-form,
+            .result-content {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .forexter-title {
+                font-size: 28px;
+            }
+            
+            .forexter-logo-container {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .form-title {
+                font-size: 24px;
+            }
+            
+            .download-btn {
+                padding: 18px 30px;
+                font-size: 18px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* History Section */
+        .history-section {
+            background: rgba(30, 30, 45, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .history-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--forexter-purple), 
+                var(--forexter-blue));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 15px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--forexter-purple), var(--forexter-blue));
+            border-radius: 10px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(138, 43, 226, 0.3);
+            transform: translateX(10px);
+        }
+
+        .history-platform {
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .history-platform i {
+            color: var(--forexter-purple);
+        }
+
+        .history-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .clear-history {
+            background: linear-gradient(135deg, rgba(232, 67, 147, 0.2), rgba(192, 57, 43, 0.2));
+            border: 2px solid rgba(232, 67, 147, 0.3);
+            color: var(--danger);
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            backdrop-filter: blur(5px);
+        }
+
+        .clear-history:hover {
+            background: linear-gradient(135deg, rgba(232, 67, 147, 0.3), rgba(192, 57, 43, 0.3));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(232, 67, 147, 0.3);
+        }
+
+        /* Video Player Controls */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-preview:hover .video-controls {
+            opacity: 1;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes pulseSuccess {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.7); 
+            }
+            70% { 
+                box-shadow: 0 0 0 10px rgba(0, 184, 148, 0); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Forexter Network Header with Logo -->
+        <div class="forexter-header">
+            <div class="forexter-logo-container">
+                <div class="forexter-logo">
+                    <img src="https://files.catbox.moe/pvnz0v.jpg" alt="Forexter Network Logo" 
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/150/8A2BE2/FFFFFF?text=Forexter';">
+                </div>
+            </div>
+            
+            <h1 class="forexter-title">Forexter Network Downloader</h1>
+            <p class="forexter-subtitle">
+                Download TikTok and Instagram videos without watermark. High-quality MP4 downloads with full metadata.
+            </p>
+            <div class="forexter-tagline">
+                <i class="fas fa-bolt"></i> No Watermark • HD Quality • Fast Download
+            </div>
+        </div>
+
+        <!-- API Status -->
+        <div class="api-status">
+            <div class="api-status-info">
+                <div class="api-status-dot"></div>
+                <div class="api-status-text">API Status: <strong>Online</strong> • Tim Forexter</div>
+            </div>
+            <div class="api-status-credits">
+                <i class="fas fa-code"></i>
+                <span>Powered by Tim Forexter</span>
+            </div>
+        </div>
+
+        <!-- Platform Selector -->
+        <div class="platform-selector">
+            <button class="platform-btn tiktok active" data-platform="tiktok">
+                <i class="fab fa-tiktok"></i>
+                TikTok Downloader (TTDL)
+            </button>
+            <button class="platform-btn instagram" data-platform="instagram">
+                <i class="fab fa-instagram"></i>
+                Instagram Downloader (IGDL)
+            </button>
+        </div>
+
+        <!-- Download Form -->
+        <div class="download-form">
+            <h2 class="form-title">
+                <i class="fas fa-download"></i> 
+                <span id="formTitleText">TikTok Video Downloader</span>
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-link"></i> 
+                    <span id="platformLabelText">TikTok</span> Video URL
+                </label>
+                <input type="text" class="form-input" id="videoUrl" 
+                       placeholder="Paste TikTok video URL here (e.g., https://www.tiktok.com/@username/video/123456789)" 
+                       value="">
+                <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Paste the full URL of the TikTok or Instagram video you want to download</span>
+                </div>
+            </div>
+
+            <button class="download-btn" id="downloadBtn">
+                <i class="fas fa-search"></i> 
+                <span id="downloadBtnText">Get TikTok Video Info</span>
+            </button>
+
+            <!-- Error Display -->
+            <div class="error-display" id="errorDisplay">
+                <div class="error-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="errorTitle">Download Error</span>
+                </div>
+                <p class="error-message" id="errorMessage">
+                    Unable to fetch video information. Please check the URL and try again.
+                </p>
+            </div>
+        </div>
+
+        <!-- Result Display -->
+        <div class="result-display" id="resultDisplay">
+            <div class="result-header">
+                <h2 class="result-title">
+                    <i class="fas fa-video"></i>
+                    <span id="resultTitle">Video Information</span>
+                </h2>
+                <p style="color: var(--text-secondary); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    <span id="resultStatus">Video information loaded successfully</span>
+                </p>
+            </div>
+
+            <div class="result-content">
+                <!-- Video Preview and Info -->
+                <div class="video-container">
+                    <div class="video-preview">
+                        <div class="video-placeholder" id="videoThumbnailPlaceholder">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <img class="video-thumbnail" id="videoThumbnail" style="display: none;" alt="Video Thumbnail">
+                    </div>
+                    
+                    <div class="video-info">
+                        <h3 class="video-title" id="videoTitle">TikTok Video Title</h3>
+                        <p class="video-description" id="videoDescription">
+                            Video description will appear here...
+                        </p>
+                        
+                        <div class="video-stats">
+                            <div class="stat-item views">
+                                <div class="stat-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <div class="stat-label">Total Views</div>
+                                    <div class="stat-value" id="viewCount">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item likes">
+                                <div class="stat-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <div class="stat-label">Total Likes</div>
+                                    <div class="stat-value" id="likeCount">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item comments">
+                                <div class="stat-icon">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <div class="stat-label">Total Comments</div>
+                                    <div class="stat-value" id="commentCount">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-item saves">
+                                <div class="stat-icon">
+                                    <i class="fas fa-share-alt"></i>
+                                </div>
+                                <div class="stat-details">
+                                    <div class="stat-label">Total Shares</div>
+                                    <div class="stat-value" id="shareCount">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Creator Info -->
+                <div class="creator-info">
+                    <div class="creator-header">
+                        <div class="creator-avatar" id="creatorAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="creator-details">
+                            <h3 id="creatorName">Creator Name</h3>
+                            <p>
+                                <i class="fas fa-at"></i>
+                                <span id="creatorUsername">@username</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="creator-stats">
+                        <div class="creator-stat">
+                            <div class="creator-stat-value" id="creatorStats1">-</div>
+                            <div class="creator-stat-label" id="creatorStats1Label">Platform</div>
+                        </div>
+                        <div class="creator-stat">
+                            <div class="creator-stat-value" id="creatorStats2">-</div>
+                            <div class="creator-stat-label" id="creatorStats2Label">Upload Date</div>
+                        </div>
+                        <div class="creator-stat">
+                            <div class="creator-stat-value" id="creatorStats3">-</div>
+                            <div class="creator-stat-label" id="creatorStats3Label">Video Type</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Options -->
+                <div class="download-options">
+                    <h3 class="options-title">
+                        <i class="fas fa-download"></i> Download Options
+                    </h3>
+                    
+                    <div class="options-grid" id="downloadOptionsGrid">
+                        <!-- Options will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h3 class="options-title">
+                <i class="fas fa-history"></i> Download History
+                <span style="font-size: 14px; color: var(--text-secondary); margin-left: 10px;">
+                    (Last 10 downloads)
+                </span>
+            </h3>
+            <div class="history-list" id="historyList">
+                <!-- History items will be added here -->
+                <div style="text-align: center; padding: 30px; color: var(--text-secondary);">
+                    <i class="fas fa-clock" style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <div>No download history yet.</div>
+                    <div style="font-size: 14px; margin-top: 5px;">Download a video to see history here.</div>
+                </div>
+            </div>
+            <button class="clear-history" id="clearHistory">
+                <i class="fas fa-trash-alt"></i> Clear All History
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 Forexter Network Tools • TikTok & Instagram Downloader</p>
+            <p>
+                <i class="fas fa-bolt" style="color: var(--forexter-purple);"></i>
+                No Watermark • HD Quality • Fast Downloads
+                <i class="fas fa-bolt" style="color: var(--forexter-blue);"></i>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        class ForexterDownloader {
+            constructor() {
+                this.platform = 'tiktok';
+                this.downloadHistory = [];
+                this.currentVideoData = null;
+                this.apiEndpoints = {
+                    tiktok: 'https://api.nekolabs.web.id/downloader/tiktok?url=',
+                    instagram: 'https://api.nekolabs.web.id/downloader/instagram?url='
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.loadHistory();
+                this.setupEventListeners();
+                this.updateHistoryDisplay();
+            }
+
+            setupEventListeners() {
+                // Platform selection
+                document.querySelectorAll('.platform-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.platform = btn.dataset.platform;
+                        this.updateFormForPlatform();
+                    });
+                });
+
+                // Download button
+                document.getElementById('downloadBtn').addEventListener('click', () => {
+                    this.fetchVideoInfo();
+                });
+
+                // Enter key in input field
+                document.getElementById('videoUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.fetchVideoInfo();
+                    }
+                });
+
+                // Clear history
+                document.getElementById('clearHistory').addEventListener('click', () => {
+                    this.clearHistory();
+                });
+
+                // Load from history items (delegated)
+                document.getElementById('historyList').addEventListener('click', (e) => {
+                    const historyItem = e.target.closest('.history-item');
+                    if (historyItem) {
+                        const videoUrl = historyItem.dataset.url;
+                        this.loadFromHistory(videoUrl);
+                    }
+                });
+            }
+
+            updateFormForPlatform() {
+                const platformText = this.platform === 'tiktok' ? 'TikTok' : 'Instagram';
+                
+                // Update form title
+                document.getElementById('formTitleText').textContent = `${platformText} Video Downloader`;
+                document.getElementById('platformLabelText').textContent = platformText;
+                document.getElementById('downloadBtnText').textContent = `Get ${platformText} Video Info`;
+                document.getElementById('resultTitle').textContent = `${platformText} Video Information`;
+                
+                // Update placeholder
+                const input = document.getElementById('videoUrl');
+                if (this.platform === 'tiktok') {
+                    input.placeholder = 'Paste TikTok video URL here (e.g., https://www.tiktok.com/@username/video/123456789)';
+                } else {
+                    input.placeholder = 'Paste Instagram video URL here (e.g., https://www.instagram.com/p/AbCdEfGHiJk/)';
+                }
+                
+                // Clear previous results
+                document.getElementById('resultDisplay').style.display = 'none';
+                document.getElementById('errorDisplay').style.display = 'none';
+            }
+
+            async fetchVideoInfo() {
+                const videoUrl = document.getElementById('videoUrl').value.trim();
+                if (!videoUrl) {
+                    this.showError('Missing URL', 'Please enter a video URL to download');
+                    return;
+                }
+
+                // Validate URL
+                if (!this.isValidUrl(videoUrl)) {
+                    this.showError('Invalid URL', 'Please enter a valid video URL');
+                    return;
+                }
+
+                // Update button state
+                const downloadBtn = document.getElementById('downloadBtn');
+                downloadBtn.classList.add('loading');
+                downloadBtn.disabled = true;
+
+                // Hide error display
+                this.hideError();
+
+                // Show loading state
+                document.getElementById('resultDisplay').style.display = 'block';
+                this.showLoadingState();
+
+                try {
+                    let videoData;
+                    
+                    if (this.platform === 'tiktok') {
+                        videoData = await this.fetchTikTokData(videoUrl);
+                    } else {
+                        videoData = await this.fetchInstagramData(videoUrl);
+                    }
+                    
+                    this.currentVideoData = videoData;
+                    
+                    // Process and display data
+                    this.displayVideoInfo(videoData);
+                    
+                    // Add to history
+                    this.addToHistory(videoUrl, videoData);
+                    
+                } catch (error) {
+                    console.error('Error fetching video info:', error);
+                    this.showError(
+                        'Failed to Fetch Video Info',
+                        error.message || 'Unable to fetch video information. Please check the URL and try again.'
+                    );
+                    document.getElementById('resultDisplay').style.display = 'none';
+                } finally {
+                    // Reset button state
+                    downloadBtn.classList.remove('loading');
+                    downloadBtn.disabled = false;
+                }
+            }
+
+            isValidUrl(url) {
+                try {
+                    new URL(url);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            async fetchTikTokData(url) {
+                // API untuk TikTok dari Nekolabs
+                const apiUrl = `${this.apiEndpoints.tiktok}` + `${encodeURIComponent(url)}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API responded with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to fetch TikTok data');
+                }
+
+                // Format data untuk konsistensi
+                const result = data.result;
+                return {
+                    platform: 'tiktok',
+                    url: url,
+                    title: result.title || 'TikTok Video',
+                    description: result.title || '',
+                    thumbnail: result.cover || '',
+                    videoUrl: result.videoUrl || '',
+                    views: result.stats?.play || '0',
+                    likes: result.stats?.like || '0',
+                    comments: result.stats?.comment || '0',
+                    shares: result.stats?.share || '0',
+                    creator: {
+                        name: result.author?.name || 'Unknown',
+                        username: result.author?.username || '@unknown',
+                        avatar: result.author?.avatar || '',
+                        createAt: result.create_at || 'Unknown'
+                    },
+                    musicInfo: result.music_info || {},
+                    downloadLinks: [{
+                        type: 'video',
+                        quality: 'HD',
+                        url: result.videoUrl,
+                        description: 'Download video without watermark'
+                    }]
+                };
+            }
+
+            async fetchInstagramData(url) {
+                // API untuk Instagram dari Nekolabs
+                const apiUrl = `${this.apiEndpoints.instagram}` + `${encodeURIComponent(url)}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API responded with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'Failed to fetch Instagram data');
+                }
+
+                // Format data untuk konsistensi
+                const result = data.result;
+                const metadata = result.metadata || {};
+                const downloadUrl = result.downloadUrl?.[0] || '';
+                
+                return {
+                    platform: 'instagram',
+                    url: url,
+                    title: metadata.caption ? metadata.caption.substring(0, 100) + (metadata.caption.length > 100 ? '...' : '') : 'Instagram Video',
+                    description: metadata.caption || '',
+                    thumbnail: '', // Instagram API tidak memberikan thumbnail
+                    videoUrl: downloadUrl,
+                    views: 'N/A',
+                    likes: metadata.like || '0',
+                    comments: metadata.comment || '0',
+                    shares: 'N/A',
+                    creator: {
+                        name: metadata.username || 'Instagram User',
+                        username: `@${metadata.username || 'instagram'}`,
+                        avatar: '',
+                        isVideo: metadata.isVideo || false
+                    },
+                    downloadLinks: [{
+                        type: 'video',
+                        quality: metadata.isVideo ? 'Video' : 'Image',
+                        url: downloadUrl,
+                        description: metadata.isVideo ? 'Download Instagram video' : 'Download Instagram image'
+                    }]
+                };
+            }
+
+            displayVideoInfo(data) {
+                // Update video info
+                document.getElementById('videoTitle').textContent = data.title;
+                document.getElementById('videoDescription').textContent = data.description || 'No description available';
+                
+                // Update stats
+                document.getElementById('viewCount').textContent = data.views;
+                document.getElementById('likeCount').textContent = data.likes;
+                document.getElementById('commentCount').textContent = data.comments;
+                document.getElementById('shareCount').textContent = data.shares;
+                
+                // Update creator info
+                document.getElementById('creatorName').textContent = data.creator.name;
+                document.getElementById('creatorUsername').textContent = data.creator.username;
+                
+                // Update creator stats based on platform
+                if (data.platform === 'tiktok') {
+                    document.getElementById('creatorStats1').textContent = 'TikTok';
+                    document.getElementById('creatorStats1Label').textContent = 'Platform';
+                    
+                    document.getElementById('creatorStats2').textContent = data.creator.createAt || '-';
+                    document.getElementById('creatorStats2Label').textContent = 'Upload Date';
+                    
+                    document.getElementById('creatorStats3').textContent = 'Video';
+                    document.getElementById('creatorStats3Label').textContent = 'Type';
+                } else {
+                    document.getElementById('creatorStats1').textContent = 'Instagram';
+                    document.getElementById('creatorStats1Label').textContent = 'Platform';
+                    
+                    document.getElementById('creatorStats2').textContent = data.creator.isVideo ? 'Video' : 'Image';
+                    document.getElementById('creatorStats2Label').textContent = 'Content Type';
+                    
+                    document.getElementById('creatorStats3').textContent = '-';
+                    document.getElementById('creatorStats3Label').textContent = 'Info';
+                }
+                
+                // Update creator avatar
+                const creatorAvatar = document.getElementById('creatorAvatar');
+                if (data.creator.avatar) {
+                    creatorAvatar.innerHTML = `<img src="${data.creator.avatar}" alt="${data.creator.name}" 
+                        onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i>';">`;
+                } else {
+                    creatorAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                }
+                
+                // Update video thumbnail
+                const videoThumbnail = document.getElementById('videoThumbnail');
+                const videoPlaceholder = document.getElementById('videoThumbnailPlaceholder');
+                
+                if (data.thumbnail) {
+                    videoThumbnail.src = data.thumbnail;
+                    videoThumbnail.style.display = 'block';
+                    videoPlaceholder.style.display = 'none';
+                } else {
+                    videoThumbnail.style.display = 'none';
+                    videoPlaceholder.style.display = 'flex';
+                }
+                
+                // Update result status
+                const platformText = this.platform === 'tiktok' ? 'TikTok' : 'Instagram';
+                document.getElementById('resultStatus').textContent = 
+                    `${platformText} video information loaded successfully`;
+                
+                // Update download options
+                this.updateDownloadOptions(data);
+                
+                // Show result display
+                document.getElementById('resultDisplay').style.display = 'block';
+                
+                // Scroll to result
+                setTimeout(() => {
+                    document.getElementById('resultDisplay').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+
+            updateDownloadOptions(data) {
+                const optionsGrid = document.getElementById('downloadOptionsGrid');
+                
+                // Clear previous options
+                optionsGrid.innerHTML = '';
+                
+                // Add download options based on available links
+                if (data.downloadLinks && data.downloadLinks.length > 0) {
+                    data.downloadLinks.forEach((link, index) => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.className = 'download-option option-video';
+                        optionDiv.innerHTML = `
+                            <div class="option-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h4 class="option-title">Download Video</h4>
+                            <p class="option-description">
+                                ${link.description || 'Download video without watermark'}
+                            </p>
+                            <button class="option-btn" data-url="${link.url}" data-platform="${data.platform}">
+                                <i class="fas fa-download"></i> Download MP4
+                            </button>
+                        `;
+                        optionsGrid.appendChild(optionDiv);
+                    });
+                    
+                    // Add event listeners to download buttons
+                    document.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const url = e.target.dataset.url || e.target.closest('.option-btn').dataset.url;
+                            const platform = e.target.dataset.platform || e.target.closest('.option-btn').dataset.platform;
+                            this.downloadVideo(url, platform);
+                        });
+                    });
+                } else {
+                    optionsGrid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 50px; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <h3>No Download Links Available</h3>
+                            <p>Unable to fetch download links for this video. Please try another video.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            downloadVideo(url, platform) {
+                if (!url) {
+                    this.showError('Download Error', 'Download link is not available');
+                    return;
+                }
+
+                // Create download link
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `forexter-${platform}-${Date.now()}.mp4`;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                
+                // Trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Show success message
+                this.showSuccessMessage('Download started!');
+                
+                // Track download in history
+                this.trackDownload(url, platform);
+            }
+
+            trackDownload(url, platform) {
+                // Simpan ke localStorage untuk tracking
+                const downloads = JSON.parse(localStorage.getItem('forexterDownloads') || '[]');
+                downloads.unshift({
+                    url: url,
+                    platform: platform,
+                    timestamp: new Date().toISOString()
+                });
+                
+                if (downloads.length > 50) {
+                    downloads.pop();
+                }
+                
+                localStorage.setItem('forexterDownloads', JSON.stringify(downloads));
+            }
+
+            showSuccessMessage(message) {
+                // Create temporary success message
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, var(--success), #00C9B7);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    animation: fadeIn 0.3s;
+                `;
+                successDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(successDiv);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    successDiv.style.animation = 'fadeOut 0.3s';
+                    setTimeout(() => {
+                        document.body.removeChild(successDiv);
+                    }, 300);
+                }, 3000);
+            }
+
+            showLoadingState() {
+                // Show loading placeholders
+                document.getElementById('videoTitle').textContent = 'Loading video information...';
+                document.getElementById('videoDescription').textContent = 'Please wait while we fetch video details...';
+                document.getElementById('viewCount').textContent = '...';
+                document.getElementById('likeCount').textContent = '...';
+                document.getElementById('commentCount').textContent = '...';
+                document.getElementById('shareCount').textContent = '...';
+                document.getElementById('creatorName').textContent = 'Loading...';
+                document.getElementById('creatorUsername').textContent = '@loading';
+                document.getElementById('creatorStats1').textContent = '...';
+                document.getElementById('creatorStats2').textContent = '...';
+                document.getElementById('creatorStats3').textContent = '...';
+                
+                // Show thumbnail placeholder
+                document.getElementById('videoThumbnail').style.display = 'none';
+                document.getElementById('videoThumbnailPlaceholder').style.display = 'flex';
+                
+                // Reset creator avatar
+                document.getElementById('creatorAvatar').innerHTML = '<i class="fas fa-user"></i>';
+                
+                // Reset download options
+                document.getElementById('downloadOptionsGrid').innerHTML = `
+                    <div class="loading-placeholder" style="height: 200px; grid-column: 1/-1;"></div>
+                `;
+            }
+
+            showError(title, message) {
+                document.getElementById('errorTitle').textContent = title;
+                document.getElementById('errorMessage').textContent = message;
+                document.getElementById('errorDisplay').style.display = 'block';
+                
+                // Scroll to error
+                setTimeout(() => {
+                    document.getElementById('errorDisplay').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+
+            hideError() {
+                document.getElementById('errorDisplay').style.display = 'none';
+            }
+
+            // History Management
+            addToHistory(url, data) {
+                const historyItem = {
+                    url: url,
+                    platform: this.platform,
+                    title: data.title.substring(0, 50) + (data.title.length > 50 ? '...' : ''),
+                    creator: data.creator.username,
+                    timestamp: new Date().toISOString(),
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    date: new Date().toLocaleDateString()
+                };
+
+                // Remove if already exists
+                this.downloadHistory = this.downloadHistory.filter(item => 
+                    item.url !== url
+                );
+
+                // Add to beginning
+                this.downloadHistory.unshift(historyItem);
+
+                // Keep only last 10 items
+                if (this.downloadHistory.length > 10) {
+                    this.downloadHistory.pop();
+                }
+
+                this.saveHistory();
+                this.updateHistoryDisplay();
+            }
+
+            loadHistory() {
+                const saved = localStorage.getItem('forexterDownloadHistory');
+                if (saved) {
+                    this.downloadHistory = JSON.parse(saved);
+                }
+            }
+
+            saveHistory() {
+                localStorage.setItem('forexterDownloadHistory', JSON.stringify(this.downloadHistory));
+            }
+
+            updateHistoryDisplay() {
+                const historyList = document.getElementById('historyList');
+                
+                if (this.downloadHistory.length === 0) {
+                    historyList.innerHTML = `
+                        <div style="text-align: center; padding: 30px; color: var(--text-secondary);">
+                            <i class="fas fa-clock" style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;"></i>
+                            <div>No download history yet.</div>
+                            <div style="font-size: 14px; margin-top: 5px;">Download a video to see history here.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                historyList.innerHTML = this.downloadHistory.map(item => `
+                    <div class="history-item" data-url="${item.url}">
+                        <div class="history-platform">
+                            <i class="fab fa-${item.platform}"></i>
+                            ${item.title}
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-left: 10px;">
+                                ${item.creator}
+                            </div>
+                        </div>
+                        <div class="history-time" title="${item.date} ${item.time}">
+                            ${item.time}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            loadFromHistory(url) {
+                document.getElementById('videoUrl').value = url;
+                
+                // Find the platform from history
+                const historyItem = this.downloadHistory.find(item => item.url === url);
+                if (historyItem) {
+                    // Set platform
+                    document.querySelectorAll('.platform-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.platform === historyItem.platform);
+                    });
+                    this.platform = historyItem.platform;
+                    this.updateFormForPlatform();
+                }
+                
+                // Fetch video info
+                this.fetchVideoInfo();
+            }
+
+            clearHistory() {
+                if (confirm('Are you sure you want to clear all download history? This action cannot be undone.')) {
+                    this.downloadHistory = [];
+                    this.saveHistory();
+                    this.updateHistoryDisplay();
+                }
+            }
+        }
+
+        // Initialize the downloader
+        document.addEventListener('DOMContentLoaded', () => {
+            window.downloader = new ForexterDownloader();
+        });
+    </script>
+</body>
+</html>
