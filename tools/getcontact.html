@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forexter Network - Promosi GetContact Analyzer Premium</title>
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/pvnz0v.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --primary-light: #8b7cea;
+            --secondary: #00cec9;
+            --secondary-dark: #00a8a8;
+            --dark: #121212;
+            --dark-light: #1e1e2d;
+            --darker: #0a0a0a;
+            --text: #eaeaea;
+            --text-secondary: #b0b0b0;
+            --success: #00b894;
+            --danger: #e84393;
+            --warning: #fdcb6e;
+            --info: #74b9ff;
+            --forexter-purple: #8A2BE2;
+            --forexter-blue: #4169E1;
+            --getcontact-blue: #007AFF;
+            --spam-red: #FF3B30;
+            --trust-green: #34C759;
+            --premium-gold: #FFD700;
+            --premium-silver: #C0C0C0;
+            --whatsapp-green: #25D366;
+            --instagram-purple: #E4405F;
+            --discord-purple: #7289DA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, var(--dark-light) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Promo Banner Mewah */
+        .promo-header {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .promo-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        .promo-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(138, 43, 226, 0.8) 0%,
+                rgba(65, 105, 225, 0.7) 25%,
+                rgba(0, 122, 255, 0.6) 50%,
+                rgba(255, 215, 0, 0.5) 75%,
+                rgba(232, 67, 147, 0.4) 100%
+            );
+            mix-blend-mode: multiply;
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 3;
+            padding: 80px 40px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .promo-title {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, 
+                #FFD700 0%,
+                #FFA500 25%,
+                #FFD700 50%,
+                #FFA500 75%,
+                #FFD700 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            letter-spacing: 3px;
+            line-height: 1.2;
+        }
+
+        .promo-subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border: 3px solid var(--premium-gold);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 60px auto;
+            max-width: 800px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+                        inset 0 0 60px rgba(255, 215, 0, 0.2);
+        }
+
+        .countdown-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--premium-gold);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .countdown-item {
+            text-align: center;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--getcontact-blue));
+            padding: 30px 20px;
+            border-radius: 20px;
+            min-width: 150px;
+            box-shadow: 0 20px 50px rgba(138, 43, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-value {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-label {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Voice Control */
+        .voice-control {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+        }
+
+        .voice-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--getcontact-blue));
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 60px rgba(138, 43, 226, 0.6);
+        }
+
+        .voice-btn.pulse {
+            animation: voicePulse 1.5s infinite;
+        }
+
+        @keyframes voicePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 30px rgba(138, 43, 226, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(138, 43, 226, 0);
+            }
+        }
+
+        /* Pricing Grid Premium */
+        .pricing-grid-premium {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-card-premium {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+
+        .pricing-card-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                var(--forexter-purple),
+                var(--getcontact-blue),
+                var(--premium-gold)
+            );
+        }
+
+        .pricing-card-premium:hover {
+            transform: translateY(-20px) scale(1.05);
+            border-color: var(--premium-gold);
+            box-shadow: 0 40px 100px rgba(255, 215, 0, 0.3);
+        }
+
+        .pricing-card-premium.popular {
+            background: linear-gradient(135deg, 
+                rgba(138, 43, 226, 0.2),
+                rgba(0, 122, 255, 0.15));
+            border: 3px solid var(--premium-gold);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--premium-gold), #FFC107);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .pricing-title-premium {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .pricing-price-premium {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--premium-gold), #FFC107, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period-premium {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pricing-features-premium {
+            list-style: none;
+            margin-bottom: 50px;
+        }
+
+        .pricing-features-premium li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pricing-features-premium li i {
+            color: var(--success);
+            font-size: 1.3rem;
+        }
+
+        .buy-button-premium {
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--getcontact-blue));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-button-premium:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Testimonial Carousel */
+        .testimonial-section {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .testimonial-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--premium-gold);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .testimonial-carousel {
+            display: flex;
+            overflow: hidden;
+            gap: 40px;
+            padding: 20px 0;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            min-width: 350px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial-rating {
+            color: var(--premium-gold);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--getcontact-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .author-info h4 {
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Feature Showcase */
+        .feature-showcase {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover {
+            border-color: var(--forexter-purple);
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--getcontact-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            position: relative;
+            z-index: 2;
+            padding: 100px 40px;
+            text-align: center;
+            background: radial-gradient(circle at center, 
+                rgba(138, 43, 226, 0.2) 0%,
+                transparent 70%);
+        }
+
+        .cta-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, 
+                var(--premium-gold),
+                var(--forexter-purple),
+                var(--getcontact-blue)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-subtitle {
+            font-size: 1.8rem;
+            color: var(--text);
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 25px 50px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 300px;
+            justify-content: center;
+        }
+
+        .cta-button.whatsapp {
+            background: linear-gradient(135deg, var(--whatsapp-green), #128C7E);
+            color: white;
+            border: none;
+        }
+
+        .cta-button.instagram {
+            background: linear-gradient(135deg, var(--instagram-purple), #833AB4);
+            color: white;
+            border: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer Premium */
+        .footer-premium {
+            position: relative;
+            z-index: 2;
+            padding: 60px 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 3px solid var(--premium-gold);
+        }
+
+        .footer-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, 
+                var(--forexter-purple),
+                var(--forexter-blue),
+                var(--getcontact-blue)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-contact {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            color: var(--premium-gold);
+            transform: translateY(-3px);
+        }
+
+        /* Sound Effects Toggle */
+        .sound-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .sound-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), #00C9B7);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(0, 184, 148, 0.4);
+            transition: all 0.3s;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .pricing-grid-premium {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .promo-title {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid-premium {
+                grid-template-columns: 1fr;
+            }
+            
+            .promo-title {
+                font-size: 3rem;
+            }
+            
+            .promo-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            
+            .countdown-item {
+                min-width: 120px;
+                padding: 20px 15px;
+            }
+            
+            .countdown-value {
+                font-size: 3rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .promo-title {
+                font-size: 2.5rem;
+            }
+            
+            .promo-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .countdown-item {
+                min-width: 100px;
+            }
+            
+            .countdown-value {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Audio Visualizer */
+        .audio-visualizer {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 200px;
+            height: 100px;
+            z-index: 1000;
+        }
+
+        .visualizer-bar {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            background: linear-gradient(to top, 
+                var(--forexter-purple),
+                var(--getcontact-blue),
+                var(--premium-gold)
+            );
+            border-radius: 5px 5px 0 0;
+            animation: visualizerMove 1s infinite alternate;
+            opacity: 0.7;
+        }
+
+        @keyframes visualizerMove {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .loading-spinner {
+            width: 100px;
+            height: 100px;
+            border: 8px solid rgba(138, 43, 226, 0.1);
+            border-top: 8px solid var(--forexter-purple);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+        }
+
+        .loading-text {
+            color: var(--text);
+            font-size: 1.5rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Celebration Effects */
+        .confetti {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            z-index: 9998;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">MEMUAT PROMOSI PREMIUM...</div>
+    </div>
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Promo Header -->
+    <header class="promo-header">
+        <video class="promo-video-bg" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-geometric-orbital-motion-34222-large.mp4" type="video/mp4">
+        </video>
+        <div class="promo-gradient"></div>
+        <div class="promo-content">
+            <h1 class="promo-title">GETCONTACT ANALYZER PREMIUM</h1>
+            <p class="promo-subtitle">
+                Layanan Analisis Telepon Paling Canggih dengan Database 5.2 Juta+ Nomor Indonesia
+                <br>
+                <span style="color: var(--premium-gold); font-weight: 700;">AKTIFKAN PREMIUM HARI INI!</span>
+            </p>
+            <div class="countdown-container">
+                <h2 class="countdown-title">🚨 PROMO TERBATAS 🚨</h2>
+                <div class="countdown" id="countdownTimer">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Hari</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Jam</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Menit</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Detik</div>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 20px;">
+                    ⚡ Harga naik dalam: <span id="countdownText" style="color: var(--premium-gold); font-weight: 700;"></span>
+                </p>
+                <button class="buy-button-premium" onclick="playPromoVoice('promo1')" style="max-width: 400px; margin: 0 auto;">
+                    <i class="fas fa-volume-up"></i> DENGARKAN PENAWARAN SPESIAL
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Voice Control -->
+    <div class="voice-control">
+        <button class="voice-btn pulse" id="voiceControl">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <!-- Sound Toggle -->
+    <div class="sound-toggle">
+        <button class="sound-btn" id="soundToggle">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
+    <!-- Audio Visualizer -->
+    <div class="audio-visualizer" id="audioVisualizer">
+        <!-- Visualizer bars will be generated by JavaScript -->
+    </div>
+
+    <!-- Pricing Section -->
+    <section class="pricing-grid-premium">
+        <div class="pricing-card-premium">
+            <div class="popular-badge">💎 BASIC</div>
+            <h3 class="pricing-title-premium">PAKET HARIAN</h3>
+            <div class="pricing-price-premium">Rp 2K</div>
+            <div class="pricing-period-premium">/ HARI</div>
+            <ul class="pricing-features-premium">
+                <li><i class="fas fa-check-circle"></i> 50 pencarian per hari</li>
+                <li><i class="fas fa-check-circle"></i> Data tag lengkap</li>
+                <li><i class="fas fa-check-circle"></i> Spam detection basic</li>
+                <li><i class="fas fa-check-circle"></i> Support 12 jam</li>
+                <li><i class="fas fa-check-circle"></i> Update real-time</li>
+            </ul>
+            <button class="buy-button-premium" onclick="playPromoVoice('basic')">
+                <i class="fab fa-whatsapp"></i> BELI SEKARANG
+            </button>
+        </div>
+
+        <div class="pricing-card-premium popular">
+            <div class="popular-badge">🔥 POPULAR</div>
+            <h3 class="pricing-title-premium">PAKET BULANAN</h3>
+            <div class="pricing-price-premium">Rp 15K</div>
+            <div class="pricing-period-premium">/ BULAN</div>
+            <ul class="pricing-features-premium">
+                <li><i class="fas fa-check-circle"></i> Unlimited pencarian</li>
+                <li><i class="fas fa-check-circle"></i> Data tag lengkap + AI</li>
+                <li><i class="fas fa-check-circle"></i> Spam detection real-time</li>
+                <li><i class="fas fa-check-circle"></i> Support 24/7 priority</li>
+                <li><i class="fas fa-check-circle"></i> Data historis 30 hari</li>
+            </ul>
+            <button class="buy-button-premium" onclick="playPromoVoice('pro')">
+                <i class="fas fa-crown"></i> PILIHAN TERBAIK
+            </button>
+        </div>
+
+        <div class="pricing-card-premium">
+            <div class="popular-badge">👑 VIP</div>
+            <h3 class="pricing-title-premium">PAKET TAHUNAN</h3>
+            <div class="pricing-price-premium">Rp 60K</div>
+            <div class="pricing-period-premium">/ TAHUN</div>
+            <ul class="pricing-features-premium">
+                <li><i class="fas fa-check-circle"></i> Unlimited pencarian</li>
+                <li><i class="fas fa-check-circle"></i> Semua fitur Pro + AI advanced</li>
+                <li><i class="fas fa-check-circle"></i> Spam prediction system</li>
+                <li><i class="fas fa-check-circle"></i> VIP Support 24/7</li>
+                <li><i class="fas fa-check-circle"></i> Data historis 1 tahun</li>
+            </ul>
+            <button class="buy-button-premium" onclick="playPromoVoice('vip')">
+                <i class="fas fa-calendar-alt"></i> HEMAT 66%
+            </button>
+        </div>
+    </section>
+
+    <!-- Feature Showcase -->
+    <section class="feature-showcase">
+        <h2 class="testimonial-title">✨ FITUR PREMIUM EKSKLUSIF</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3 class="feature-title">Database 5.2 Juta+</h3>
+                <p class="feature-description">
+                    Akses database nomor telepon terlengkap di Indonesia dengan update real-time setiap jam.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="feature-title">AI Analysis</h3>
+                <p class="feature-description">
+                    Sistem AI canggih menganalisis pola dan statistik dengan akurasi mencapai 95%.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Spam Detection</h3>
+                <p class="feature-description">
+                    Deteksi spam real-time berdasarkan laporan dari jutaan pengguna aktif.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Real-Time Update</h3>
+                <p class="feature-description">
+                    Data selalu terupdate dengan sistem scraping yang bekerja 24/7 tanpa henti.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Community Powered</h3>
+                <p class="feature-description">
+                    Data berasal dari komunitas 10+ juta pengguna GetContact aktif di seluruh Indonesia.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Advanced Analytics</h3>
+                <p class="feature-description">
+                    Analisis mendalam dengan grafik dan statistik untuk pengambilan keputusan.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonial-section">
+        <h2 class="testimonial-title">🎖️ TESTIMONI PREMIUM MEMBER</h2>
+        <div class="testimonial-carousel" id="testimonialCarousel">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Dengan GetContact Premium, bisnis saya naik 300%! Sekarang bisa tau calon customer duluan sebelum telepon."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AS</div>
+                    <div class="author-info">
+                        <h4>Andi Susanto</h4>
+                        <p>Owner Dealership Mobil</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Tag identitasnya 95% akurat! Sekarang gak pernah lagi salah telepon atau tertipu sales abal-abal."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RD</div>
+                    <div class="author-info">
+                        <h4>Rina Dewi</h4>
+                        <p>Marketing Manager</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">
+                    "Worth every penny! Data spam detectionnya udah selamatin saya dari penipuan puluhan juta."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">BS</div>
+                    <div class="author-info">
+                        <h4>Budi Santoso</h4>
+                        <p>Entrepreneur</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <h2 class="cta-title">🚀 AKTIFKAN PREMIUM HARI INI!</h2>
+        <p class="cta-subtitle">
+            Gabung dengan 50.000+ member premium yang sudah merasakan manfaat GetContact Analyzer.
+            <br>
+            <span style="color: var(--premium-gold); font-weight: 700;">GARANSI 100% UANG KEMBALI JIKA TIDAK PUAS!</span>
+        </p>
+        <div class="cta-buttons">
+            <button class="cta-button whatsapp" onclick="openWhatsApp()">
+                <i class="fab fa-whatsapp"></i>
+                <span>BELI VIA WHATSAPP</span>
+            </button>
+            <button class="cta-button instagram" onclick="openInstagram()">
+                <i class="fab fa-instagram"></i>
+                <span>BELI VIA INSTAGRAM</span>
+            </button>
+        </div>
+        <p style="color: var(--text-secondary); margin-top: 30px; font-size: 1.1rem;">
+            <i class="fas fa-bolt"></i>
+            Aktifasi instan dalam 1-5 menit setelah pembayaran
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-premium">
+        <div class="footer-logo">FOREXTER NETWORK</div>
+        <p style="color: var(--text-secondary); max-width: 800px; margin: 0 auto 30px; font-size: 1.1rem;">
+            GetContact Analyzer Premium - Layanan analisis nomor telepon paling canggih dengan teknologi AI dan database real-time terbesar di Indonesia.
+        </p>
+        <div class="footer-contact">
+            <a href="https://wa.me/6285800650661" class="contact-item" target="_blank">
+                <i class="fab fa-whatsapp" style="color: var(--whatsapp-green);"></i>
+                <span>+62 858-0065-0661 (Admin Ndii)</span>
+            </a>
+            <a href="https://instagram.com/its.me_ndii" class="contact-item" target="_blank">
+                <i class="fab fa-instagram" style="color: var(--instagram-purple);"></i>
+                <span>@its.me_ndii</span>
+            </a>
+            <a href="https://instagram.com/ndii.cloud" class="contact-item" target="_blank">
+                <i class="fab fa-instagram" style="color: var(--getcontact-blue);"></i>
+                <span>@ndii.cloud (Business)</span>
+            </a>
+        </div>
+        <p style="color: var(--text-secondary); margin-top: 40px; font-size: 0.9rem;">
+            &copy; 2025 Forexter Network • GetContact Analyzer Premium • All Rights Reserved
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        class PremiumPromo {
+            constructor() {
+                this.soundEnabled = true;
+                this.audioContext = null;
+                this.analyser = null;
+                this.promoMessages = {
+                    promo1: "Selamat datang di GetContact Analyzer Premium! Layanan analisis nomor telepon paling canggih di Indonesia dengan database 5.2 juta nomor aktif. Dapatkan akses premium sekarang dengan harga spesial!",
+                    basic: "Paket Basic hanya Rp 2,000 per hari! Dapatkan 50 pencarian, data tag lengkap, dan spam detection. Cocok untuk kebutuhan harian Anda.",
+                    pro: "Paket Pro hanya Rp 15,000 per bulan! Unlimited pencarian, AI analysis, spam detection real-time, dan support 24/7. Pilihan terbaik untuk profesional!",
+                    vip: "Paket VIP hanya Rp 60,000 per tahun! Hemat 66% dapat semua fitur premium plus data historis 1 tahun. Investasi terbaik Anda!"
+                };
+                this.init();
+            }
+
+            async init() {
+                // Initialize particles
+                particlesJS("particles-js", {
+                    particles: {
+                        number: { value: 150, density: { enable: true, value_area: 800 } },
+                        color: { value: ["#8A2BE2", "#4169E1", "#007AFF", "#FFD700"] },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.5, random: true },
+                        size: { value: 3, random: true },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: "#8A2BE2",
+                            opacity: 0.2,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 2,
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            out_mode: "out",
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: { enable: true, mode: "repulse" },
+                            onclick: { enable: true, mode: "push" }
+                        }
+                    }
+                });
+
+                // Hide loading screen
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    this.startAutoPromo();
+                    this.createConfetti();
+                }, 2000);
+
+                // Initialize countdown
+                this.startCountdown();
+
+                // Initialize testimonial carousel
+                this.initCarousel();
+
+                // Initialize audio visualizer
+                this.initAudioVisualizer();
+
+                // Setup event listeners
+                this.setupEventListeners();
+
+                // Play welcome voice
+                setTimeout(() => {
+                    if (this.soundEnabled) {
+                        this.playPromoVoice('promo1');
+                    }
+                }, 3000);
+            }
+
+            startCountdown() {
+                const targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() + 3); // 3 days from now
+
+                const updateCountdown = () => {
+                    const now = new Date();
+                    const diff = targetDate - now;
+
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+                    // Update countdown text
+                    const countdownText = `${days} hari ${hours} jam ${minutes} menit ${seconds} detik`;
+                    document.getElementById('countdownText').textContent = countdownText;
+                };
+
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
+
+            initCarousel() {
+                const carousel = document.getElementById('testimonialCarousel');
+                let scrollPosition = 0;
+                const scrollSpeed = 1;
+                const cardWidth = 390; // card width + gap
+
+                const scrollCarousel = () => {
+                    scrollPosition += scrollSpeed;
+                    if (scrollPosition >= carousel.scrollWidth / 2) {
+                        scrollPosition = 0;
+                    }
+                    carousel.scrollLeft = scrollPosition;
+                };
+
+                setInterval(scrollCarousel, 30);
+            }
+
+            initAudioVisualizer() {
+                const visualizer = document.getElementById('audioVisualizer');
+                for (let i = 0; i < 20; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'visualizer-bar';
+                    bar.style.left = `${i * 10}px`;
+                    bar.style.animationDelay = `${i * 0.05}s`;
+                    bar.style.height = `${20 + Math.random() * 80}%`;
+                    visualizer.appendChild(bar);
+                }
+            }
+
+            setupEventListeners() {
+                // Voice control button
+                document.getElementById('voiceControl').addEventListener('click', () => {
+                    this.playRandomPromo();
+                });
+
+                // Sound toggle button
+                document.getElementById('soundToggle').addEventListener('click', () => {
+                    this.soundEnabled = !this.soundEnabled;
+                    const btn = document.getElementById('soundToggle');
+                    btn.innerHTML = this.soundEnabled ? 
+                        '<i class="fas fa-volume-up"></i>' : 
+                        '<i class="fas fa-volume-mute"></i>';
+                    
+                    if (this.soundEnabled) {
+                        btn.style.background = 'linear-gradient(135deg, var(--success), #00C9B7)';
+                        this.playSoundEffect('toggle_on');
+                    } else {
+                        btn.style.background = 'linear-gradient(135deg, var(--danger), #FF416C)';
+                        this.playSoundEffect('toggle_off');
+                    }
+                });
+
+                // Buy buttons
+                document.querySelectorAll('.buy-button-premium, .cta-button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.createClickEffect(e);
+                        this.playSoundEffect('click');
+                    });
+                });
+
+                // Pricing card hover effects
+                document.querySelectorAll('.pricing-card-premium').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        this.playSoundEffect('hover');
+                        card.style.transform = 'translateY(-20px) scale(1.05)';
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        if (!card.classList.contains('popular')) {
+                            card.style.transform = 'translateY(0) scale(1)';
+                        } else {
+                            card.style.transform = 'translateY(-20px) scale(1.05)';
+                        }
+                    });
+                });
+            }
+
+            async playPromoVoice(type) {
+                if (!this.soundEnabled) return;
+
+                const message = this.promoMessages[type];
+                if (!message) return;
+
+                try {
+                    // Play sound effect before voice
+                    this.playSoundEffect('voice_start');
+
+                    // Create TTS audio
+                    const ttsUrl = `https://api.zenitsu.web.id/api/tools/tts?text=${encodeURIComponent(message)}&lang=id`;
+                    const audio = new Audio(ttsUrl);
+                    
+                    audio.onplay = () => {
+                        document.getElementById('voiceControl').classList.add('pulse');
+                        this.animateVisualizer(true);
+                    };
+                    
+                    audio.onended = () => {
+                        document.getElementById('voiceControl').classList.remove('pulse');
+                        this.animateVisualizer(false);
+                        this.playSoundEffect('voice_end');
+                        this.createCelebration();
+                    };
+
+                    await audio.play();
+                } catch (error) {
+                    console.log('Voice playback error:', error);
+                }
+            }
+
+            playRandomPromo() {
+                const types = ['basic', 'pro', 'vip'];
+                const randomType = types[Math.floor(Math.random() * types.length)];
+                this.playPromoVoice(randomType);
+            }
+
+            playSoundEffect(type) {
+                if (!this.soundEnabled) return;
+
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                switch(type) {
+                    case 'click':
+                        this.playBeep(audioContext, 800, 0.1);
+                        break;
+                    case 'hover':
+                        this.playBeep(audioContext, 600, 0.05);
+                        break;
+                    case 'voice_start':
+                        this.playSwoosh(audioContext);
+                        break;
+                    case 'voice_end':
+                        this.playSuccess(audioContext);
+                        break;
+                    case 'toggle_on':
+                        this.playBeep(audioContext, 1000, 0.2);
+                        break;
+                    case 'toggle_off':
+                        this.playBeep(audioContext, 400, 0.2);
+                        break;
+                }
+            }
+
+            playBeep(audioContext, frequency, duration) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            }
+
+            playSwoosh(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.5);
+                
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+
+            playSuccess(audioContext) {
+                const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                let time = audioContext.currentTime;
+                
+                notes.forEach((freq, i) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = freq;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0, time);
+                    gainNode.gain.linearRampToValueAtTime(0.3, time + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.3);
+                    
+                    oscillator.start(time);
+                    oscillator.stop(time + 0.3);
+                    
+                    time += 0.15;
+                });
+            }
+
+            animateVisualizer(active) {
+                const bars = document.querySelectorAll('.visualizer-bar');
+                bars.forEach(bar => {
+                    if (active) {
+                        bar.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+                        bar.style.opacity = '0.9';
+                    } else {
+                        bar.style.opacity = '0.3';
+                    }
+                });
+            }
+
+            createClickEffect(event) {
+                const x = event.clientX;
+                const y = event.clientY;
+                
+                for (let i = 0; i < 10; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'confetti';
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+                    particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = 5 + Math.random() * 5;
+                    const vx = Math.cos(angle) * velocity;
+                    const vy = Math.sin(angle) * velocity;
+                    
+                    document.body.appendChild(particle);
+                    
+                    let posX = x;
+                    let posY = y;
+                    const gravity = 0.1;
+                    
+                    const animate = () => {
+                        posX += vx;
+                        posY += vy;
+                        vy += gravity;
+                        
+                        particle.style.left = `${posX}px`;
+                        particle.style.top = `${posY}px`;
+                        particle.style.opacity = 1 - (posY - y) / 300;
+                        
+                        if (posY < window.innerHeight + 100) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            particle.remove();
+                        }
+                    };
+                    
+                    animate();
+                }
+            }
+
+            createCelebration() {
+                // Create confetti burst
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        this.createConfettiParticle();
+                    }, i * 20);
+                }
+                
+                // Play celebration sound
+                this.playSoundEffect('voice_end');
+            }
+
+            createConfetti() {
+                // Create initial confetti
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        this.createConfettiParticle();
+                    }, i * 100);
+                }
+            }
+
+            createConfettiParticle() {
+                const colors = ['#8A2BE2', '#4169E1', '#007AFF', '#FFD700', '#25D366', '#E4405F'];
+                const particle = document.createElement('div');
+                particle.className = 'confetti';
+                
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `-20px`;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = `${10 + Math.random() * 10}px`;
+                particle.style.height = `${10 + Math.random() * 10}px`;
+                particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                particle.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(particle);
+                
+                const duration = 3 + Math.random() * 2;
+                const animation = particle.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${Math.random() * 200 - 100}px, 100vh) rotate(${360 * 2}deg)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => particle.remove();
+            }
+
+            startAutoPromo() {
+                // Auto play promo every 2 minutes
+                setInterval(() => {
+                    if (this.soundEnabled && Math.random() > 0.3) {
+                        this.playRandomPromo();
+                    }
+                }, 120000);
+            }
+
+            openWhatsApp() {
+                const message = encodeURIComponent("Halo Admin Ndii, saya mau beli GetContact Analyzer Premium. Info paket dan cara pembayarannya dong!");
+                window.open(`https://wa.me/6285800650661?text=${message}`, '_blank');
+            }
+
+            openInstagram() {
+                window.open('https://instagram.com/its.me_ndii', '_blank');
+            }
+        }
+
+        // Initialize the promo
+        document.addEventListener('DOMContentLoaded', () => {
+            window.premiumPromo = new PremiumPromo();
+            
+            // Global functions for button onclick
+            window.playPromoVoice = (type) => window.premiumPromo.playPromoVoice(type);
+            window.openWhatsApp = () => window.premiumPromo.openWhatsApp();
+            window.openInstagram = () => window.premiumPromo.openInstagram();
+        });
+    </script>
+</body>
+</html>
