@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forexter Network Community - Group Chat</title>
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/pvnz0v.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --primary-light: #8b7cea;
+            --secondary: #00cec9;
+            --secondary-dark: #00a8a8;
+            --dark: #121212;
+            --dark-light: #1e1e2d;
+            --darker: #0a0a0a;
+            --text: #eaeaea;
+            --text-secondary: #b0b0b0;
+            --success: #00b894;
+            --danger: #e84393;
+            --warning: #fdcb6e;
+            --info: #74b9ff;
+            --forexter-purple: #8A2BE2;
+            --forexter-blue: #4169E1;
+            --chat-bg: #0f0f1a;
+            --message-sent: #6c5ce7;
+            --message-received: #2d2d44;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, var(--dark-light) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .site-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--forexter-purple), var(--forexter-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .site-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .notification-bell {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-bell:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, var(--danger), #FF416C);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 2px;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar Left - Group Info */
+        .sidebar-left {
+            width: 320px;
+            background: linear-gradient(180deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .group-info {
+            margin-bottom: 30px;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .group-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.3);
+            flex-shrink: 0;
+        }
+
+        .group-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+        }
+
+        .group-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .group-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .group-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .group-stat i {
+            color: var(--forexter-purple);
+        }
+
+        .group-description {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .group-id {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .id-label {
+            color: var(--text-secondary);
+        }
+
+        .id-value {
+            font-weight: 600;
+            color: var(--forexter-purple);
+        }
+
+        .copy-id {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            color: var(--forexter-purple);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .copy-id:hover {
+            background: rgba(138, 43, 226, 0.3);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--forexter-purple);
+        }
+
+        /* Member List */
+        .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .member-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .member-item.admin {
+            border-left: 4px solid var(--forexter-purple);
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .member-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .member-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .member-email {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: monospace;
+            margin-top: 3px;
+        }
+
+        .make-admin-btn {
+            background: transparent;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            color: var(--forexter-purple);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .member-item:hover .make-admin-btn {
+            opacity: 1;
+        }
+
+        .make-admin-btn:hover {
+            background: rgba(138, 43, 226, 0.2);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--chat-bg);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulseOnline 2s infinite;
+        }
+
+        @keyframes pulseOnline {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 184, 148, 0); }
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        /* Messages Area */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message-date {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .date-label {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: inline-block;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 70%;
+            animation: messageAppear 0.3s ease;
+        }
+
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.received {
+            align-self: flex-start;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: var(--message-received);
+            padding: 15px;
+            border-radius: 18px;
+            border-top-left-radius: 5px;
+            max-width: 100%;
+            position: relative;
+        }
+
+        .message.sent .message-content {
+            background: linear-gradient(135deg, var(--message-sent), #5649c0);
+            border-top-left-radius: 18px;
+            border-top-right-radius: 5px;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sender-badge {
+            font-size: 10px;
+            background: rgba(138, 43, 226, 0.3);
+            color: var(--forexter-purple);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .message-text {
+            line-height: 1.5;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message-action:hover {
+            color: var(--text);
+        }
+
+        /* Input Area */
+        .input-container {
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .message-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: var(--text);
+            font-size: 15px;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+            transition: all 0.3s;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--forexter-purple);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .input-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-action-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Sidebar Right - Group Settings */
+        .sidebar-right {
+            width: 320px;
+            background: linear-gradient(180deg, rgba(30, 30, 45, 0.95), rgba(20, 20, 35, 0.95));
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Rules Section */
+        .rules-section {
+            margin-bottom: 30px;
+        }
+
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rule-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--forexter-purple);
+        }
+
+        .rule-number {
+            display: inline-block;
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--forexter-purple);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 600;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .rule-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        /* Group Links */
+        .group-links {
+            margin-bottom: 30px;
+        }
+
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .link-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Admin Controls */
+        .admin-controls {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(65, 105, 225, 0.05));
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        .control-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--forexter-purple);
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(138, 43, 226, 0.3);
+        }
+
+        .control-btn.delete {
+            color: var(--danger);
+            border-color: rgba(232, 67, 147, 0.3);
+            background: rgba(232, 67, 147, 0.05);
+        }
+
+        .control-btn.delete:hover {
+            background: rgba(232, 67, 147, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar-left,
+            .sidebar-right {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                display: none;
+            }
+            
+            .header {
+                padding: 12px 20px;
+            }
+            
+            .chat-header,
+            .input-container {
+                padding: 15px 20px;
+            }
+            
+            .messages-container {
+                padding: 20px;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+
+        /* Notification Panel */
+        .notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            width: 350px;
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.98), rgba(20, 20, 35, 0.98));
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            backdrop-filter: blur(20px);
+            display: none;
+            overflow: hidden;
+        }
+
+        .notification-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clear-notifications {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .clear-notifications:hover {
+            color: var(--text);
+        }
+
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 12px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(138, 43, 226, 0.05);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--forexter-purple);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(65, 105, 225, 0.05));
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--forexter-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="https://files.catbox.moe/pvnz0v.jpg" alt="Forexter Network" 
+                     onerror="this.onerror=null; this.innerHTML='<i class=\'fas fa-network-wired\'></i>';">
+            </div>
+            <div>
+                <div class="site-title">Forexter Network Community</div>
+                <div class="site-subtitle">Group Chat & Collaboration Platform</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button class="notification-bell" id="notificationBtn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count" id="notificationCount">3</span>
+            </button>
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div>
+                    <div class="user-name" id="userName">Guest User</div>
+                    <div class="user-role" id="userRole">Member</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Left - Group Info -->
+        <div class="sidebar-left">
+            <div class="group-info">
+                <div class="group-header">
+                    <div class="group-avatar" id="groupAvatar">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h2 class="group-title" id="groupTitle">Forexter Trading Group</h2>
+                        <div class="group-meta">
+                            <div class="group-stat">
+                                <i class="fas fa-users"></i>
+                                <span id="memberCount">42</span> members
+                            </div>
+                            <div class="group-stat">
+                                <i class="fas fa-comments"></i>
+                                <span id="messageCount">1287</span> messages
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group-description" id="groupDescription">
+                    Welcome to the official Forexter Network trading community! Share ideas, analysis, and learn together. This is a professional environment for serious traders.
+                </div>
+
+                <div class="group-id">
+                    <span class="id-label">Group ID:</span>
+                    <span class="id-value" id="groupId">FOREXTER-2024-GRP01</span>
+                    <button class="copy-id" id="copyIdBtn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="section-title">
+                <i class="fas fa-crown"></i> Admins & Moderators
+            </h3>
+            <div class="member-list" id="adminList">
+                <!-- Admins will be populated by JavaScript -->
+            </div>
+
+            <h3 class="section-title">
+                <i class="fas fa-users"></i> Online Members
+            </h3>
+            <div class="member-list" id="onlineMembers">
+                <!-- Online members will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div>
+                    <h2 class="chat-title">
+                        <i class="fas fa-hashtag"></i>
+                        <span id="chatChannelName">general-chat</span>
+                    </h2>
+                    <div class="online-status">
+                        <div class="online-dot"></div>
+                        <span id="onlineCount">24</span> members online
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-action-btn" title="Search Messages">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="chat-action-btn" title="Mute Notifications">
+                        <i class="fas fa-bell-slash"></i>
+                    </button>
+                    <button class="chat-action-btn" title="Chat Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- Welcome Message -->
+                <div class="welcome-message">
+                    <h3 class="welcome-title">Welcome to Forexter Network Community! 👋</h3>
+                    <p class="welcome-text">
+                        This is a professional trading community where members share market analysis, trading ideas, and educational content. 
+                        Please read the group rules before participating. Be respectful and constructive in all discussions.
+                    </p>
+                </div>
+
+                <!-- Messages will be loaded here -->
+            </div>
+
+            <!-- Input Container -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea class="message-input" id="messageInput" 
+                              placeholder="Type your message here... (Enter to send, Shift+Enter for new line)" 
+                              rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-actions">
+                    <button class="input-action-btn" title="Attach File">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="input-action-btn" title="Add Emoji">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <button class="input-action-btn" title="Format Text">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="input-action-btn" title="Clear Chat">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Right - Group Settings -->
+        <div class="sidebar-right">
+            <div class="rules-section">
+                <h3 class="section-title">
+                    <i class="fas fa-gavel"></i> Group Rules
+                </h3>
+                <div class="rules-list" id="rulesList">
+                    <!-- Rules will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="group-links">
+                <h3 class="section-title">
+                    <i class="fas fa-link"></i> Important Links
+                </h3>
+                <div class="links-list" id="linksList">
+                    <!-- Links will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="admin-controls" id="adminControls">
+                <h3 class="control-title">
+                    <i class="fas fa-shield-alt"></i> Admin Controls
+                </h3>
+                <div class="control-buttons">
+                    <button class="control-btn" id="editGroupBtn">
+                        <i class="fas fa-edit"></i> Edit Group Info
+                    </button>
+                    <button class="control-btn" id="manageRulesBtn">
+                        <i class="fas fa-gavel"></i> Manage Rules
+                    </button>
+                    <button class="control-btn" id="manageLinksBtn">
+                        <i class="fas fa-link"></i> Manage Links
+                    </button>
+                    <button class="control-btn" id="manageMembersBtn">
+                        <i class="fas fa-user-cog"></i> Manage Members
+                    </button>
+                    <button class="control-btn delete" id="deleteMessageBtn">
+                        <i class="fas fa-trash"></i> Delete Message
+                    </button>
+                    <button class="control-btn delete" id="removeMemberBtn">
+                        <i class="fas fa-user-times"></i> Remove Member
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3 class="notification-title">
+                <i class="fas fa-bell"></i> Notifications
+            </h3>
+            <button class="clear-notifications" id="clearNotificationsBtn">
+                Clear All
+            </button>
+        </div>
+        <div class="notifications-list" id="notificationsList">
+            <!-- Notifications will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        class ForexterCommunity {
+            constructor() {
+                this.currentUser = {
+                    id: 'guest_' + Math.random().toString(36).substr(2, 9),
+                    name: 'Guest User',
+                    email: this.generateRandomEmail(),
+                    role: 'member',
+                    avatarColor: this.getRandomColor(),
+                    isOnline: true
+                };
+
+                this.groupData = {
+                    id: 'FOREXTER-2024-GRP01',
+                    name: 'Forexter Trading Group',
+                    description: 'Welcome to the official Forexter Network trading community! Share ideas, analysis, and learn together. This is a professional environment for serious traders.',
+                    members: 42,
+                    messages: 1287,
+                    online: 24,
+                    createdAt: '2024-01-15'
+                };
+
+                this.admins = [];
+                this.members = [];
+                this.messages = [];
+                this.notifications = [];
+                this.rules = [];
+                this.links = [];
+
+                this.init();
+            }
+
+            init() {
+                this.generateSampleData();
+                this.setupEventListeners();
+                this.renderAll();
+                this.setupWebSocket();
+                this.loadFromStorage();
+            }
+
+            generateSampleData() {
+                // Generate sample admins
+                this.admins = [
+                    {
+                        id: 'admin1',
+                        name: 'Alex Trader',
+                        email: 'alex*******@gmail.com',
+                        role: 'admin',
+                        avatarColor: '#8A2BE2',
+                        isOnline: true,
+                        joinedAt: '2024-01-15'
+                    },
+                    {
+                        id: 'admin2',
+                        name: 'Sarah Forex',
+                        email: 'sar*****@yahoo.com',
+                        role: 'moderator',
+                        avatarColor: '#4169E1',
+                        isOnline: true,
+                        joinedAt: '2024-01-20'
+                    },
+                    {
+                        id: 'admin3',
+                        name: 'Mike Analyst',
+                        email: 'mik****@protonmail.com',
+                        role: 'moderator',
+                        avatarColor: '#00CEB4',
+                        isOnline: false,
+                        joinedAt: '2024-02-01'
+                    }
+                ];
+
+                // Generate sample members
+                const memberNames = [
+                    'John Trader', 'Emma Forex', 'David Investor', 'Lisa Analyst',
+                    'Robert Crypto', 'Maria Stocks', 'James Bonds', 'Anna Futures',
+                    'Paul Options', 'Sophia Commodities', 'Kevin Forex', 'Olivia Trading'
+                ];
+
+                this.members = memberNames.map((name, index) => ({
+                    id: 'member' + index,
+                    name: name,
+                    email: this.generateMaskedEmail(name.toLowerCase().replace(' ', '.')),
+                    role: 'member',
+                    avatarColor: this.getRandomColor(),
+                    isOnline: Math.random() > 0.3,
+                    joinedAt: '2024-0' + (Math.floor(Math.random() * 3) + 1) + '-' + (Math.floor(Math.random() * 28) + 1)
+                }));
+
+                // Generate rules
+                this.rules = [
+                    'No spam or self-promotion without permission',
+                    'Be respectful to all members',
+                    'No sharing of illegal content',
+                    'Keep discussions trading-related',
+                    'No financial advice - share analysis only',
+                    'Use appropriate channels for different topics',
+                    'Report any issues to admins immediately',
+                    'Keep personal information private'
+                ];
+
+                // Generate links
+                this.links = [
+                    {
+                        title: 'Forexter Network Website',
+                        url: 'https://www.forexternetwork.my.id',
+                        description: 'Main website with tools and resources',
+                        icon: 'fas fa-globe'
+                    },
+                    {
+                        title: 'Trading Signals Channel',
+                        url: '#',
+                        description: 'Premium trading signals and analysis',
+                        icon: 'fas fa-chart-line'
+                    },
+                    {
+                        title: 'Educational Resources',
+                        url: '#',
+                        description: 'Trading courses and tutorials',
+                        icon: 'fas fa-graduation-cap'
+                    },
+                    {
+                        title: 'Market Calendar',
+                        url: '#',
+                        description: 'Upcoming economic events',
+                        icon: 'fas fa-calendar-alt'
+                    }
+                ];
+
+                // Generate sample messages
+                this.generateSampleMessages();
+
+                // Generate notifications
+                this.generateNotifications();
+            }
+
+            generateSampleMessages() {
+                const sampleMessages = [
+                    {
+                        id: 'msg1',
+                        sender: this.admins[0],
+                        text: 'Welcome everyone to the Forexter Network community! Please read the rules before posting.',
+                        timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
+                        type: 'received'
+                    },
+                    {
+                        id: 'msg2',
+                        sender: this.members[0],
+                        text: 'Thanks for having me! Looking forward to learning from experienced traders.',
+                        timestamp: new Date(Date.now() - 3600000 * 1.8).toISOString(),
+                        type: 'received'
+                    },
+                    {
+                        id: 'msg3',
+                        sender: this.admins[1],
+                        text: 'Remember to check the market analysis in the analysis channel. EURUSD looking bullish today.',
+                        timestamp: new Date(Date.now() - 3600000 * 1.5).toISOString(),
+                        type: 'received'
+                    },
+                    {
+                        id: 'msg4',
+                        sender: this.currentUser,
+                        text: 'What are everyone\'s thoughts on gold prices this week?',
+                        timestamp: new Date(Date.now() - 3600000 * 1).toISOString(),
+                        type: 'sent'
+                    },
+                    {
+                        id: 'msg5',
+                        sender: this.members[3],
+                        text: 'Gold might test $2350 resistance. Fed meeting minutes could be key.',
+                        timestamp: new Date(Date.now() - 3600000 * 0.8).toISOString(),
+                        type: 'received'
+                    },
+                    {
+                        id: 'msg6',
+                        sender: this.members[5],
+                        text: 'Has anyone tried the new trading bot on the Forexter website?',
+                        timestamp: new Date(Date.now() - 3600000 * 0.5).toISOString(),
+                        type: 'received'
+                    },
+                    {
+                        id: 'msg7',
+                        sender: this.admins[2],
+                        text: 'Yes, it\'s quite effective for scalping. I recommend starting with demo account.',
+                        timestamp: new Date(Date.now() - 3600000 * 0.3).toISOString(),
+                        type: 'received'
+                    }
+                ];
+
+                this.messages = sampleMessages;
+            }
+
+            generateNotifications() {
+                this.notifications = [
+                    {
+                        id: 'notif1',
+                        type: 'welcome',
+                        text: 'Welcome to Forexter Network Community! Your account has been created.',
+                        timestamp: new Date(Date.now() - 86400000).toISOString(),
+                        read: false,
+                        icon: 'fas fa-user-plus'
+                    },
+                    {
+                        id: 'notif2',
+                        type: 'message',
+                        text: 'Sarah Forex mentioned you in a message',
+                        timestamp: new Date(Date.now() - 7200000).toISOString(),
+                        read: false,
+                        icon: 'fas fa-at'
+                    },
+                    {
+                        id: 'notif3',
+                        type: 'system',
+                        text: 'New trading signal available in premium channel',
+                        timestamp: new Date(Date.now() - 3600000).toISOString(),
+                        read: true,
+                        icon: 'fas fa-bell'
+                    },
+                    {
+                        id: 'notif4',
+                        type: 'update',
+                        text: 'Group rules have been updated. Please review.',
+                        timestamp: new Date(Date.now() - 1800000).toISOString(),
+                        read: true,
+                        icon: 'fas fa-gavel'
+                    }
+                ];
+            }
+
+            generateRandomEmail() {
+                const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'protonmail.com'];
+                const randomName = Math.random().toString(36).substring(2, 10);
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const maskedName = randomName.substring(0, 3) + '*****@' + domain;
+                return maskedName;
+            }
+
+            generateMaskedEmail(name) {
+                const domains = ['gmail.com', 'yahoo.com', 'outlook.com'];
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const maskedName = name.substring(0, 3) + '*****@' + domain;
+                return maskedName;
+            }
+
+            getRandomColor() {
+                const colors = ['#8A2BE2', '#4169E1', '#00B894', '#E84393', '#FDCA40', '#74B9FF', '#A29BFE'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            setupEventListeners() {
+                // Send message
+                document.getElementById('sendBtn').addEventListener('click', () => this.sendMessage());
+                document.getElementById('messageInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // Auto-resize textarea
+                const textarea = document.getElementById('messageInput');
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+                });
+
+                // Copy group ID
+                document.getElementById('copyIdBtn').addEventListener('click', () => this.copyGroupId());
+
+                // Notification panel
+                document.getElementById('notificationBtn').addEventListener('click', () => this.toggleNotifications());
+                document.getElementById('clearNotificationsBtn').addEventListener('click', () => this.clearNotifications());
+
+                // Close notification panel when clicking outside
+                document.addEventListener('click', (e) => {
+                    const panel = document.getElementById('notificationPanel');
+                    const btn = document.getElementById('notificationBtn');
+                    if (!panel.contains(e.target) && !btn.contains(e.target)) {
+                        panel.style.display = 'none';
+                    }
+                });
+
+                // Admin controls
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = e.target.id || e.target.closest('.control-btn').id;
+                        this.handleAdminAction(action);
+                    });
+                });
+
+                // Make admin buttons (delegated)
+                document.getElementById('onlineMembers').addEventListener('click', (e) => {
+                    const makeAdminBtn = e.target.closest('.make-admin-btn');
+                    if (makeAdminBtn) {
+                        const memberId = makeAdminBtn.closest('.member-item').dataset.id;
+                        this.makeAdmin(memberId);
+                    }
+                });
+            }
+
+            setupWebSocket() {
+                // Simulate real-time updates
+                setInterval(() => {
+                    this.updateOnlineStatus();
+                    this.simulateNewMessage();
+                }, 30000);
+
+                // Simulate notifications
+                setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        this.addRandomNotification();
+                    }
+                }, 60000);
+            }
+
+            renderAll() {
+                this.renderUserInfo();
+                this.renderGroupInfo();
+                this.renderAdmins();
+                this.renderMembers();
+                this.renderMessages();
+                this.renderRules();
+                this.renderLinks();
+                this.renderNotifications();
+                this.updateOnlineCount();
+            }
+
+            renderUserInfo() {
+                document.getElementById('userName').textContent = this.currentUser.name;
+                document.getElementById('userRole').textContent = this.currentUser.role;
+                document.getElementById('userAvatar').style.background = `linear-gradient(135deg, ${this.currentUser.avatarColor}, ${this.lightenColor(this.currentUser.avatarColor, 30)})`;
+                document.getElementById('userAvatar').textContent = this.currentUser.name.charAt(0);
+            }
+
+            renderGroupInfo() {
+                document.getElementById('groupTitle').textContent = this.groupData.name;
+                document.getElementById('groupDescription').textContent = this.groupData.description;
+                document.getElementById('memberCount').textContent = this.groupData.members;
+                document.getElementById('messageCount').textContent = this.groupData.messages;
+                document.getElementById('groupId').textContent = this.groupData.id;
+                document.getElementById('chatChannelName').textContent = 'general-chat';
+                
+                // Set group avatar color
+                document.getElementById('groupAvatar').style.background = 
+                    `linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue))`;
+            }
+
+            renderAdmins() {
+                const adminList = document.getElementById('adminList');
+                adminList.innerHTML = this.admins.map(admin => `
+                    <div class="member-item admin" data-id="${admin.id}">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, ${admin.avatarColor}, ${this.lightenColor(admin.avatarColor, 30)})">
+                            ${admin.name.charAt(0)}
+                        </div>
+                        <div class="member-info">
+                            <div class="member-name">
+                                ${admin.name}
+                                <span class="member-role">${admin.role}</span>
+                            </div>
+                            <div class="member-email">${admin.email}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderMembers() {
+                const onlineMembers = document.getElementById('onlineMembers');
+                const onlineList = this.members.filter(m => m.isOnline);
+                
+                onlineMembers.innerHTML = onlineList.map(member => `
+                    <div class="member-item" data-id="${member.id}">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, ${member.avatarColor}, ${this.lightenColor(member.avatarColor, 30)})">
+                            ${member.name.charAt(0)}
+                        </div>
+                        <div class="member-info">
+                            <div class="member-name">
+                                ${member.name}
+                                <span class="member-role">${member.role}</span>
+                            </div>
+                            <div class="member-email">${member.email}</div>
+                        </div>
+                        ${this.currentUser.role === 'admin' ? `
+                            <button class="make-admin-btn" title="Make Admin">
+                                <i class="fas fa-crown"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+
+            renderMessages() {
+                const messagesContainer = document.getElementById('messagesContainer');
+                const messagesHTML = this.messages.map(msg => {
+                    const time = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const date = new Date(msg.timestamp).toLocaleDateString();
+                    
+                    return `
+                        <div class="message ${msg.type}">
+                            <div class="message-avatar" style="background: linear-gradient(135deg, ${msg.sender.avatarColor}, ${this.lightenColor(msg.sender.avatarColor, 30)})">
+                                ${msg.sender.name.charAt(0)}
+                            </div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-sender">
+                                        ${msg.sender.name}
+                                        ${msg.sender.role !== 'member' ? `<span class="sender-badge">${msg.sender.role}</span>` : ''}
+                                    </div>
+                                    <div class="message-time" title="${date} ${time}">${time}</div>
+                                </div>
+                                <div class="message-text">${this.escapeHtml(msg.text)}</div>
+                                <div class="message-actions">
+                                    <button class="message-action" onclick="community.replyToMessage('${msg.id}')">
+                                        <i class="fas fa-reply"></i> Reply
+                                    </button>
+                                    <button class="message-action" onclick="community.likeMessage('${msg.id}')">
+                                        <i class="far fa-heart"></i> Like
+                                    </button>
+                                    ${this.currentUser.role === 'admin' ? `
+                                        <button class="message-action delete" onclick="community.deleteMessage('${msg.id}')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Add date separator for today
+                const today = new Date().toLocaleDateString();
+                messagesContainer.innerHTML = `
+                    <div class="message-date">
+                        <span class="date-label">Today, ${today}</span>
+                    </div>
+                    ${messagesHTML}
+                `;
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            renderRules() {
+                const rulesList = document.getElementById('rulesList');
+                rulesList.innerHTML = this.rules.map((rule, index) => `
+                    <div class="rule-item">
+                        <span class="rule-number">${index + 1}</span>
+                        <span class="rule-text">${rule}</span>
+                    </div>
+                `).join('');
+            }
+
+            renderLinks() {
+                const linksList = document.getElementById('linksList');
+                linksList.innerHTML = this.links.map(link => `
+                    <a href="${link.url}" class="link-item" target="_blank">
+                        <div class="link-icon">
+                            <i class="${link.icon}"></i>
+                        </div>
+                        <div class="link-info">
+                            <div class="link-title">${link.title}</div>
+                            <div class="link-description">${link.description}</div>
+                        </div>
+                    </a>
+                `).join('');
+            }
+
+            renderNotifications() {
+                const notificationsList = document.getElementById('notificationsList');
+                const unreadCount = this.notifications.filter(n => !n.read).length;
+                
+                document.getElementById('notificationCount').textContent = unreadCount;
+                
+                notificationsList.innerHTML = this.notifications.map(notif => {
+                    const time = new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const date = new Date(notif.timestamp).toLocaleDateString();
+                    
+                    return `
+                        <div class="notification-item ${notif.read ? '' : 'unread'}" data-id="${notif.id}">
+                            <div class="notification-icon">
+                                <i class="${notif.icon}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">${notif.text}</div>
+                                <div class="notification-time" title="${date} ${time}">${time}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateOnlineStatus() {
+                // Randomly change online status for some members
+                this.members.forEach(member => {
+                    if (Math.random() > 0.8) {
+                        member.isOnline = !member.isOnline;
+                    }
+                });
+                
+                // Update admins too
+                this.admins.forEach(admin => {
+                    if (Math.random() > 0.9) {
+                        admin.isOnline = !admin.isOnline;
+                    }
+                });
+                
+                this.renderMembers();
+                this.updateOnlineCount();
+            }
+
+            updateOnlineCount() {
+                const onlineAdmins = this.admins.filter(a => a.isOnline).length;
+                const onlineMembers = this.members.filter(m => m.isOnline).length;
+                const totalOnline = onlineAdmins + onlineMembers;
+                
+                document.getElementById('onlineCount').textContent = totalOnline;
+                this.groupData.online = totalOnline;
+            }
+
+            simulateNewMessage() {
+                if (Math.random() > 0.7 && this.members.length > 0) {
+                    const randomMember = this.members[Math.floor(Math.random() * this.members.length)];
+                    const messages = [
+                        'What do you think about the Fed announcement?',
+                        'Any good trading opportunities for tomorrow?',
+                        'Has anyone tried the new indicator?',
+                        'Market seems volatile today',
+                        'Good analysis in the premium channel',
+                        'Looking for trading partner for copy trading'
+                    ];
+                    
+                    const newMessage = {
+                        id: 'msg_' + Date.now(),
+                        sender: randomMember,
+                        text: messages[Math.floor(Math.random() * messages.length)],
+                        timestamp: new Date().toISOString(),
+                        type: 'received'
+                    };
+                    
+                    this.messages.push(newMessage);
+                    this.groupData.messages++;
+                    this.renderMessages();
+                    
+                    // Add notification
+                    this.addNotification({
+                        type: 'message',
+                        text: `${randomMember.name} sent a new message`,
+                        icon: 'fas fa-comment'
+                    });
+                }
+            }
+
+            sendMessage() {
+                const input = document.getElementById('messageInput');
+                const text = input.value.trim();
+                
+                if (!text) return;
+                
+                const newMessage = {
+                    id: 'msg_' + Date.now(),
+                    sender: this.currentUser,
+                    text: text,
+                    timestamp: new Date().toISOString(),
+                    type: 'sent'
+                };
+                
+                this.messages.push(newMessage);
+                this.groupData.messages++;
+                this.renderMessages();
+                
+                // Clear input
+                input.value = '';
+                input.style.height = 'auto';
+                
+                // Simulate reply after 1-3 seconds
+                setTimeout(() => {
+                    this.simulateReply(text);
+                }, 1000 + Math.random() * 2000);
+                
+                // Save to storage
+                this.saveToStorage();
+            }
+
+            simulateReply(userMessage) {
+                const possibleReplies = [
+                    'Interesting point about that!',
+                    'I agree with your analysis',
+                    'Have you considered the technical indicators?',
+                    'That aligns with what I was thinking',
+                    'Good question, let me check the charts',
+                    'I\'ll look into that and get back to you'
+                ];
+                
+                const randomAdmin = this.admins[Math.floor(Math.random() * this.admins.length)];
+                const replyText = possibleReplies[Math.floor(Math.random() * possibleReplies.length)];
+                
+                const replyMessage = {
+                    id: 'msg_' + Date.now(),
+                    sender: randomAdmin,
+                    text: replyText,
+                    timestamp: new Date().toISOString(),
+                    type: 'received'
+                };
+                
+                this.messages.push(replyMessage);
+                this.groupData.messages++;
+                this.renderMessages();
+            }
+
+            copyGroupId() {
+                const groupId = document.getElementById('groupId').textContent;
+                navigator.clipboard.writeText(groupId).then(() => {
+                    this.showToast('Group ID copied to clipboard!');
+                });
+            }
+
+            toggleNotifications() {
+                const panel = document.getElementById('notificationPanel');
+                panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+                
+                // Mark all as read when opening
+                if (panel.style.display === 'block') {
+                    this.notifications.forEach(notif => notif.read = true);
+                    this.renderNotifications();
+                }
+            }
+
+            clearNotifications() {
+                this.notifications = [];
+                this.renderNotifications();
+                this.showToast('Notifications cleared');
+            }
+
+            addRandomNotification() {
+                const types = [
+                    {text: 'New market analysis available', icon: 'fas fa-chart-bar'},
+                    {text: 'Weekly trading competition starting', icon: 'fas fa-trophy'},
+                    {text: 'System maintenance scheduled', icon: 'fas fa-tools'},
+                    {text: 'New educational video uploaded', icon: 'fas fa-video'}
+                ];
+                
+                const randomType = types[Math.floor(Math.random() * types.length)];
+                this.addNotification(randomType);
+            }
+
+            addNotification(notification) {
+                const newNotif = {
+                    id: 'notif_' + Date.now(),
+                    type: notification.type || 'system',
+                    text: notification.text,
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                    icon: notification.icon || 'fas fa-bell'
+                };
+                
+                this.notifications.unshift(newNotif);
+                if (this.notifications.length > 20) {
+                    this.notifications.pop();
+                }
+                
+                this.renderNotifications();
+                
+                // Show desktop notification if allowed
+                if (Notification.permission === 'granted') {
+                    new Notification('Forexter Community', {
+                        body: notification.text,
+                        icon: 'https://files.catbox.moe/pvnz0v.jpg'
+                    });
+                }
+            }
+
+            makeAdmin(memberId) {
+                const member = this.members.find(m => m.id === memberId);
+                if (member) {
+                    member.role = 'moderator';
+                    this.admins.push(member);
+                    this.members = this.members.filter(m => m.id !== memberId);
+                    this.renderAdmins();
+                    this.renderMembers();
+                    
+                    this.showToast(`${member.name} is now a moderator`);
+                    this.addNotification({
+                        type: 'admin',
+                        text: `${member.name} promoted to moderator`,
+                        icon: 'fas fa-crown'
+                    });
+                }
+            }
+
+            handleAdminAction(action) {
+                const actions = {
+                    editGroupBtn: () => this.editGroupInfo(),
+                    manageRulesBtn: () => this.manageRules(),
+                    manageLinksBtn: () => this.manageLinks(),
+                    manageMembersBtn: () => this.manageMembers(),
+                    deleteMessageBtn: () => this.deleteLastMessage(),
+                    removeMemberBtn: () => this.removeInactiveMember()
+                };
+                
+                if (actions[action]) {
+                    actions[action]();
+                }
+            }
+
+            editGroupInfo() {
+                const newName = prompt('Enter new group name:', this.groupData.name);
+                if (newName) {
+                    this.groupData.name = newName;
+                    this.renderGroupInfo();
+                    this.showToast('Group name updated');
+                }
+            }
+
+            manageRules() {
+                const newRule = prompt('Add new rule:');
+                if (newRule) {
+                    this.rules.push(newRule);
+                    this.renderRules();
+                    this.showToast('Rule added');
+                }
+            }
+
+            manageLinks() {
+                const newLink = prompt('Add new link (format: Title|URL|Description):');
+                if (newLink) {
+                    const parts = newLink.split('|');
+                    if (parts.length === 3) {
+                        this.links.push({
+                            title: parts[0],
+                            url: parts[1],
+                            description: parts[2],
+                            icon: 'fas fa-link'
+                        });
+                        this.renderLinks();
+                        this.showToast('Link added');
+                    }
+                }
+            }
+
+            manageMembers() {
+                alert('Member management panel would open here. In a real app, this would show detailed member management options.');
+            }
+
+            deleteLastMessage() {
+                if (this.messages.length > 0) {
+                    const lastMessage = this.messages[this.messages.length - 1];
+                    if (confirm(`Delete last message from ${lastMessage.sender.name}?`)) {
+                        this.messages.pop();
+                        this.groupData.messages--;
+                        this.renderMessages();
+                        this.showToast('Message deleted');
+                    }
+                }
+            }
+
+            removeInactiveMember() {
+                const inactiveMembers = this.members.filter(m => !m.isOnline);
+                if (inactiveMembers.length > 0) {
+                    const member = inactiveMembers[0];
+                    if (confirm(`Remove inactive member ${member.name}?`)) {
+                        this.members = this.members.filter(m => m.id !== member.id);
+                        this.groupData.members--;
+                        this.renderMembers();
+                        this.showToast('Member removed');
+                    }
+                } else {
+                    alert('No inactive members found');
+                }
+            }
+
+            replyToMessage(messageId) {
+                const message = this.messages.find(m => m.id === messageId);
+                if (message) {
+                    const input = document.getElementById('messageInput');
+                    input.value = `@${message.sender.name} `;
+                    input.focus();
+                }
+            }
+
+            likeMessage(messageId) {
+                this.showToast('Message liked!');
+            }
+
+            deleteMessage(messageId) {
+                if (confirm('Delete this message?')) {
+                    this.messages = this.messages.filter(m => m.id !== messageId);
+                    this.groupData.messages--;
+                    this.renderMessages();
+                    this.showToast('Message deleted');
+                }
+            }
+
+            showToast(message) {
+                // Create toast element
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    right: 30px;
+                    background: linear-gradient(135deg, var(--forexter-purple), var(--forexter-blue));
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    animation: slideIn 0.3s;
+                `;
+                
+                toast.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    toast.style.animation = 'slideOut 0.3s';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }
+
+            lightenColor(color, percent) {
+                const num = parseInt(color.replace('#', ''), 16);
+                const amt = Math.round(2.55 * percent);
+                const R = (num >> 16) + amt;
+                const G = (num >> 8 & 0x00FF) + amt;
+                const B = (num & 0x0000FF) + amt;
+                
+                return '#' + (
+                    0x1000000 +
+                    (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                    (B < 255 ? B < 1 ? 0 : B : 255)
+                ).toString(16).slice(1);
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            saveToStorage() {
+                const data = {
+                    messages: this.messages.slice(-100), // Save last 100 messages
+                    groupData: this.groupData,
+                    currentUser: this.currentUser
+                };
+                localStorage.setItem('forexterCommunity', JSON.stringify(data));
+            }
+
+            loadFromStorage() {
+                try {
+                    const saved = localStorage.getItem('forexterCommunity');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        if (data.messages) {
+                            // Merge saved messages with current ones
+                            this.messages = [...data.messages, ...this.messages];
+                            this.messages = this.messages.filter((msg, index, self) =>
+                                index === self.findIndex(m => m.id === msg.id)
+                            );
+                        }
+                        if (data.groupData) {
+                            this.groupData = {...this.groupData, ...data.groupData};
+                        }
+                        if (data.currentUser) {
+                            this.currentUser = {...this.currentUser, ...data.currentUser};
+                            this.renderUserInfo();
+                        }
+                        this.renderAll();
+                    }
+                } catch (error) {
+                    console.error('Error loading from storage:', error);
+                }
+            }
+        }
+
+        // Initialize the community app
+        document.addEventListener('DOMContentLoaded', () => {
+            window.community = new ForexterCommunity();
+            
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+            
+            // Add CSS animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
