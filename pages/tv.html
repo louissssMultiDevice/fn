@@ -3,182 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote TV Universal - Untuk Rumah Tangga</title>
+    <title>Remote TV Darurat - Ganti Remote Rusak</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: #f0f2f5;
-            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         header {
-            background: linear-gradient(135deg, #2193b0, #6dd5ed);
-            color: white;
-            padding: 25px;
             text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #0f3460;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: #4cc9f0;
+            margin-bottom: 10px;
         }
         
         h1 {
             font-size: 1.8rem;
             margin-bottom: 10px;
+            color: #4cc9f0;
         }
         
         .subtitle {
+            color: #b8b8d1;
             font-size: 0.95rem;
-            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .main-content {
-            padding: 20px;
-        }
-        
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-        }
-        
-        h2 {
-            color: #2193b0;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            border-bottom: 2px solid #2193b0;
-            padding-bottom: 5px;
-        }
-        
-        .instructions {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
+        .emergency-alert {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
             padding: 15px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
         }
         
-        .instructions ol {
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        .setup-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .option-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .option-card:hover {
+            border-color: #4cc9f0;
+            transform: translateY(-5px);
+        }
+        
+        .option-card.selected {
+            border-color: #4cc9f0;
+            background: rgba(76, 201, 240, 0.1);
+        }
+        
+        .option-icon {
+            font-size: 2.5rem;
+            color: #4cc9f0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .option-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #4cc9f0;
+        }
+        
+        .option-desc {
+            color: #b8b8d1;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .option-steps {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .option-steps ol {
             padding-left: 20px;
             margin: 10px 0;
         }
         
-        .instructions li {
+        .option-steps li {
             margin-bottom: 8px;
+            color: #e0e0e0;
         }
         
-        .code-section {
-            text-align: center;
-            padding: 20px;
-            background: white;
+        .setup-section {
+            display: none;
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .setup-section.active {
+            display: block;
+        }
+        
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .brand-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin: 20px 0;
-        }
-        
-        .code-display {
-            font-size: 3rem;
-            font-weight: bold;
-            letter-spacing: 8px;
-            color: #2193b0;
-            margin: 15px 0;
-            font-family: monospace;
-        }
-        
-        .input-group {
-            margin: 20px 0;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            text-align: center;
-            letter-spacing: 5px;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #2193b0;
-        }
-        
-        .button-group {
+            padding: 15px 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 10px;
+        }
+        
+        .brand-btn:hover {
+            background: rgba(76, 201, 240, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .brand-btn.selected {
+            background: rgba(76, 201, 240, 0.3);
+            border: 2px solid #4cc9f0;
+        }
+        
+        .brand-icon {
+            font-size: 2rem;
+        }
+        
+        .ir-setup {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
             margin: 20px 0;
         }
         
-        button {
-            flex: 1;
+        .connection-test {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
             padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .test-btn {
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            background: #4cc9f0;
+            color: white;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
         }
         
-        .btn-primary {
-            background: #2193b0;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #1a7a94;
+        .test-btn:hover {
+            background: #3aa8d8;
             transform: translateY(-2px);
         }
         
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
+        .test-result {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
         }
         
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
+        .success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
         }
         
-        .btn-success {
-            background: #28a745;
-            color: white;
+        .fail {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
         }
         
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-2px);
+        .remote-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .remote-section.active {
+            display: block;
+        }
+        
+        .remote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .tv-info-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4cc9f0;
         }
         
         .remote-control {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 12px;
             margin: 20px 0;
         }
         
         .remote-btn {
-            background: white;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 12px;
             padding: 20px 10px;
-            font-size: 1.2rem;
+            color: white;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
@@ -189,7 +279,7 @@
         }
         
         .remote-btn:hover {
-            background: #e9ecef;
+            background: rgba(76, 201, 240, 0.3);
             transform: scale(1.05);
         }
         
@@ -199,688 +289,895 @@
         
         .remote-btn i {
             font-size: 1.5rem;
-            color: #2193b0;
         }
         
         .power-btn {
-            grid-column: span 3;
-            background: #dc3545;
-            color: white;
-            border-color: #dc3545;
+            grid-column: span 5;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            font-size: 1.2rem;
         }
         
-        .power-btn i {
-            color: white;
-        }
-        
-        .volume-control, .channel-control {
-            grid-column: span 3;
+        .volume-section, .channel-section {
+            grid-column: span 5;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-top: 10px;
         }
         
-        .status {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .connected {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .disconnected {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .tv-list {
-            display: grid;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .tv-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-        }
-        
-        .tv-info h3 {
+        .section-title {
             font-size: 1.1rem;
-            margin-bottom: 5px;
+            color: #4cc9f0;
         }
         
-        .tv-info p {
-            font-size: 0.9rem;
-            color: #666;
+        .volume-controls, .channel-controls {
+            display: flex;
+            gap: 15px;
         }
         
-        .tv-status {
+        .quick-actions {
+            grid-column: span 5;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(76, 201, 240, 0.3);
+        }
+        
+        .action-label {
+            font-size: 0.8rem;
+            color: #b8b8d1;
+            margin-top: 5px;
+        }
+        
+        .number-pad {
+            grid-column: span 5;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .number-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .number-btn:hover {
+            background: rgba(76, 201, 240, 0.3);
+        }
+        
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        
-        .online {
-            background: #28a745;
-        }
-        
-        .offline {
-            background: #dc3545;
-        }
-        
-        .hidden {
-            display: none !important;
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
         
         footer {
             text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            color: #666;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #0f3460;
+            color: #b8b8d1;
             font-size: 0.9rem;
         }
         
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .remote-control {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .power-btn {
+                grid-column: span 4;
+            }
+            
+            .volume-section, .channel-section {
+                grid-column: span 4;
+            }
+            
+            .quick-actions {
+                grid-column: span 4;
+            }
+            
+            .number-pad {
+                grid-column: span 4;
+            }
+            
+            .setup-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .remote-control {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
             }
             
-            .remote-btn {
-                padding: 15px 5px;
-                font-size: 1rem;
+            .power-btn {
+                grid-column: span 3;
             }
             
-            .code-display {
-                font-size: 2.5rem;
-                letter-spacing: 5px;
+            .volume-section, .channel-section {
+                grid-column: span 3;
             }
             
-            .button-group {
-                flex-direction: column;
+            .quick-actions {
+                grid-column: span 3;
+            }
+            
+            .number-pad {
+                grid-column: span 3;
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Remote TV Universal - Untuk Rumah Tangga</h1>
-            <p class="subtitle">Kendalikan semua TV di rumah Anda dari satu perangkat</p>
+            <div class="logo">
+                <i class="fas fa-tv"></i>
+            </div>
+            <h1>Remote TV Darurat</h1>
+            <p class="subtitle">Gantikan remote TV yang rusak/hilang dengan smartphone Anda. Tidak perlu beli remote baru!</p>
         </header>
         
-        <div class="main-content">
-            <!-- Setup Instructions -->
-            <div class="section">
-                <h2><i class="fas fa-cogs"></i> Setup Awal</h2>
-                <div class="instructions">
-                    <p><strong>Langkah-langkah untuk mengatur sistem:</strong></p>
+        <div class="emergency-alert">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <strong>REMOTE TV RUSAK/HILANG?</strong> Gunakan smartphone sebagai pengganti remote dengan sistem ini!
+        </div>
+        
+        <!-- Setup Options -->
+        <div class="setup-options">
+            <div class="option-card" id="optionSmart" onclick="selectOption('smart')">
+                <div class="option-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <h3 class="option-title">TV Smart (Punya WiFi)</h3>
+                <p class="option-desc">Samsung, LG, Sony, Android TV, dll yang terhubung WiFi</p>
+                
+                <div class="option-steps">
+                    <strong>Cara Kerja:</strong>
                     <ol>
-                        <li>Download aplikasi "TV Receiver" di TV Smart Anda dari store</li>
-                        <li>Buka aplikasi dan pilih "Generate Code"</li>
-                        <li>Kode 6 digit akan muncul di layar TV</li>
-                        <li>Masukkan kode tersebut di website ini</li>
-                        <li>TV Anda sekarang bisa dikontrol dari sini</li>
+                        <li>TV dan HP harus satu WiFi</li>
+                        <li>Install "TV Remote Receiver" di TV</li>
+                        <li>Koneksi otomatis terdeteksi</li>
                     </ol>
-                    <p><strong>Untuk TV Analog/Lama:</strong> Gunakan Raspberry Pi/Pi Zero (Rp 300rb) sebagai penerima IR dan hubungkan ke WiFi rumah.</p>
                 </div>
             </div>
             
-            <!-- Connection Status -->
-            <div class="section">
-                <h2><i class="fas fa-link"></i> Status Koneksi</h2>
-                <div id="statusDisplay" class="status disconnected">
-                    <i class="fas fa-times-circle"></i> Tidak terhubung ke TV
+            <div class="option-card" id="optionIR" onclick="selectOption('ir')">
+                <div class="option-icon">
+                    <i class="fas fa-infrared"></i>
                 </div>
+                <h3 class="option-title">TV Biasa (Infrared)</h3>
+                <p class="option-desc">TV tabung, LCD lama, LED TV tanpa WiFi</p>
                 
-                <!-- Code Verification -->
-                <div id="connectionPanel">
-                    <h3>Koneksi dengan Kode TV</h3>
-                    <div class="code-section">
-                        <p>Masukkan kode yang muncul di layar TV:</p>
-                        <div class="input-group">
-                            <input type="text" id="tvCode" placeholder="Contoh: A1B2C3" maxlength="6" autocomplete="off">
-                        </div>
-                        <div class="button-group">
-                            <button id="connectBtn" class="btn-primary">
-                                <i class="fas fa-plug"></i> Hubungkan
-                            </button>
-                            <button id="scanBtn" class="btn-secondary">
-                                <i class="fas fa-broadcast-tower"></i> Scan Jaringan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Connected TVs -->
-                <div id="connectedTVs" class="hidden">
-                    <h3>TV Terhubung</h3>
-                    <div class="tv-list" id="tvList">
-                        <!-- TV list will be populated by JavaScript -->
-                    </div>
+                <div class="option-steps">
+                    <strong>Perlu Alat:</strong>
+                    <ol>
+                        <li>HP dengan Infrared (Samsung lama)</li>
+                        <li>ATAU IR Blaster USB (Rp 50rb)</li>
+                        <li>ATAU Arduino + IR LED (Rp 100rb)</li>
+                    </ol>
                 </div>
             </div>
             
-            <!-- Remote Control -->
-            <div class="section">
-                <h2><i class="fas fa-tv"></i> Remote Control</h2>
-                <div id="remoteSection" class="hidden">
-                    <div class="remote-control">
-                        <button class="remote-btn" data-command="power">
-                            <i class="fas fa-power-off"></i>
-                            <span>Power</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="source">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span>Input</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="menu">
-                            <i class="fas fa-bars"></i>
-                            <span>Menu</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="up">
-                            <i class="fas fa-chevron-up"></i>
-                            <span>Atas</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="ok">
-                            <i class="fas fa-circle"></i>
-                            <span>OK</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="down">
-                            <i class="fas fa-chevron-down"></i>
-                            <span>Bawah</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="left">
-                            <i class="fas fa-chevron-left"></i>
-                            <span>Kiri</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="home">
-                            <i class="fas fa-home"></i>
-                            <span>Home</span>
-                        </button>
-                        
-                        <button class="remote-btn" data-command="right">
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Kanan</span>
-                        </button>
-                    </div>
-                    
-                    <div class="volume-control">
-                        <span>Volume</span>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="remote-btn" data-command="vol_down">
-                                <i class="fas fa-volume-down"></i>
-                                <span>-</span>
-                            </button>
-                            <button class="remote-btn" data-command="mute">
-                                <i class="fas fa-volume-mute"></i>
-                                <span>Mute</span>
-                            </button>
-                            <button class="remote-btn" data-command="vol_up">
-                                <i class="fas fa-volume-up"></i>
-                                <span>+</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="channel-control">
-                        <span>Channel</span>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="remote-btn" data-command="ch_down">
-                                <i class="fas fa-chevron-left"></i>
-                                <span>-</span>
-                            </button>
-                            <button class="remote-btn" data-command="ch_up">
-                                <i class="fas fa-chevron-right"></i>
-                                <span>+</span>
-                            </button>
-                            <button class="remote-btn" data-command="guide">
-                                <i class="fas fa-list"></i>
-                                <span>Guide</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 20px;">
-                        <button id="disconnectBtn" class="btn-secondary">
-                            <i class="fas fa-unlink"></i> Putuskan Koneksi
-                        </button>
-                    </div>
+            <div class="option-card" id="optionCCTV" onclick="selectOption('cctv')">
+                <div class="option-icon">
+                    <i class="fas fa-video"></i>
                 </div>
+                <h3 class="option-title">Pakai Kamera HP</h3>
+                <p class="option-title" style="color:#ff6b6b;">CARA DARURAT!</h3>
+                <p class="option-desc">TV rusak total, tidak ada alat apapun</p>
                 
-                <div id="notConnectedMessage">
-                    <p style="text-align: center; color: #666; padding: 20px;">
-                        <i class="fas fa-tv" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
-                        Hubungkan ke TV terlebih dahulu untuk menggunakan remote control
-                    </p>
+                <div class="option-steps">
+                    <strong>Instan - Tanpa Alat:</strong>
+                    <ol>
+                        <li>Arahkan kamera HP ke receiver TV</li>
+                        <li>Layar HP menyala infrared</li>
+                        <li>TV menerima sinyal dari cahaya layar</li>
+                    </ol>
                 </div>
             </div>
+        </div>
+        
+        <!-- Smart TV Setup -->
+        <div class="setup-section" id="setupSmart">
+            <h2><i class="fas fa-wifi"></i> Setup TV Smart</h2>
             
-            <!-- Configuration -->
-            <div class="section">
-                <h2><i class="fas fa-sliders-h"></i> Konfigurasi</h2>
-                <div class="input-group">
-                    <label for="tvBrand">Merk TV:</label>
-                    <select id="tvBrand" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
-                        <option value="">Pilih merk TV</option>
-                        <option value="samsung">Samsung</option>
-                        <option value="lg">LG</option>
-                        <option value="sony">Sony</option>
-                        <option value="panasonic">Panasonic</option>
-                        <option value="sharp">Sharp</option>
-                        <option value="polytron">Polytron</option>
-                        <option value="coocaa">Coocaa</option>
-                        <option value="changhong">Changhong</option>
-                        <option value="android">Android TV Box</option>
-                        <option value="custom">Lainnya</option>
-                    </select>
+            <div class="connection-test">
+                <div>
+                    <h3>Langkah 1: Install Receiver di TV</h3>
+                    <p>Buka Store di TV → Cari "Remote Receiver" → Install</p>
                 </div>
-                
-                <div class="input-group">
-                    <label for="tvName">Nama TV (untuk mudah diingat):</label>
-                    <input type="text" id="tvName" placeholder="Contoh: TV Ruang Keluarga" style="width: 100%; padding: 10px; margin: 10px 0;">
-                </div>
-                
-                <button id="saveConfigBtn" class="btn-success">
-                    <i class="fas fa-save"></i> Simpan Konfigurasi
+                <button class="test-btn" onclick="testConnection('smart')">
+                    <i class="fas fa-broadcast-tower"></i> Cari TV
                 </button>
+            </div>
+            
+            <div id="smartResult" class="test-result" style="display:none;"></div>
+            
+            <div class="brand-grid">
+                <button class="brand-btn" onclick="selectBrand('samsung')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Samsung</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('lg')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>LG</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('sony')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Sony</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('sharp')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Sharp</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('panasonic')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Panasonic</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('polytron')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Polytron</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('coocaa')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Coocaa</span>
+                </button>
+                <button class="brand-btn" onclick="selectBrand('aqua')">
+                    <i class="fas fa-tv brand-icon"></i>
+                    <span>Aqua</span>
+                </button>
+            </div>
+            
+            <button class="test-btn" style="width:100%; margin-top:20px;" onclick="connectSmartTV()">
+                <i class="fas fa-plug"></i> Hubungkan ke TV
+            </button>
+        </div>
+        
+        <!-- IR Setup -->
+        <div class="setup-section" id="setupIR">
+            <h2><i class="fas fa-infrared"></i> Setup Infrared</h2>
+            
+            <div class="ir-setup">
+                <h3>Pilih salah satu metode:</h3>
+                
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; margin:20px 0;">
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+                        <h4><i class="fas fa-mobile-alt"></i> HP dengan IR Blaster</h4>
+                        <p>Samsung S6, Note 4, Xiaomi Redmi, dll</p>
+                        <button class="test-btn" onclick="testIR('phone')" style="margin-top:10px; width:100%;">
+                            Test IR HP
+                        </button>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+                        <h4><i class="fas fa-usb"></i> IR Blaster USB</h4>
+                        <p>Beli di Tokopedia (Rp 50-100rb)</p>
+                        <button class="test-btn" onclick="testIR('usb')" style="margin-top:10px; width:100%;">
+                            Test USB IR
+                        </button>
+                    </div>
+                    
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+                        <h4><i class="fas fa-microchip"></i> Arduino + IR LED</h4>
+                        <p>DIY dengan Arduino (Rp 100rb)</p>
+                        <button class="test-btn" onclick="testIR('arduino')" style="margin-top:10px; width:100%;">
+                            Test Arduino
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="irResult" class="test-result" style="display:none;"></div>
+            
+            <button class="test-btn" style="width:100%; margin-top:20px;" onclick="setupIRComplete()">
+                <i class="fas fa-cogs"></i> Lanjut ke Remote
+            </button>
+        </div>
+        
+        <!-- CCTV/Darurat Setup -->
+        <div class="setup-section" id="setupCCTV">
+            <h2 style="color:#ff6b6b;"><i class="fas fa-first-aid"></i> Mode Darurat</h2>
+            
+            <div style="background:rgba(255,107,107,0.1); padding:20px; border-radius:10px; margin:20px 0;">
+                <h3><i class="fas fa-exclamation-circle"></i> PERINGATAN!</h3>
+                <p>Metode ini hanya bekerja pada beberapa TV tertentu. Keberhasilan 30-50%.</p>
+            </div>
+            
+            <div class="option-steps">
+                <h3>Langkah-langkah:</h3>
+                <ol>
+                    <li>Buka website ini di smartphone lain (sebagai penerima)</li>
+                    <li>Letakkan smartphone penerima di depan TV (kamera menghadap receiver TV)</li>
+                    <li>Di smartphone ini (pengirim), tekan tombol remote</li>
+                    <li>Layar akan berkedip → Kamera menangkap → TV menerima sinyal</li>
+                </ol>
+                
+                <p style="margin-top:15px; color:#ff6b6b;">
+                    <i class="fas fa-lightbulb"></i> Tips: Gunakan di ruangan gelap, dekatkan smartphone ke receiver TV
+                </p>
+            </div>
+            
+            <button class="test-btn" style="width:100%; margin-top:20px; background:#ff6b6b;" onclick="startEmergencyMode()">
+                <i class="fas fa-play-circle"></i> Aktifkan Mode Darurat
+            </button>
+        </div>
+        
+        <!-- Remote Control Interface -->
+        <div class="remote-section" id="remoteControl">
+            <div class="remote-header">
+                <div>
+                    <h2><i class="fas fa-gamepad"></i> Remote Control</h2>
+                    <div class="tv-info-display" id="tvInfo">
+                        TV Belum Terhubung
+                    </div>
+                </div>
+                <button class="back-btn" onclick="backToSetup()">
+                    <i class="fas fa-arrow-left"></i> Ganti TV
+                </button>
+            </div>
+            
+            <div class="remote-control">
+                <!-- Power -->
+                <button class="remote-btn power-btn" onclick="sendCommand('power')">
+                    <i class="fas fa-power-off"></i>
+                    <span>POWER ON/OFF</span>
+                </button>
+                
+                <!-- Navigation -->
+                <button class="remote-btn" onclick="sendCommand('up')">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>ATAS</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('left')">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>KIRI</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('ok')">
+                    <i class="fas fa-circle"></i>
+                    <span>OK</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('right')">
+                    <i class="fas fa-chevron-right"></i>
+                    <span>KANAN</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('down')">
+                    <i class="fas fa-chevron-down"></i>
+                    <span>BAWAH</span>
+                </button>
+                
+                <!-- Menu Controls -->
+                <button class="remote-btn" onclick="sendCommand('menu')">
+                    <i class="fas fa-bars"></i>
+                    <span>MENU</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('home')">
+                    <i class="fas fa-home"></i>
+                    <span>HOME</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('back')">
+                    <i class="fas fa-reply"></i>
+                    <span>BACK</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('source')">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>SOURCE</span>
+                </button>
+                
+                <button class="remote-btn" onclick="sendCommand('guide')">
+                    <i class="fas fa-list"></i>
+                    <span>GUIDE</span>
+                </button>
+            </div>
+            
+            <!-- Volume Control -->
+            <div class="volume-section">
+                <div class="section-title">
+                    <i class="fas fa-volume-up"></i> VOLUME
+                </div>
+                <div class="volume-controls">
+                    <button class="remote-btn" onclick="sendCommand('vol_down')">
+                        <i class="fas fa-volume-down"></i>
+                        <span>-</span>
+                    </button>
+                    <button class="remote-btn" onclick="sendCommand('mute')">
+                        <i class="fas fa-volume-mute"></i>
+                        <span>MUTE</span>
+                    </button>
+                    <button class="remote-btn" onclick="sendCommand('vol_up')">
+                        <i class="fas fa-volume-up"></i>
+                        <span>+</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Channel Control -->
+            <div class="channel-section">
+                <div class="section-title">
+                    <i class="fas fa-tv"></i> CHANNEL
+                </div>
+                <div class="channel-controls">
+                    <button class="remote-btn" onclick="sendCommand('ch_down')">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>CH-</span>
+                    </button>
+                    <button class="remote-btn" onclick="sendCommand('ch_up')">
+                        <i class="fas fa-chevron-right"></i>
+                        <span>CH+</span>
+                    </button>
+                    <button class="remote-btn" onclick="sendCommand('favorites')">
+                        <i class="fas fa-star"></i>
+                        <span>FAV</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-btn" onclick="sendCommand('netflix')">
+                    <i class="fab fa-netflix" style="color:#e50914; font-size:1.5rem;"></i>
+                    <div class="action-label">Netflix</div>
+                </div>
+                <div class="action-btn" onclick="sendCommand('youtube')">
+                    <i class="fab fa-youtube" style="color:#ff0000; font-size:1.5rem;"></i>
+                    <div class="action-label">YouTube</div>
+                </div>
+                <div class="action-btn" onclick="sendCommand('settings')">
+                    <i class="fas fa-cog" style="color:#4cc9f0; font-size:1.5rem;"></i>
+                    <div class="action-label">Settings</div>
+                </div>
+            </div>
+            
+            <!-- Number Pad -->
+            <div class="number-pad">
+                <button class="number-btn" onclick="sendCommand('1')">1</button>
+                <button class="number-btn" onclick="sendCommand('2')">2</button>
+                <button class="number-btn" onclick="sendCommand('3')">3</button>
+                <button class="number-btn" onclick="sendCommand('4')">4</button>
+                <button class="number-btn" onclick="sendCommand('5')">5</button>
+                <button class="number-btn" onclick="sendCommand('6')">6</button>
+                <button class="number-btn" onclick="sendCommand('7')">7</button>
+                <button class="number-btn" onclick="sendCommand('8')">8</button>
+                <button class="number-btn" onclick="sendCommand('9')">9</button>
+                <button class="number-btn" onclick="sendCommand('0')">0</button>
+                <button class="number-btn" onclick="sendCommand('enter')">ENTER</button>
+                <button class="number-btn" onclick="sendCommand('clear')">CLEAR</button>
+            </div>
+            
+            <div style="text-align:center; margin-top:20px; color:#b8b8d1;">
+                <i class="fas fa-info-circle"></i> Gunakan juga tombol keyboard: Arrow keys, Enter, Space, +/- untuk volume
             </div>
         </div>
         
         <footer>
-            <p>Remote TV Universal v1.0 - Untuk penggunaan rumah tangga</p>
-            <p>Simpan file ini di komputer lokal atau hosting sederhana (seperti Raspberry Pi)</p>
+            <p><i class="fas fa-wrench"></i> Remote TV Darurat v2.0 - Untuk TV dengan remote rusak/hilang</p>
+            <p>Simpan halaman ini di HP untuk akses cepat saat remote rusak!</p>
+            <p style="margin-top:10px; font-size:0.8rem;">
+                <i class="fas fa-lightbulb"></i> Tips: Bookmark halaman ini → Tambang ke Homescreen (Add to Home Screen)
+            </p>
         </footer>
     </div>
 
     <script>
-        // TV Management System
-        const TVManager = {
-            currentTV: null,
-            connectedTVs: [],
-            
-            // Initialize from localStorage
-            init: function() {
-                const savedTVs = localStorage.getItem('homeTVs');
-                if (savedTVs) {
-                    this.connectedTVs = JSON.parse(savedTVs);
-                    this.updateTVList();
-                }
-                
-                // Check if any TV is currently selected
-                const currentTVId = localStorage.getItem('currentTV');
-                if (currentTVId) {
-                    this.currentTV = this.connectedTVs.find(tv => tv.id === currentTVId);
-                    if (this.currentTV) {
-                        this.showRemoteControl();
-                    }
-                }
-            },
-            
-            // Connect to a new TV
-            connectTV: function(code, brand, name) {
-                // Generate TV object
-                const newTV = {
-                    id: 'tv_' + Date.now(),
-                    code: code,
-                    brand: brand,
-                    name: name || 'TV ' + (this.connectedTVs.length + 1),
-                    connectedAt: new Date().toISOString(),
-                    lastUsed: new Date().toISOString()
-                };
-                
-                this.connectedTVs.push(newTV);
-                this.currentTV = newTV;
-                
-                // Save to localStorage
-                this.saveToStorage();
-                
-                // Update UI
-                this.updateTVList();
-                this.showRemoteControl();
-                
-                return newTV;
-            },
-            
-            // Disconnect current TV
-            disconnectTV: function() {
-                if (this.currentTV) {
-                    this.currentTV = null;
-                    localStorage.removeItem('currentTV');
-                    this.hideRemoteControl();
-                }
-            },
-            
-            // Save to localStorage
-            saveToStorage: function() {
-                localStorage.setItem('homeTVs', JSON.stringify(this.connectedTVs));
-                if (this.currentTV) {
-                    localStorage.setItem('currentTV', this.currentTV.id);
-                }
-            },
-            
-            // Update TV list in UI
-            updateTVList: function() {
-                const tvListElement = document.getElementById('tvList');
-                tvListElement.innerHTML = '';
-                
-                this.connectedTVs.forEach(tv => {
-                    const tvElement = document.createElement('div');
-                    tvElement.className = 'tv-item';
-                    tvElement.innerHTML = `
-                        <div class="tv-info">
-                            <h3>${tv.name}</h3>
-                            <p>${this.getBrandName(tv.brand)} • ${new Date(tv.lastUsed).toLocaleDateString()}</p>
-                        </div>
-                        <div class="tv-status">
-                            <div class="status-dot ${this.currentTV?.id === tv.id ? 'online' : 'offline'}"></div>
-                            <span>${this.currentTV?.id === tv.id ? 'Aktif' : 'Tersimpan'}</span>
-                        </div>
-                    `;
-                    
-                    // Add click event to switch to this TV
-                    tvElement.addEventListener('click', () => {
-                        this.currentTV = tv;
-                        this.saveToStorage();
-                        this.updateTVList();
-                        this.showRemoteControl();
-                        showMessage(`Beralih ke ${tv.name}`, 'success');
-                    });
-                    
-                    tvListElement.appendChild(tvElement);
-                });
-                
-                // Show/hide connected TVs section
-                const connectedTVsSection = document.getElementById('connectedTVs');
-                if (this.connectedTVs.length > 0) {
-                    connectedTVsSection.classList.remove('hidden');
-                } else {
-                    connectedTVsSection.classList.add('hidden');
-                }
-            },
-            
-            // Show remote control
-            showRemoteControl: function() {
-                document.getElementById('remoteSection').classList.remove('hidden');
-                document.getElementById('notConnectedMessage').classList.add('hidden');
-                document.getElementById('statusDisplay').className = 'status connected';
-                document.getElementById('statusDisplay').innerHTML = 
-                    `<i class="fas fa-check-circle"></i> Terhubung ke: ${this.currentTV.name}`;
-            },
-            
-            // Hide remote control
-            hideRemoteControl: function() {
-                document.getElementById('remoteSection').classList.add('hidden');
-                document.getElementById('notConnectedMessage').classList.remove('hidden');
-                document.getElementById('statusDisplay').className = 'status disconnected';
-                document.getElementById('statusDisplay').innerHTML = 
-                    `<i class="fas fa-times-circle"></i> Tidak terhubung ke TV`;
-            },
-            
-            // Get brand name
-            getBrandName: function(brandCode) {
-                const brands = {
-                    'samsung': 'Samsung',
-                    'lg': 'LG',
-                    'sony': 'Sony',
-                    'panasonic': 'Panasonic',
-                    'sharp': 'Sharp',
-                    'polytron': 'Polytron',
-                    'coocaa': 'Coocaa',
-                    'changhong': 'Changhong',
-                    'android': 'Android TV',
-                    'custom': 'Lainnya'
-                };
-                return brands[brandCode] || brandCode;
-            },
-            
-            // Send command to TV
-            sendCommand: function(command) {
-                if (!this.currentTV) return;
-                
-                // Log the command
-                console.log(`Sending command "${command}" to ${this.currentTV.name}`);
-                
-                // Update last used time
-                this.currentTV.lastUsed = new Date().toISOString();
-                this.saveToStorage();
-                
-                // In a real implementation, this would send HTTP request to your server/Raspberry Pi
-                // For now, we'll just show visual feedback
-                showMessage(`Mengirim: ${this.getCommandName(command)}`, 'info');
-                
-                // Simulate sending to TV (remove this in production)
-                this.simulateSendToTV(command);
-            },
-            
-            // Get command display name
-            getCommandName: function(command) {
-                const commands = {
-                    'power': 'Power On/Off',
-                    'vol_up': 'Volume Naik',
-                    'vol_down': 'Volume Turun',
-                    'mute': 'Mute',
-                    'ch_up': 'Channel Naik',
-                    'ch_down': 'Channel Turun',
-                    'up': 'Navigasi Atas',
-                    'down': 'Navigasi Bawah',
-                    'left': 'Navigasi Kiri',
-                    'right': 'Navigasi Kanan',
-                    'ok': 'OK/Select',
-                    'home': 'Home',
-                    'back': 'Back',
-                    'menu': 'Menu',
-                    'source': 'Input/Source',
-                    'guide': 'Guide'
-                };
-                return commands[command] || command;
-            },
-            
-            // Simulate sending to TV (Replace with actual HTTP request)
-            simulateSendToTV: function(command) {
-                // This is where you would make actual HTTP request to your server
-                // Example using fetch:
-                /*
-                fetch('/send-command', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        tvId: this.currentTV.id,
-                        command: command,
-                        brand: this.currentTV.brand
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        showMessage('Gagal mengirim perintah', 'error');
-                    }
-                })
-                .catch(error => {
-                    showMessage('Error: ' + error.message, 'error');
-                });
-                */
-                
-                // For demo purposes, we'll just log it
-                const commandLog = {
-                    timestamp: new Date().toISOString(),
-                    tv: this.currentTV.name,
-                    command: command,
-                    brand: this.currentTV.brand
-                };
-                
-                // Save command log
-                let logs = JSON.parse(localStorage.getItem('tvCommandLogs') || '[]');
-                logs.push(commandLog);
-                if (logs.length > 100) logs = logs.slice(-100); // Keep only last 100
-                localStorage.setItem('tvCommandLogs', JSON.stringify(logs));
-            }
+        // Configuration
+        let currentTV = {
+            type: null,
+            brand: null,
+            method: null,
+            connected: false
         };
         
-        // Utility functions
+        // Select setup option
+        function selectOption(option) {
+            // Remove selected class from all options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            document.getElementById('option' + option.charAt(0).toUpperCase() + option.slice(1)).classList.add('selected');
+            
+            // Hide all setup sections
+            document.querySelectorAll('.setup-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected setup section
+            document.getElementById('setup' + option.charAt(0).toUpperCase() + option.slice(1)).classList.add('active');
+            
+            // Store selected type
+            currentTV.type = option;
+        }
+        
+        // Select TV brand
+        function selectBrand(brand) {
+            // Remove selected class from all brand buttons
+            document.querySelectorAll('.brand-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            event.target.closest('.brand-btn').classList.add('selected');
+            
+            // Store brand
+            currentTV.brand = brand;
+            
+            // Show brand name
+            const brandNames = {
+                'samsung': 'Samsung',
+                'lg': 'LG',
+                'sony': 'Sony',
+                'sharp': 'Sharp',
+                'panasonic': 'Panasonic',
+                'polytron': 'Polytron',
+                'coocaa': 'Coocaa',
+                'aqua': 'Aqua'
+            };
+            
+            showMessage(`Merk TV dipilih: ${brandNames[brand]}`, 'info');
+        }
+        
+        // Test connection for Smart TV
+        function testConnection(type) {
+            const resultDiv = document.getElementById('smartResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari TV dalam jaringan...';
+            
+            // Simulate network scan
+            setTimeout(() => {
+                // In real implementation, this would scan for TVs
+                // Using WebSockets or HTTP requests to find TV receiver
+                
+                const tvFound = Math.random() > 0.3; // 70% chance of finding TV
+                
+                if (tvFound) {
+                    resultDiv.className = 'test-result success';
+                    resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> TV ditemukan! Siap dihubungkan.';
+                } else {
+                    resultDiv.className = 'test-result fail';
+                    resultDiv.innerHTML = '<i class="fas fa-times-circle"></i> TV tidak ditemukan. Pastikan TV menyala dan terhubung WiFi.';
+                }
+            }, 2000);
+        }
+        
+        // Test IR method
+        function testIR(method) {
+            const resultDiv = document.getElementById('irResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menguji sinyal IR...';
+            
+            // Simulate IR test
+            setTimeout(() => {
+                currentTV.method = method;
+                
+                resultDiv.className = 'test-result success';
+                resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> Sinyal IR terdeteksi! Siap digunakan.';
+                
+                showMessage(`Metode IR: ${method.toUpperCase()} siap digunakan`, 'success');
+            }, 1500);
+        }
+        
+        // Connect to Smart TV
+        function connectSmartTV() {
+            if (!currentTV.brand) {
+                showMessage('Pilih merk TV terlebih dahulu!', 'error');
+                return;
+            }
+            
+            currentTV.connected = true;
+            currentTV.method = 'wifi';
+            
+            showMessage(`Terhubung ke TV ${currentTV.brand} via WiFi!`, 'success');
+            showRemoteControl();
+        }
+        
+        // Complete IR setup
+        function setupIRComplete() {
+            if (!currentTV.method) {
+                showMessage('Test metode IR terlebih dahulu!', 'error');
+                return;
+            }
+            
+            currentTV.connected = true;
+            showMessage('Setup IR selesai! Remote siap digunakan.', 'success');
+            showRemoteControl();
+        }
+        
+        // Start emergency mode
+        function startEmergencyMode() {
+            currentTV.type = 'cctv';
+            currentTV.method = 'camera';
+            currentTV.connected = true;
+            
+            showMessage('Mode darurat diaktifkan! Arahkan kamera HP ke receiver TV.', 'warning');
+            showRemoteControl();
+        }
+        
+        // Show remote control interface
+        function showRemoteControl() {
+            // Hide all setup sections
+            document.querySelectorAll('.setup-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Hide setup options
+            document.querySelector('.setup-options').style.display = 'none';
+            
+            // Show remote control
+            document.getElementById('remoteControl').classList.add('active');
+            
+            // Update TV info display
+            const brandNames = {
+                'samsung': 'Samsung',
+                'lg': 'LG',
+                'sony': 'Sony',
+                'sharp': 'Sharp',
+                'panasonic': 'Panasonic',
+                'polytron': 'Polytron',
+                'coocaa': 'Coocaa',
+                'aqua': 'Aqua'
+            };
+            
+            const methodNames = {
+                'wifi': 'WiFi',
+                'phone': 'IR HP',
+                'usb': 'USB IR',
+                'arduino': 'Arduino',
+                'camera': 'Mode Darurat'
+            };
+            
+            const tvName = currentTV.brand ? brandNames[currentTV.brand] : 'TV';
+            const method = methodNames[currentTV.method] || 'Direct';
+            
+            document.getElementById('tvInfo').innerHTML = `
+                <strong>${tvName}</strong> | Metode: ${method} | Status: <span style="color:#2ecc71;">TERHUBUNG</span>
+            `;
+            
+            // Save to localStorage for future use
+            localStorage.setItem('lastTVConfig', JSON.stringify(currentTV));
+        }
+        
+        // Send command to TV
+        function sendCommand(command) {
+            if (!currentTV.connected) {
+                showMessage('TV belum terhubung!', 'error');
+                return;
+            }
+            
+            console.log(`Mengirim perintah: ${command} ke TV ${currentTV.brand}`);
+            
+            // Visual feedback
+            const button = event?.target.closest('button') || event?.target.closest('.action-btn');
+            if (button) {
+                button.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    button.style.transform = '';
+                }, 200);
+            }
+            
+            // Show command sent notification
+            const commandNames = {
+                'power': 'Power On/Off',
+                'vol_up': 'Volume Naik',
+                'vol_down': 'Volume Turun',
+                'mute': 'Mute',
+                'ch_up': 'Channel Naik',
+                'ch_down': 'Channel Turun',
+                'up': 'Navigasi Atas',
+                'down': 'Navigasi Bawah',
+                'left': 'Navigasi Kiri',
+                'right': 'Navigasi Kanan',
+                'ok': 'OK/Select',
+                'home': 'Home',
+                'back': 'Back',
+                'menu': 'Menu',
+                'source': 'Source/Input',
+                'guide': 'TV Guide',
+                'netflix': 'Buka Netflix',
+                'youtube': 'Buka YouTube',
+                'settings': 'Settings',
+                'favorites': 'Channel Favorit'
+            };
+            
+            const commandName = commandNames[command] || `Tombol ${command}`;
+            showMessage(`Mengirim: ${commandName}`, 'info');
+            
+            // In real implementation, send actual command:
+            sendActualCommand(command);
+        }
+        
+        // Send actual command (implement based on method)
+        function sendActualCommand(command) {
+            // This is where you implement actual sending logic
+            
+            switch(currentTV.method) {
+                case 'wifi':
+                    // Send via HTTP/WebSocket to TV
+                    // fetch(`http://tv-ip:8080/command?cmd=${command}`);
+                    break;
+                    
+                case 'phone':
+                case 'usb':
+                case 'arduino':
+                    // Send IR signal
+                    // WebUSB API or serial communication
+                    break;
+                    
+                case 'camera':
+                    // Emergency mode: Flash screen to simulate IR
+                    flashScreenForIR(command);
+                    break;
+            }
+            
+            // Log command
+            logCommand(command);
+        }
+        
+        // Emergency mode: Flash screen for IR simulation
+        function flashScreenForIR(command) {
+            // Create flashing element
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                opacity: 0;
+                z-index: 9999;
+                pointer-events: none;
+                animation: flash 0.3s;
+            `;
+            
+            document.body.appendChild(flash);
+            
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes flash {
+                    0% { opacity: 0; }
+                    50% { opacity: 0.7; }
+                    100% { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove after animation
+            setTimeout(() => {
+                document.body.removeChild(flash);
+                document.head.removeChild(style);
+            }, 300);
+            
+            showMessage('Layar berkedip! Arahkan kamera penerima ke receiver TV', 'info');
+        }
+        
+        // Log command for debugging
+        function logCommand(command) {
+            const log = {
+                timestamp: new Date().toISOString(),
+                command: command,
+                tvType: currentTV.type,
+                tvBrand: currentTV.brand,
+                method: currentTV.method
+            };
+            
+            // Save to localStorage
+            let logs = JSON.parse(localStorage.getItem('tvCommandLogs') || '[]');
+            logs.push(log);
+            if (logs.length > 50) logs = logs.slice(-50);
+            localStorage.setItem('tvCommandLogs', JSON.stringify(logs));
+        }
+        
+        // Back to setup
+        function backToSetup() {
+            document.getElementById('remoteControl').classList.remove('active');
+            document.querySelector('.setup-options').style.display = 'grid';
+            
+            // Show last selected setup
+            if (currentTV.type) {
+                selectOption(currentTV.type);
+            }
+        }
+        
+        // Show message
         function showMessage(message, type = 'info') {
             // Create message element
-            const messageElement = document.createElement('div');
-            messageElement.style.cssText = `
+            const messageEl = document.createElement('div');
+            messageEl.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
                 padding: 15px 20px;
-                border-radius: 8px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
-                z-index: 1000;
-                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                z-index: 10000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
                 animation: slideIn 0.3s ease;
+                max-width: 300px;
             `;
             
             // Set color based on type
-            if (type === 'success') {
-                messageElement.style.background = '#28a745';
-            } else if (type === 'error') {
-                messageElement.style.background = '#dc3545';
-            } else if (type === 'info') {
-                messageElement.style.background = '#2193b0';
-            }
+            const colors = {
+                'success': '#2ecc71',
+                'error': '#e74c3c',
+                'warning': '#f39c12',
+                'info': '#3498db'
+            };
             
-            messageElement.textContent = message;
-            document.body.appendChild(messageElement);
+            messageEl.style.background = colors[type] || '#3498db';
+            messageEl.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}`;
+            
+            document.body.appendChild(messageEl);
             
             // Remove after 3 seconds
             setTimeout(() => {
-                messageElement.style.animation = 'slideOut 0.3s ease';
+                messageEl.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => {
-                    document.body.removeChild(messageElement);
+                    document.body.removeChild(messageEl);
                 }, 300);
             }, 3000);
-            
-            // Add CSS animations
-            if (!document.getElementById('messageAnimations')) {
-                const style = document.createElement('style');
-                style.id = 'messageAnimations';
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                    @keyframes slideOut {
-                        from { transform: translateX(0); opacity: 1; }
-                        to { transform: translateX(100%); opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
         }
         
-        // Initialize when page loads
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize TV Manager
-            TVManager.init();
-            
-            // Connect button
-            document.getElementById('connectBtn').addEventListener('click', function() {
-                const code = document.getElementById('tvCode').value.trim().toUpperCase();
-                const brand = document.getElementById('tvBrand').value;
-                const name = document.getElementById('tvName').value.trim();
-                
-                if (!code || code.length !== 6) {
-                    showMessage('Masukkan kode 6 digit dari TV', 'error');
-                    return;
+            // Check for saved configuration
+            const savedConfig = localStorage.getItem('lastTVConfig');
+            if (savedConfig) {
+                currentTV = JSON.parse(savedConfig);
+                if (currentTV.connected) {
+                    showRemoteControl();
                 }
-                
-                if (!brand) {
-                    showMessage('Pilih merk TV terlebih dahulu', 'error');
-                    return;
-                }
-                
-                // In real implementation, you would verify the code with your server
-                // For now, we'll assume it's valid
-                TVManager.connectTV(code, brand, name || `TV ${TVManager.connectedTVs.length + 1}`);
-                
-                showMessage(`Berhasil menghubungkan ${name || 'TV baru'}!`, 'success');
-                
-                // Clear inputs
-                document.getElementById('tvCode').value = '';
-                document.getElementById('tvName').value = '';
-            });
+            }
             
-            // Scan network button
-            document.getElementById('scanBtn').addEventListener('click', function() {
-                showMessage('Memindai TV dalam jaringan...', 'info');
-                
-                // Simulate network scan
-                setTimeout(() => {
-                    // In real implementation, this would scan your local network for TV receivers
-                    // Using technologies like SSDP, mDNS, or custom UDP broadcast
-                    showMessage('Fitur scan memerlukan server di jaringan lokal', 'info');
-                }, 1000);
-            });
-            
-            // Disconnect button
-            document.getElementById('disconnectBtn').addEventListener('click', function() {
-                TVManager.disconnectTV();
-                showMessage('Koneksi diputus', 'info');
-            });
-            
-            // Save config button
-            document.getElementById('saveConfigBtn').addEventListener('click', function() {
-                const brand = document.getElementById('tvBrand').value;
-                const name = document.getElementById('tvName').value.trim();
-                
-                if (!brand) {
-                    showMessage('Pilih merk TV terlebih dahulu', 'error');
-                    return;
-                }
-                
-                showMessage('Konfigurasi disimpan', 'success');
-            });
-            
-            // Remote control buttons
-            document.querySelectorAll('.remote-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const command = this.getAttribute('data-command');
-                    if (command && TVManager.currentTV) {
-                        TVManager.sendCommand(command);
-                    }
-                });
-            });
-            
-            // Keyboard shortcuts for remote
-            document.addEventListener('keydown', function(event) {
-                if (!TVManager.currentTV) return;
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (!currentTV.connected) return;
                 
                 const keyMap = {
                     'ArrowUp': 'up',
@@ -888,32 +1185,42 @@
                     'ArrowLeft': 'left',
                     'ArrowRight': 'right',
                     'Enter': 'ok',
-                    ' ': 'ok', // Space
+                    ' ': 'ok',
                     'Escape': 'back',
                     'm': 'mute',
+                    'M': 'mute',
                     '+': 'vol_up',
                     '-': 'vol_down',
+                    '=': 'vol_up',
+                    '_': 'vol_down',
                     'PageUp': 'ch_up',
                     'PageDown': 'ch_down'
                 };
                 
-                const command = keyMap[event.key];
-                if (command) {
-                    event.preventDefault();
-                    TVManager.sendCommand(command);
+                if (keyMap[e.key]) {
+                    e.preventDefault();
+                    sendCommand(keyMap[e.key]);
+                }
+                
+                // Number keys
+                if (e.key >= '0' && e.key <= '9') {
+                    sendCommand(e.key);
                 }
             });
             
-            // Load TV brand from localStorage if exists
-            const savedBrand = localStorage.getItem('defaultTVBrand');
-            if (savedBrand) {
-                document.getElementById('tvBrand').value = savedBrand;
-            }
-            
-            // Save TV brand when changed
-            document.getElementById('tvBrand').addEventListener('change', function() {
-                localStorage.setItem('defaultTVBrand', this.value);
-            });
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
         });
     </script>
 </body>
