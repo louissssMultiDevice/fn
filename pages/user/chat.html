@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - ForexterChat</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Chat Specific Styles */
+        .chat-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 1rem;
+            height: calc(100vh - 60px);
+            background: var(--dark-900);
+        }
+        
+        /* Sidebar Contacts */
+        .contacts-sidebar {
+            background: var(--dark-800);
+            border-right: 1px solid var(--dark-700);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .contacts-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--dark-700);
+        }
+        
+        .contacts-search {
+            position: relative;
+        }
+        
+        .contacts-search input {
+            padding-left: 2.5rem;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-600);
+        }
+        
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-item:hover {
+            background: var(--dark-700);
+        }
+        
+        .contact-item.active {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .contact-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            position: relative;
+        }
+        
+        .online-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--dark-800);
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .contact-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-last-message {
+            font-size: 0.875rem;
+            color: var(--dark-600);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .contact-time {
+            font-size: 0.75rem;
+            color: var(--dark-600);
+        }
+        
+        /* Chat Area */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            background: var(--dark-900);
+        }
+        
+        .chat-header {
+            padding: 1rem 1.5rem;
+            background: var(--dark-800);
+            border-bottom: 1px solid var(--dark-700);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        /* Message Bubbles */
+        .message {
+            max-width: 70%;
+            animation: messageIn 0.3s ease forwards;
+            opacity: 0;
+        }
+        
+        .message.outgoing {
+            align-self: flex-end;
+        }
+        
+        .message.incoming {
+            align-self: flex-start;
+        }
+        
+        .message-bubble {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-xl);
+            position: relative;
+            line-height: 1.4;
+            word-wrap: break-word;
+            animation: bubbleIn 0.3s ease forwards;
+        }
+        
+        .message.outgoing .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-bottom-right-radius: var(--radius-sm);
+        }
+        
+        .message.incoming .message-bubble {
+            background: var(--dark-700);
+            border: 1px solid var(--dark-600);
+            border-bottom-left-radius: var(--radius-sm);
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--dark-600);
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+        
+        .message-status {
+            position: absolute;
+            right: -20px;
+            bottom: 0;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+        
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--dark-700);
+            border-radius: var(--radius-xl);
+            width: fit-content;
+            margin-bottom: 0.5rem;
+            animation: typingIn 0.3s ease;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Voice Recording */
+        .voice-recorder {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-800);
+            border: 1px solid var(--dark-700);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .wave-bar {
+            width: 3px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: var(--radius-full);
+            animation: wave 1s ease infinite;
+        }
+        
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+        
+        .voice-timer {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        /* Chat Input */
+        .chat-input-container {
+            padding: 1rem;
+            background: var(--dark-800);
+            border-top: 1px solid var(--dark-700);
+        }
+        
+        .input-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+        
+        .message-input {
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            padding: 0.75rem 1rem;
+            background: var(--dark-700);
+            border: 1px solid var(--dark-600);
+            border-radius: var(--radius-lg);
+            color: var(--light-100);
+            font-size: 1rem;
+            resize: none;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: transparent;
+            border: none;
+            color: var(--dark-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .input-action-btn:hover {
+            background: var(--dark-700);
+            color: var(--primary);
+        }
+        
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .send-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        /* Animations */
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bubbleIn {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes typing {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes wave {
+            0%, 100% {
+                height: 10px;
+            }
+            50% {
+                height: 20px;
+            }
+        }
+        
+        @keyframes typingIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        /* Responsive Chat */
+        @media (max-width: 768px) {
+            .chat-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .contacts-sidebar {
+                display: none;
+            }
+            
+            .contacts-sidebar.active {
+                display: flex;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 60px);
+                z-index: 90;
+            }
+            
+            .mobile-contact-toggle {
+                display: block;
+            }
+        }
+        
+        /* Emoji Picker */
+        .emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            right: 1rem;
+            width: 300px;
+            background: var(--dark-800);
+            border: 1px solid var(--dark-700);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            z-index: 100;
+            display: none;
+        }
+        
+        .emoji-picker.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .emoji-categories {
+            display: flex;
+            border-bottom: 1px solid var(--dark-700);
+            padding: 0.5rem;
+        }
+        
+        .emoji-category-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: var(--dark-600);
+            cursor: pointer;
+            border-radius: var(--radius-md);
+        }
+        
+        .emoji-category-btn.active {
+            background: var(--dark-700);
+            color: var(--primary);
+        }
+        
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0.5rem;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .emoji-btn {
+            font-size: 1.2rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: background 0.2s ease;
+        }
+        
+        .emoji-btn:hover {
+            background: var(--dark-700);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="home.html" class="nav-logo">ForexterChat</a>
+            <ul class="nav-menu">
+                <li><a href="home.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="chat.html" class="nav-link active"><i class="fas fa-comment"></i> Chat</a></li>
+                <li><a href="calls.html" class="nav-link"><i class="fas fa-phone"></i> Calls</a></li>
+                <li><a href="community.html" class="nav-link"><i class="fas fa-users"></i> Community</a></li>
+                <li><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><button class="btn btn-outline" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+            </ul>
+            <button class="btn-icon mobile-menu-btn hidden"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+    
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <!-- Contacts Sidebar -->
+        <div class="contacts-sidebar" id="contactsSidebar">
+            <div class="contacts-header">
+                <div class="contacts-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="form-input" placeholder="Search contacts..." id="contactSearch">
+                </div>
+            </div>
+            
+            <div class="contacts-list" id="contactsList">
+                <!-- Contacts loaded dynamically -->
+                <div class="text-center p-4 text-gray">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <p>No contacts yet</p>
+                </div>
+            </div>
+            
+            <div class="p-4">
+                <button class="btn btn-primary w-100" id="newContactBtn">
+                    <i class="fas fa-user-plus"></i> Add New Contact
+                </button>
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <button class="btn-icon mobile-contact-toggle hidden" id="toggleContacts">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="contact-avatar">
+                        <span>👤</span>
+                        <div class="online-status"></div>
+                    </div>
+                    <div>
+                        <h3 id="chatUserName">Select a contact</h3>
+                        <p class="text-gray" id="chatUserStatus">Click on a contact to start chatting</p>
+                    </div>
+                </div>
+                
+                <div class="chat-actions">
+                    <button class="btn-icon" id="voiceCallBtn">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="btn-icon" id="videoCallBtn">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="btn-icon" id="chatInfoBtn">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages loaded dynamically -->
+                <div class="text-center p-8 text-gray">
+                    <i class="fas fa-comments fa-3x mb-4"></i>
+                    <h3 class="mb-2">Welcome to ForexterChat</h3>
+                    <p>Select a contact from the sidebar to start chatting</p>
+                </div>
+            </div>
+            
+            <!-- Typing Indicator (hidden by default) -->
+            <div class="typing-indicator hidden" id="typingIndicator">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <span class="text-gray" id="typingText">typing...</span>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <div class="input-actions">
+                    <button class="input-action-btn" id="emojiBtn">
+                        <i class="fas fa-smile"></i>
+                    </button>
+                    <button class="input-action-btn" id="attachBtn">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="input-action-btn" id="cameraBtn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                
+                <div class="input-wrapper">
+                    <textarea class="message-input" id="messageInput" placeholder="Type a message..." rows="1" disabled></textarea>
+                    <button class="input-action-btn" id="voiceBtn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-btn" id="sendBtn" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Voice Recorder -->
+    <div class="voice-recorder hidden" id="voiceRecorder">
+        <div class="voice-wave">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+        </div>
+        <div class="voice-timer" id="voiceTimer">00:00</div>
+        <div class="flex gap-4 justify-between">
+            <button class="btn btn-danger" id="cancelRecording">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn btn-success" id="sendRecording">
+                <i class="fas fa-check"></i> Send
+            </button>
+        </div>
+    </div>
+    
+    <!-- Emoji Picker -->
+    <div class="emoji-picker" id="emojiPicker">
+        <div class="emoji-categories">
+            <button class="emoji-category-btn active" data-category="smileys">😀</button>
+            <button class="emoji-category-btn" data-category="people">👋</button>
+            <button class="emoji-category-btn" data-category="animals">🐶</button>
+            <button class="emoji-category-btn" data-category="food">🍕</button>
+            <button class="emoji-category-btn" data-category="activities">⚽</button>
+        </div>
+        <div class="emoji-grid" id="emojiGrid">
+            <!-- Emojis loaded dynamically -->
+        </div>
+    </div>
+    
+    <script src="../../assets/js/chat.js"></script>
+</body>
+</html>
