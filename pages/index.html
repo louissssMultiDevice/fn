@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForexterChat™ - Next-Generation Secure Messenger</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Features Grid */
+        .features {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* Canvas Posters */
+        .posters {
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+        
+        .posters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .poster-canvas {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5rem; }
+            .tagline { font-size: 1.2rem; }
+            .cta-buttons { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="logo">ForexterChat</h1>
+            <p class="tagline">Next-generation secure messaging with quantum encryption, admin monitoring, and real-time communication for the Forexter community.</p>
+            
+            <div class="cta-buttons">
+                <a href="login.html" class="btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login dengan Google
+                </a>
+                <a href="register.html" class="btn" style="background: linear-gradient(135deg, var(--secondary), var(--accent));">
+                    <i class="fas fa-user-plus"></i>
+                    Daftar Sekarang
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Fitur Unggulan
+        </h2>
+        <p style="text-align: center; color: var(--gray); max-width: 600px; margin: 0 auto 3rem;">
+            Dikembangkan khusus untuk komunitas Forexter dengan teknologi terkini
+        </p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Quantum Encryption</h3>
+                <p style="color: var(--gray); line-height: 1.6;">Pesan dienkripsi dengan teknologi kuantum yang tidak bisa diretas oleh superkomputer sekalipun.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Admin Monitoring</h3>
+                <p style="color: var(--gray); line-height: 1.6;">Sistem admin lengkap dengan dashboard real-time, file management, dan user control.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Real-time Chat</h3>
+                <p style="color: var(gray); line-height: 1.6;">Chat instan dengan animasi typing, voice recording, dan message bubbles yang elegan.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">File Management</h3>
+                <p style="color: var(--gray); line-height: 1.6;">Upload dan kelola file dengan sistem organisasi yang rapi dan pencarian canggih.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Analytics Dashboard</h3>
+                <p style="color: var(--gray); line-height: 1.6;">Monitor aktivitas sistem dengan grafik real-time CPU, RAM, dan network usage.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Multi-Platform</h3>
+                <p style="color: var(--gray); line-height: 1.6;">Akses dari desktop, tablet, atau smartphone dengan responsive design yang sempurna.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Canvas Posters -->
+    <section class="posters">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Poster Interaktif
+        </h2>
+        <p style="text-align: center; color: var(--gray); max-width: 600px; margin: 0 auto 3rem;">
+            Visualisasi data dan informasi dengan teknologi Canvas HTML5
+        </p>
+        
+        <div class="posters-grid">
+            <canvas class="poster-canvas" id="poster1" width="400" height="300"></canvas>
+            <canvas class="poster-canvas" id="poster2" width="400" height="300"></canvas>
+            <canvas class="poster-canvas" id="poster3" width="400" height="300"></canvas>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer style="padding: 3rem 2rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 5rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                ForexterChat™
+            </h3>
+            <p style="color: var(--gray); margin-bottom: 2rem;">
+                Developed with ❤️ for Forexter Community Network
+            </p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <a href="#" style="color: var(--gray); text-decoration: none; transition: color 0.3s ease;">Terms</a>
+                <a href="#" style="color: var(--gray); text-decoration: none; transition: color 0.3s ease;">Privacy</a>
+                <a href="#" style="color: var(--gray); text-decoration: none; transition: color 0.3s ease;">Security</a>
+                <a href="#" style="color: var(--gray); text-decoration: none; transition: color 0.3s ease;">Contact</a>
+            </div>
+            <p style="color: var(--gray); font-size: 0.9rem;">
+                &copy; 2024 ForexterChat. All rights reserved. | 
+                <a href="https://www.forexternetwork.my.id" style="color: var(--primary); text-decoration: none;">Forexter Network</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Canvas Poster 1: Security Visualization
+        const poster1 = document.getElementById('poster1');
+        const ctx1 = poster1.getContext('2d');
+        
+        // Gradient background
+        const gradient1 = ctx1.createLinearGradient(0, 0, 400, 300);
+        gradient1.addColorStop(0, '#0f172a');
+        gradient1.addColorStop(1, '#1e293b');
+        ctx1.fillStyle = gradient1;
+        ctx1.fillRect(0, 0, 400, 300);
+        
+        // Title
+        ctx1.fillStyle = '#ffffff';
+        ctx1.font = 'bold 24px Inter';
+        ctx1.textAlign = 'center';
+        ctx1.fillText('QUANTUM SECURITY', 200, 40);
+        
+        // Shield
+        ctx1.beginPath();
+        ctx1.arc(200, 120, 40, 0, Math.PI * 2);
+        ctx1.strokeStyle = '#10b981';
+        ctx1.lineWidth = 3;
+        ctx1.stroke();
+        
+        ctx1.beginPath();
+        ctx1.moveTo(200, 90);
+        ctx1.lineTo(220, 130);
+        ctx1.lineTo(180, 130);
+        ctx1.closePath();
+        ctx1.fillStyle = '#10b981';
+        ctx1.fill();
+        
+        // Encryption lines
+        ctx1.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+        ctx1.lineWidth = 1;
+        for(let i = 0; i < 10; i++) {
+            ctx1.beginPath();
+            ctx1.moveTo(50 + i * 30, 170);
+            ctx1.lineTo(50 + i * 30, 230);
+            ctx1.stroke();
+            
+            // Random dots
+            for(let j = 0; j < 5; j++) {
+                ctx1.fillStyle = `rgba(16, 185, 129, ${Math.random() * 0.5 + 0.5})`;
+                ctx1.beginPath();
+                ctx1.arc(50 + i * 30, 170 + j * 15, 2, 0, Math.PI * 2);
+                ctx1.fill();
+            }
+        }
+        
+        // Bottom text
+        ctx1.font = '14px Inter';
+        ctx1.fillStyle = '#64748b';
+        ctx1.fillText('End-to-End Quantum Encryption', 200, 270);
+        
+        // Canvas Poster 2: Performance Graph
+        const poster2 = document.getElementById('poster2');
+        const ctx2 = poster2.getContext('2d');
+        
+        // Background
+        ctx2.fillStyle = '#0f172a';
+        ctx2.fillRect(0, 0, 400, 300);
+        
+        // Title
+        ctx2.fillStyle = '#ffffff';
+        ctx2.font = 'bold 24px Inter';
+        ctx2.textAlign = 'center';
+        ctx2.fillText('SYSTEM PERFORMANCE', 200, 40);
+        
+        // Graph grid
+        ctx2.strokeStyle = 'rgba(100, 116, 139, 0.3)';
+        ctx2.lineWidth = 1;
+        
+        // Vertical lines
+        for(let i = 1; i < 10; i++) {
+            ctx2.beginPath();
+            ctx2.moveTo(i * 40, 60);
+            ctx2.lineTo(i * 40, 200);
+            ctx2.stroke();
+        }
+        
+        // Horizontal lines
+        for(let i = 0; i < 5; i++) {
+            ctx2.beginPath();
+            ctx2.moveTo(40, 60 + i * 35);
+            ctx2.lineTo(360, 60 + i * 35);
+            ctx2.stroke();
+        }
+        
+        // Performance lines
+        const data = [30, 45, 60, 75, 90, 85, 70, 65, 80, 95];
+        ctx2.strokeStyle = '#2563eb';
+        ctx2.lineWidth = 3;
+        ctx2.beginPath();
+        ctx2.moveTo(40, 200 - (data[0] * 140 / 100));
+        
+        data.forEach((value, index) => {
+            const x = 40 + index * 40;
+            const y = 200 - (value * 140 / 100);
+            ctx2.lineTo(x, y);
+            
+            // Point
+            ctx2.fillStyle = '#2563eb';
+            ctx2.beginPath();
+            ctx2.arc(x, y, 4, 0, Math.PI * 2);
+            ctx2.fill();
+        });
+        ctx2.stroke();
+        
+        // Labels
+        ctx2.fillStyle = '#64748b';
+        ctx2.font = '12px Inter';
+        ctx2.textAlign = 'center';
+        ctx2.fillText('CPU Usage', 200, 240);
+        
+        // Canvas Poster 3: Community Stats
+        const poster3 = document.getElementById('poster3');
+        const ctx3 = poster3.getContext('2d');
+        
+        // Background
+        const gradient3 = ctx3.createLinearGradient(0, 0, 400, 300);
+        gradient3.addColorStop(0, '#1e293b');
+        gradient3.addColorStop(1, '#0f172a');
+        ctx3.fillStyle = gradient3;
+        ctx3.fillRect(0, 0, 400, 300);
+        
+        // Title
+        ctx3.fillStyle = '#ffffff';
+        ctx3.font = 'bold 24px Inter';
+        ctx3.textAlign = 'center';
+        ctx3.fillText('COMMUNITY STATS', 200, 40);
+        
+        // Pie chart
+        const stats = [
+            { label: 'Active', value: 65, color: '#10b981' },
+            { label: 'Idle', value: 20, color: '#f59e0b' },
+            { label: 'Offline', value: 15, color: '#64748b' }
+        ];
+        
+        let startAngle = 0;
+        const centerX = 200;
+        const centerY = 150;
+        const radius = 60;
+        
+        stats.forEach(stat => {
+            const sliceAngle = (stat.value / 100) * 2 * Math.PI;
+            
+            ctx3.beginPath();
+            ctx3.moveTo(centerX, centerY);
+            ctx3.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+            ctx3.closePath();
+            ctx3.fillStyle = stat.color;
+            ctx3.fill();
+            
+            // Legend
+            const legendX = 300;
+            const legendY = 100 + stats.indexOf(stat) * 30;
+            ctx3.fillStyle = stat.color;
+            ctx3.fillRect(legendX, legendY - 10, 15, 15);
+            
+            ctx3.fillStyle = '#ffffff';
+            ctx3.font = '14px Inter';
+            ctx3.textAlign = 'left';
+            ctx3.fillText(`${stat.label}: ${stat.value}%`, legendX + 25, legendY);
+            
+            startAngle += sliceAngle;
+        });
+        
+        // Center text
+        ctx3.fillStyle = '#ffffff';
+        ctx3.font = 'bold 20px Inter';
+        ctx3.textAlign = 'center';
+        ctx3.fillText('Users', centerX, centerY + 5);
+        
+        // Animate logo
+        const logo = document.querySelector('.logo');
+        let floatDirection = 1;
+        
+        function animateLogo() {
+            const currentTransform = logo.style.transform || 'translateY(0px)';
+            const currentY = parseInt(currentTransform.match(/-?\d+/)[0]) || 0;
+            
+            if (Math.abs(currentY) >= 20) {
+                floatDirection *= -1;
+            }
+            
+            logo.style.transform = `translateY(${currentY + floatDirection}px)`;
+            requestAnimationFrame(animateLogo);
+        }
+        
+        animateLogo();
+        
+        // Animate feature cards on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
