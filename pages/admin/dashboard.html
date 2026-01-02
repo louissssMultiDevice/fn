@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ForexterChat</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Dashboard Specific Styles */
+        .dashboard {
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            color: var(--dark-600);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--dark-800);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--dark-700);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-icon.users { background: rgba(37, 99, 235, 0.1); color: var(--primary); }
+        .stat-icon.messages { background: rgba(124, 58, 237, 0.1); color: var(--secondary); }
+        .stat-icon.groups { background: rgba(16, 185, 129, 0.1); color: var(--accent); }
+        .stat-icon.files { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--dark-600);
+            font-size: 0.9rem;
+        }
+        
+        .stat-change {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-change.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+        
+        .stat-change.negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        /* System Monitoring */
+        .monitoring-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .monitor-card {
+            background: var(--dark-800);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--dark-700);
+        }
+        
+        .monitor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .monitor-title {
+            font-weight: 600;
+        }
+        
+        .monitor-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .monitor-canvas {
+            width: 100%;
+            height: 150px;
+            margin-top: 1rem;
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            background: var(--dark-800);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--dark-700);
+            overflow: hidden;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--dark-700);
+            transition: background 0.2s ease;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-item:hover {
+            background: var(--dark-700);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .activity-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--accent); }
+        .activity-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .activity-icon.info { background: rgba(37, 99, 235, 0.1); color: var(--primary); }
+        .activity-icon.danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.875rem;
+            color: var(--dark-600);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--dark-800);
+            border: 1px solid var(--dark-700);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--light-100);
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action-btn:hover {
+            background: var(--dark-700);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .quick-action-text {
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="dashboard.html" class="nav-logo">ForexterChat Admin</a>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="console.html" class="nav-link"><i class="fas fa-terminal"></i> Console</a></li>
+                <li><a href="files.html" class="nav-link"><i class="fas fa-folder"></i> Files</a></li>
+                <li><a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database</a></li>
+                <li><a href="settings.html" class="nav-link"><i class="fas fa-cogs"></i> Settings</a></li>
+                <li><a href="cpanel/create.html" class="nav-link"><i class="fas fa-user-plus"></i> Cpanel</a></li>
+                <li><button class="btn btn-outline" id="adminLogout"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-menu">
+            <div class="mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="contact-avatar" style="width: 50px; height: 50px;">
+                        <span>👑</span>
+                    </div>
+                    <div>
+                        <div class="font-bold" id="adminName">Admin</div>
+                        <div class="text-sm text-success">Online</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="dashboard.html" class="sidebar-item active">
+                <i class="fas fa-tachometer-alt sidebar-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="console.html" class="sidebar-item">
+                <i class="fas fa-terminal sidebar-icon"></i>
+                <span>Console</span>
+            </a>
+            
+            <a href="files.html" class="sidebar-item">
+                <i class="fas fa-folder sidebar-icon"></i>
+                <span>Files</span>
+                <span class="badge bg-warning ml-auto">12</span>
+            </a>
+            
+            <a href="database.html" class="sidebar-item">
+                <i class="fas fa-database sidebar-icon"></i>
+                <span>Database</span>
+            </a>
+            
+            <a href="settings.html" class="sidebar-item">
+                <i class="fas fa-cogs sidebar-icon"></i>
+                <span>Settings</span>
+            </a>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="sidebar-subtitle">Cpanel</div>
+            
+            <a href="cpanel/create.html" class="sidebar-item">
+                <i class="fas fa-user-plus sidebar-icon"></i>
+                <span>Create User</span>
+            </a>
+            
+            <a href="cpanel/list.html" class="sidebar-item">
+                <i class="fas fa-list sidebar-icon"></i>
+                <span>User List</span>
+                <span class="badge bg-primary ml-auto" id="userCount">0</span>
+            </a>
+            
+            <div class="sidebar-divider"></div>
+            
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-history sidebar-icon"></i>
+                <span>Audit Log</span>
+            </a>
+            
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-shield-alt sidebar-icon"></i>
+                <span>Security</span>
+            </a>
+            
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-chart-line sidebar-icon"></i>
+                <span>Analytics</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Admin Dashboard</h1>
+                <p class="dashboard-subtitle">Real-time monitoring and system analytics</p>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon users">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 12%
+                        </span>
+                    </div>
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon messages">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <span class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 24%
+                        </span>
+                    </div>
+                    <div class="stat-value" id="totalMessages">0</div>
+                    <div class="stat-label">Messages Today</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon groups">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <span class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> 8%
+                        </span>
+                    </div>
+                    <div class="stat-value" id="totalGroups">0</div>
+                    <div class="stat-label">Active Groups</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon files">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> 3%
+                        </span>
+                    </div>
+                    <div class="stat-value" id="totalFiles">0</div>
+                    <div class="stat-label">Files Uploaded</div>
+                </div>
+            </div>
+            
+            <!-- System Monitoring -->
+            <div class="monitoring-section">
+                <h2 class="section-title">
+                    <i class="fas fa-desktop"></i>
+                    System Monitoring
+                </h2>
+                
+                <div class="monitoring-grid">
+                    <div class="monitor-card">
+                        <div class="monitor-header">
+                            <div class="monitor-title">CPU Usage</div>
+                            <div class="monitor-value" id="cpuUsage">0%</div>
+                        </div>
+                        <canvas class="monitor-canvas" id="cpuChart"></canvas>
+                    </div>
+                    
+                    <div class="monitor-card">
+                        <div class="monitor-header">
+                            <div class="monitor-title">Memory Usage</div>
+                            <div class="monitor-value" id="memoryUsage">0%</div>
+                        </div>
+                        <canvas class="monitor-canvas" id="memoryChart"></canvas>
+                    </div>
+                    
+                    <div class="monitor-card">
+                        <div class="monitor-header">
+                            <div class="monitor-title">Network Activity</div>
+                            <div class="monitor-value" id="networkSpeed">0 KB/s</div>
+                        </div>
+                        <canvas class="monitor-canvas" id="networkChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity & Quick Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Activity -->
+                <div>
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i>
+                        Recent Activity
+                    </h2>
+                    
+                    <div class="activity-list" id="activityList">
+                        <!-- Activities loaded dynamically -->
+                        <div class="text-center p-8 text-gray">
+                            <i class="fas fa-history fa-2x mb-4"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div>
+                    <h2 class="section-title">
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h2>
+                    
+                    <div class="quick-actions">
+                        <a href="cpanel/create.html" class="quick-action-btn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="quick-action-text">Create User</div>
+                        </a>
+                        
+                        <a href="console.html" class="quick-action-btn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-terminal"></i>
+                            </div>
+                            <div class="quick-action-text">System Console</div>
+                        </a>
+                        
+                        <a href="files.html" class="quick-action-btn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                            <div class="quick-action-text">Upload File</div>
+                        </a>
+                        
+                        <a href="settings.html" class="quick-action-btn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="quick-action-text">Send Notification</div>
+                        </a>
+                        
+                        <a href="database.html" class="quick-action-btn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="quick-action-text">Database Backup</div>
+                        </a>
+                        
+                        <a href="#" class="quick-action-btn" id="systemHealthBtn">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="quick-action-text">System Health</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../assets/js/admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize Admin Dashboard
+        class AdminDashboard {
+            constructor() {
+                this.cpuChart = null;
+                this.memoryChart = null;
+                this.networkChart = null;
+                this.cpuData = [];
+                this.memoryData = [];
+                this.networkData = [];
+                this.maxDataPoints = 20;
+                
+                this.init();
+            }
+            
+            init() {
+                this.loadAdminData();
+                this.initCharts();
+                this.loadActivities();
+                this.startMonitoring();
+                
+                // Update user count in sidebar
+                this.updateUserCount();
+            }
+            
+            loadAdminData() {
+                // Load stats from localStorage
+                const users = JSON.parse(localStorage.getItem('forexter_users') || '[]');
+                const messages = JSON.parse(localStorage.getItem('forexter_messages') || '[]');
+                const groups = JSON.parse(localStorage.getItem('forexter_groups') || '[]');
+                const files = JSON.parse(localStorage.getItem('forexter_files') || '[]');
+                
+                // Update stats
+                document.getElementById('totalUsers').textContent = users.length;
+                document.getElementById('totalMessages').textContent = messages.length;
+                document.getElementById('totalGroups').textContent = groups.length;
+                document.getElementById('totalFiles').textContent = files.length;
+                
+                // Update user count in sidebar
+                document.getElementById('userCount').textContent = users.length;
+            }
+            
+            updateUserCount() {
+                const users = JSON.parse(localStorage.getItem('forexter_users') || '[]');
+                document.getElementById('userCount').textContent = users.length;
+            }
+            
+            initCharts() {
+                // CPU Chart
+                const cpuCtx = document.getElementById('cpuChart').getContext('2d');
+                this.cpuChart = new Chart(cpuCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(this.maxDataPoints).fill(''),
+                        datasets: [{
+                            label: 'CPU',
+                            data: Array(this.maxDataPoints).fill(0),
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 100,
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(100, 116, 139, 0.1)' }
+                            },
+                            x: {
+                                ticks: { display: false },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+                
+                // Memory Chart
+                const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+                this.memoryChart = new Chart(memoryCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(this.maxDataPoints).fill(''),
+                        datasets: [{
+                            label: 'Memory',
+                            data: Array(this.maxDataPoints).fill(0),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 100,
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(100, 116, 139, 0.1)' }
+                            },
+                            x: {
+                                ticks: { display: false },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+                
+                // Network Chart
+                const networkCtx = document.getElementById('networkChart').getContext('2d');
+                this.networkChart = new Chart(networkCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Array(10).fill(''),
+                        datasets: [{
+                            label: 'Network',
+                            data: Array(10).fill(0),
+                            backgroundColor: 'rgba(37, 99, 235, 0.5)',
+                            borderColor: '#2563eb',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(100, 116, 139, 0.1)' }
+                            },
+                            x: {
+                                ticks: { display: false },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            startMonitoring() {
+                // Simulate real-time monitoring
+                setInterval(() => {
+                    this.updateSystemMetrics();
+                }, 1000);
+                
+                // Update stats periodically
+                setInterval(() => {
+                    this.loadAdminData();
+                }, 5000);
+            }
+            
+            updateSystemMetrics() {
+                // Generate random system metrics (in real app, this would come from server)
+                const cpu = Math.floor(Math.random() * 30) + 20;
+                const memory = Math.floor(Math.random() * 40) + 30;
+                const network = Math.floor(Math.random() * 1000) + 500;
+                
+                // Update display
+                document.getElementById('cpuUsage').textContent = cpu + '%';
+                document.getElementById('memoryUsage').textContent = memory + '%';
+                document.getElementById('networkSpeed').textContent = network + ' KB/s';
+                
+                // Update charts
+                this.updateChart(this.cpuChart, cpu);
+                this.updateChart(this.memoryChart, memory);
+                this.updateChart(this.networkChart, network / 1000);
+            }
+            
+            updateChart(chart, value) {
+                if (chart.data.datasets[0].data.length >= this.maxDataPoints) {
+                    chart.data.datasets[0].data.shift();
+                }
+                chart.data.datasets[0].data.push(value);
+                chart.update('none');
+            }
+            
+            loadActivities() {
+                const activities = JSON.parse(localStorage.getItem('forexter_activities') || '[]');
+                const container = document.getElementById('activityList');
+                
+                if (activities.length === 0) {
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                // Show last 10 activities
+                activities.slice(-10).reverse().forEach(activity => {
+                    const item = document.createElement('div');
+                    item.className = 'activity-item';
+                    
+                    const iconClass = {
+                        'success': 'success',
+                        'warning': 'warning',
+                        'info': 'info',
+                        'danger': 'danger'
+                    }[activity.type] || 'info';
+                    
+                    const icon = {
+                        'success': 'check-circle',
+                        'warning': 'exclamation-triangle',
+                        'info': 'info-circle',
+                        'danger': 'times-circle'
+                    }[activity.type] || 'info-circle';
+                    
+                    item.innerHTML = `
+                        <div class="activity-icon ${iconClass}">
+                            <i class="fas fa-${icon}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-text">${activity.message}</div>
+                            <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(item);
+                });
+            }
+            
+            formatTime(timestamp) {
+                const now = Date.now();
+                const diff = now - timestamp;
+                
+                if (diff < 60000) return 'Just now';
+                if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+                if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+                return new Date(timestamp).toLocaleDateString();
+            }
+            
+            logActivity(type, message) {
+                const activity = {
+                    type: type,
+                    message: message,
+                    timestamp: Date.now()
+                };
+                
+                const activities = JSON.parse(localStorage.getItem('forexter_activities') || '[]');
+                activities.push(activity);
+                localStorage.setItem('forexter_activities', JSON.stringify(activities));
+                
+                this.loadActivities();
+            }
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const dashboard = new AdminDashboard();
+            window.adminDashboard = dashboard;
+            
+            // System Health Check
+            document.getElementById('systemHealthBtn').addEventListener('click', () => {
+                dashboard.logActivity('info', 'System health check performed');
+                alert('System health: All systems operational');
+            });
+            
+            // Admin logout
+            document.getElementById('adminLogout').addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('forexter_session');
+                    window.location.href = '../../login.html';
+                }
+            });
+            
+            // Set admin name
+            const session = JSON.parse(localStorage.getItem('forexter_session') || '{}');
+            if (session.user) {
+                document.getElementById('adminName').textContent = session.user.name;
+            }
+        });
+    </script>
+</body>
+</html>
