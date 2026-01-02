@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ForexterChat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .google-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .google-btn i {
+            color: #4285f4;
+            font-size: 1.2rem;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            color: var(--gray);
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .divider span {
+            padding: 0 1rem;
+        }
+        
+        .register-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .register-link:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        .admin-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 0.5rem;
+            color: #f59e0b;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-home:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1 class="logo">ForexterChat</h1>
+            <p class="subtitle">Login dengan akun Google Anda untuk mengakses ForexterChat</p>
+            
+            <button class="google-btn" id="googleLogin">
+                <i class="fab fa-google"></i>
+                Login dengan Google
+            </button>
+            
+            <div class="divider">
+                <span>Atau</span>
+            </div>
+            
+            <p>
+                Belum punya akun?
+                <a href="register.html" class="register-link">Daftar di sini</a>
+            </p>
+            
+            <div class="admin-note">
+                <i class="fas fa-shield-alt"></i>
+                <strong>Note:</strong> Admin dapat login langsung dengan ID khusus
+            </div>
+            
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-left"></i>
+                Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Google Sign-In
+        function handleCredentialResponse(response) {
+            const credential = response.credential;
+            const payload = decodeJWT(credential);
+            
+            console.log('Google Login Success:', payload);
+            
+            // Show loading
+            document.getElementById('googleLogin').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            document.getElementById('googleLogin').disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Check if user exists
+                const users = JSON.parse(localStorage.getItem('forexter_users') || '[]');
+                const userExists = users.some(u => u.email === payload.email);
+                
+                if (userExists) {
+                    // User exists, proceed to login
+                    const userData = {
+                        id: payload.sub,
+                        email: payload.email,
+                        name: payload.name,
+                        picture: payload.picture,
+                        verified: true,
+                        role: payload.email.includes('@forexter.') ? 'admin' : 'user',
+                        lastLogin: Date.now()
+                    };
+                    
+                    // Save session
+                    localStorage.setItem('forexter_session', JSON.stringify({
+                        user: userData,
+                        token: credential,
+                        expires: Date.now() + (7 * 24 * 60 * 60 * 1000)
+                    }));
+                    
+                    // Redirect based on role
+                    if (userData.role === 'admin') {
+                        window.location.href = 'pages/admin/dashboard.html';
+                    } else {
+                        window.location.href = 'pages/user/home.html';
+                    }
+                    
+                } else {
+                    // User doesn't exist, redirect to register
+                    alert('Akun belum terdaftar. Silakan daftar terlebih dahulu.');
+                    window.location.href = 'register.html?email=' + encodeURIComponent(payload.email);
+                }
+            }, 1500);
+        }
+        
+        function decodeJWT(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            
+            return JSON.parse(jsonPayload);
+        }
+        
+        // Manual Google login button
+        document.getElementById('googleLogin').addEventListener('click', function() {
+            // Initialize Google OAuth
+            google.accounts.id.initialize({
+                client_id: '732926475897-bep4e4qg150gvtqfrtbjfda34fc2cdtb.apps.googleusercontent.com',
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true,
+                context: 'signin'
+            });
+            
+            // Prompt login
+            google.accounts.id.prompt();
+        });
+        
+        // Admin direct login (for testing)
+        function adminLogin() {
+            const adminId = prompt('Enter Admin ID:');
+            const adminKey = prompt('Enter Admin Key:');
+            
+            if (adminId && adminKey) {
+                const adminUsers = ['ndii', 'fanks', 'lanyz', 'lez', 'karin', 'kenz'];
+                
+                if (adminUsers.includes(adminId.toLowerCase()) && adminKey === 'admin123') {
+                    const adminData = {
+                        id: `admin_${adminId}`,
+                        email: `${adminId}@forexter.net`,
+                        name: `Admin ${adminId.charAt(0).toUpperCase() + adminId.slice(1)}`,
+                        role: 'admin',
+                        isSuperAdmin: true
+                    };
+                    
+                    localStorage.setItem('forexter_session', JSON.stringify({
+                        user: adminData,
+                        token: 'admin_token_' + Date.now(),
+                        expires: Date.now() + (24 * 60 * 60 * 1000)
+                    }));
+                    
+                    window.location.href = 'pages/admin/dashboard.html';
+                } else {
+                    alert('Invalid admin credentials');
+                }
+            }
+        }
+        
+        // Add admin login shortcut (Ctrl+Alt+A)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key === 'a') {
+                e.preventDefault();
+                adminLogin();
+            }
+        });
+    </script>
+</body>
+</html>
