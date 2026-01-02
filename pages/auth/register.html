@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ForexterChat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .register-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: var(--light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .google-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .google-btn i {
+            color: #4285f4;
+            font-size: 1.2rem;
+        }
+        
+        .phone-section {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .phone-section h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .phone-note {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--gray);
+        }
+        
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .admin-approval {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #f59e0b;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-home:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <h1 class="logo">ForexterChat</h1>
+            <p class="subtitle">Daftar dengan akun Google Anda untuk bergabung dengan komunitas Forexter</p>
+            
+            <div class="form-group">
+                <label class="form-label">Email dari Google</label>
+                <input type="email" id="email" class="form-input" placeholder="email@example.com" disabled>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" id="fullName" class="form-input" placeholder="Masukkan nama lengkap" required>
+            </div>
+            
+            <div class="phone-section">
+                <h3><i class="fas fa-phone"></i> Nomor Telepon</h3>
+                <div class="form-group">
+                    <label class="form-label">Nomor WhatsApp (dengan kode negara)</label>
+                    <input type="tel" id="phone" class="form-input" placeholder="+62 8123 4567" required>
+                    <p class="phone-note">
+                        <i class="fas fa-info-circle"></i>
+                        Nomor akan diverifikasi oleh admin. Anda akan mendapatkan notifikasi setelah disetujui.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Jenis Akun</label>
+                <select id="accountType" class="form-input">
+                    <option value="personal">Personal</option>
+                    <option value="business">Bisnis</option>
+                    <option value="community">Komunitas</option>
+                </select>
+            </div>
+            
+            <button class="google-btn" id="googleRegister">
+                <i class="fab fa-google"></i>
+                Daftar dengan Google
+            </button>
+            
+            <div class="admin-approval">
+                <i class="fas fa-shield-alt"></i>
+                <strong>Penting:</strong> Registrasi memerlukan persetujuan admin. Admin akan memverifikasi nomor telepon Anda.
+            </div>
+            
+            <button class="btn-submit" id="submitRegister" disabled>
+                <i class="fas fa-user-plus"></i>
+                Daftar Sekarang
+            </button>
+            
+            <div class="login-link">
+                Sudah punya akun? <a href="login.html">Login di sini</a>
+            </div>
+            
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-left"></i>
+                Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Get email from URL if exists
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailFromUrl = urlParams.get('email');
+        
+        if (emailFromUrl) {
+            document.getElementById('email').value = emailFromUrl;
+        }
+        
+        // Google Registration
+        function handleGoogleRegister(response) {
+            const credential = response.credential;
+            const payload = decodeJWT(credential);
+            
+            console.log('Google Registration:', payload);
+            
+            // Auto-fill form
+            document.getElementById('email').value = payload.email;
+            document.getElementById('fullName').value = payload.name;
+            
+            // Enable submit button
+            document.getElementById('submitRegister').disabled = false;
+            
+            // Update Google button
+            document.getElementById('googleRegister').innerHTML = `
+                <i class="fab fa-google"></i>
+                ${payload.email}
+            `;
+            document.getElementById('googleRegister').disabled = true;
+        }
+        
+        function decodeJWT(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                console.error('Error decoding JWT:', e);
+                return {};
+            }
+        }
+        
+        // Google OAuth initialization
+        google.accounts.id.initialize({
+            client_id: '732926475897-bep4e4qg150gvtqfrtbjfda34fc2cdtb.apps.googleusercontent.com',
+            callback: handleGoogleRegister,
+            context: 'signup'
+        });
+        
+        // Manual Google button
+        document.getElementById('googleRegister').addEventListener('click', function() {
+            google.accounts.id.prompt(notification => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // Try fallback
+                    document.getElementById('googleRegister').innerHTML = '<i class="fas fa-exclamation-circle"></i> Popup diblokir, silakan coba lagi';
+                    setTimeout(() => {
+                        document.getElementById('googleRegister').innerHTML = '<i class="fab fa-google"></i> Daftar dengan Google';
+                    }, 3000);
+                }
+            });
+        });
+        
+        // Form submission
+        document.getElementById('submitRegister').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const accountType = document.getElementById('accountType').value;
+            
+            if (!email || !fullName || !phone) {
+                alert('Harap isi semua field yang diperlukan');
+                return;
+            }
+            
+            // Validate phone
+            const phoneRegex = /^\+[1-9]\d{1,14}$/;
+            if (!phoneRegex.test(phone.replace(/\s+/g, ''))) {
+                alert('Format nomor telepon tidak valid. Gunakan format: +62 8123 4567');
+                return;
+            }
+            
+            // Show loading
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendaftarkan...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Create user object
+                const newUser = {
+                    id: 'user_' + Date.now(),
+                    email: email,
+                    name: fullName,
+                    phone: phone,
+                    accountType: accountType,
+                    status: 'pending',
+                    registeredAt: Date.now(),
+                    requiresAdminApproval: true,
+                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=2563eb&color=fff&bold=true`
+                };
+                
+                // Save to pending users
+                const pendingUsers = JSON.parse(localStorage.getItem('forexter_pending_users') || '[]');
+                pendingUsers.push(newUser);
+                localStorage.setItem('forexter_pending_users', JSON.stringify(pendingUsers));
+                
+                // Show success message
+                alert('Pendaftaran berhasil! Akun Anda sedang menunggu persetujuan admin. Admin akan menghubungi Anda melalui WhatsApp.');
+                
+                // Redirect to login
+                window.location.href = 'login.html';
+                
+            }, 2000);
+        });
+        
+        // Enable submit when form is valid
+        const formInputs = document.querySelectorAll('#fullName, #phone');
+        formInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const email = document.getElementById('email').value;
+                const fullName = document.getElementById('fullName').value;
+                const phone = document.getElementById('phone').value;
+                
+                document.getElementById('submitRegister').disabled = !(email && fullName && phone);
+            });
+        });
+        
+        // Auto-detect Indonesian phone
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.startsWith('62')) {
+                value = '+' + value;
+            } else if (value.startsWith('0')) {
+                value = '+62' + value.substring(1);
+            } else if (value.length > 0 && !value.startsWith('+')) {
+                value = '+62' + value;
+            }
+            
+            // Format with spaces
+            if (value.length > 3) {
+                value = value.substring(0, 3) + ' ' + value.substring(3);
+            }
+            if (value.length > 7) {
+                value = value.substring(0, 7) + ' ' + value.substring(7);
+            }
+            if (value.length > 12) {
+                value = value.substring(0, 12) + ' ' + value.substring(12);
+            }
+            
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
