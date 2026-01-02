@@ -11,8 +11,8 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 // Google OAuth configuration
-define('GOOGLE_CLIENT_ID', 'YOUR_GOOGLE_CLIENT_ID');
-define('GOOGLE_CLIENT_SECRET', 'YOUR_GOOGLE_CLIENT_SECRET');
+define('GOOGLE_CLIENT_ID', '732926475897-bep4e4qg150gvtqfrtbjfda34fc2cdtb.apps.googleusercontent.com');
+define('GOOGLE_CLIENT_SECRET', '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');
 
 // Admin users (in production, store in database)
 $admin_users = ['ndii', 'fanks', 'lanyz', 'lez', 'karin', 'kenz'];
